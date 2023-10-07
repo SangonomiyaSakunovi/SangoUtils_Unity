@@ -55,7 +55,7 @@ public class BaseService : MonoBehaviour
 
 }
 
-public class BaseSystem : MonoBehaviour
+public abstract class BaseSystem : MonoBehaviour
 {
-
+    public abstract void InitSystem();
 }
