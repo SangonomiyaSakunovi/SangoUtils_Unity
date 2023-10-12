@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 
 public class _02System : BaseSystem
@@ -26,14 +27,14 @@ public class _02System : BaseSystem
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R) && !_isRecording)
-        {
-            StartRecording();
-        }
-        else if (Input.GetKeyDown(KeyCode.S) && _isRecording)
-        {
-            StopRecording();
-        }
+        //if (Input.GetKeyDown(KeyCode.R) && !_isRecording)
+        //{
+        //    StartRecording();
+        //}
+        //else if (Input.GetKeyDown(KeyCode.S) && _isRecording)
+        //{
+        //    StopRecording();
+        //}
     }
 
     public override void InitSystem()
