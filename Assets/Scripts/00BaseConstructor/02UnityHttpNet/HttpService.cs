@@ -5,11 +5,12 @@ using System.Text;
 public class HttpService : BaseService<HttpService>
 {
     private HttpClient _httpClient;
-    private Dictionary<int, BaseRequest> _requestDict = new Dictionary<int, BaseRequest>();
+    private Dictionary<int, BaseRequest> _requestDict = null;
 
     public override void OnInit()
     {
         base.OnInit();
+        _requestDict = new Dictionary<int, BaseRequest>();
         _httpClient = new HttpClient();
         _httpClient.Init();
     }
