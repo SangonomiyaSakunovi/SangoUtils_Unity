@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BaseWindow : MonoBehaviour
 {
@@ -30,6 +31,13 @@ public class BaseWindow : MonoBehaviour
 
     }
 
+    protected void SetSprite(Image image, string path, bool isCache = false)
+    {
+        Sprite sprite = ResourceService.Instance.LoadSprite(path, isCache);
+        Image imageComponent = image.GetComponent<Image>();
+        imageComponent.sprite = sprite;
+    }
+
     protected T GetOrAddComponent<T>(GameObject gameObject) where T : Component
     {
         T t = gameObject.GetComponent<T>();
@@ -52,7 +60,10 @@ public class BaseWindow : MonoBehaviour
 
 public class BaseService : MonoBehaviour
 {
+    public virtual void InitService()
+    {
 
+    }
 }
 
 public abstract class BaseSystem : MonoBehaviour
