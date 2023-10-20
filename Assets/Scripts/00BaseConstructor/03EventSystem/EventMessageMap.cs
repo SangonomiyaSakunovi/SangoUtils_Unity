@@ -3,15 +3,15 @@ using System.Collections.Generic;
 
 public class EventMessageMap<T>
 {
-    private Dictionary<T, List<Action<List<object>>>> _eventMessageHandlerDict = new Dictionary<T, List<Action<List<object>>>>();
+    private Dictionary<T, List<Action<object[]>>> _eventMessageHandlerDict = new Dictionary<T, List<Action<object[]>>>();
     private Dictionary<object, List<T>> _eventTargetDict = new Dictionary<object, List<T>>();
 
-    public void AddEventMessageHandler(T eventId, Action<List<object>> actionCallBack)
+    public void AddEventMessageHandler(T eventId, Action<object[]> actionCallBack)
     {
-        _eventMessageHandlerDict.TryGetValue(eventId, out List<Action<List<object>>> existedActionList);
+        _eventMessageHandlerDict.TryGetValue(eventId, out List<Action<object[]>> existedActionList);
         if (existedActionList == null)
         {
-            existedActionList = new List<Action<List<object>>>();
+            existedActionList = new List<Action<object[]>>();
             _eventMessageHandlerDict.Add(eventId, existedActionList);
         }
         if (existedActionList.Find(existedAction => existedAction.Equals(actionCallBack)) != null)
@@ -33,12 +33,12 @@ public class EventMessageMap<T>
         }
     }
 
-    public void RmvMsgHandler(T id)
+    public void RemoveEventMessageHandler(T id)
     {
         if (_eventMessageHandlerDict.ContainsKey(id))
         {
             var handlerLst = _eventMessageHandlerDict[id];
-            foreach (Action<List<object>> cb in handlerLst)
+            foreach (Action<object[]> cb in handlerLst)
             {
                 if (cb != null
                     && cb.Target != null
@@ -58,7 +58,7 @@ public class EventMessageMap<T>
         }
         _eventMessageHandlerDict.Remove(id);
     }
-    public void RmvTargetHandler(object target)
+    public void RemoveTargetHandler(object target)
     {
         if (_eventTargetDict.ContainsKey(target))
         {
@@ -68,8 +68,8 @@ public class EventMessageMap<T>
                 T evt = evtLst[i];
                 if (_eventMessageHandlerDict.ContainsKey(evt))
                 {
-                    List<Action<List<object>>> cbLst = _eventMessageHandlerDict[evt];
-                    cbLst.RemoveAll((Action<List<object>> cb) =>
+                    List<Action<object[]>> cbLst = _eventMessageHandlerDict[evt];
+                    cbLst.RemoveAll((Action<object[]> cb) =>
                     {
                         return cb.Target == target;
                     });
@@ -83,9 +83,9 @@ public class EventMessageMap<T>
         }
     }
 
-    public List<Action<List<object>>> GetAllEventMessageHandler(T t)
+    public List<Action<object[]>> GetAllEventMessageHandler(T t)
     {
-        _eventMessageHandlerDict.TryGetValue(t, out List<Action<List<object>>> lst);
+        _eventMessageHandlerDict.TryGetValue(t, out List<Action<object[]>> lst);
         return lst;
     }
 }

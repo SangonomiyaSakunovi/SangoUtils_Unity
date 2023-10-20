@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 public class EventService : BaseService<EventService>
 {
@@ -24,7 +23,7 @@ public class EventService : BaseService<EventService>
         _eventProxy.Clear();
     }
 
-    public void AddEventListener(EventId evt, Action<List<object>> cb)
+    public void AddEventListener(EventId evt, Action<object[]> cb)
     {
         _eventProxy.AddEventMessageHandler(evt, cb);
     }
@@ -39,12 +38,12 @@ public class EventService : BaseService<EventService>
         _eventProxy.RemoveEventMessageHandlerByTarget(target);
     }
 
-    public void InvokeEventListener(EventId evt, List<object> paramList = null)
+    public void InvokeEventListener(EventId evt, object[] paramList = null)
     {
         _eventProxy.InvokeEventMessageHandler(evt, paramList);
     }
 
-    public void InvokeEventListenerImmediately(EventId evt, List<object> paramList = null)
+    public void InvokeEventListenerImmediately(EventId evt, object[] paramList = null)
     {
         _eventProxy.InvokeEventMessageHandlerImmediately(evt, paramList);
     }

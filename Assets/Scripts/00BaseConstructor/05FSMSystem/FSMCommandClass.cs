@@ -4,11 +4,11 @@ public abstract class FSMTransCommandBase { }
 
 public class FSMTransCommandEnum<T> : FSMTransCommandBase where T : struct
 {
-    public T _enumId { get; private set; }
+    public T EnumId { get; private set; }
 
     public FSMTransCommandEnum(T enumId)
     {
-        _enumId = enumId;
+        EnumId = enumId;
     }
 
     public override bool Equals(object obj)
@@ -16,24 +16,24 @@ public class FSMTransCommandEnum<T> : FSMTransCommandBase where T : struct
         if (obj is FSMTransCommandEnum<T>)
         {
             FSMTransCommandEnum<T> commandEnum = obj as FSMTransCommandEnum<T>;
-            return commandEnum._enumId.Equals(_enumId);
+            return commandEnum.EnumId.Equals(EnumId);
         }
         return false;
     }
 
     public override int GetHashCode()
     {
-        return _enumId.GetHashCode();
+        return EnumId.GetHashCode();
     }
 }
 
 public class FSMTransCommandData : FSMTransCommandBase
 {
-    public byte[] _data { get; private set; }
+    public byte[] Data { get; private set; }
 
     public FSMTransCommandData(byte[] data)
     {
-        _data = data;
+        Data = data;
     }
 
     public override bool Equals(object obj)

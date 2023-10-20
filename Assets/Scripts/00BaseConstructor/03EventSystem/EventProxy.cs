@@ -24,7 +24,7 @@ public class EventProxy<T>
     }
     public void Clear() { }
 
-    public void AddEventMessageHandler(T evt, Action<List<object>> cb)
+    public void AddEventMessageHandler(T evt, Action<object[]> cb)
     {
         lock (_lock)
         {
@@ -35,18 +35,18 @@ public class EventProxy<T>
     {
         lock (_lock)
         {
-            _eventMessageMap.RmvMsgHandler(id);
+            _eventMessageMap.RemoveEventMessageHandler(id);
         }
     }
     public void RemoveEventMessageHandlerByTarget(object target)
     {
         lock (_lock)
         {
-            _eventMessageMap.RmvTargetHandler(target);
+            _eventMessageMap.RemoveTargetHandler(target);
         }
     }
 
-    public void InvokeEventMessageHandler(T evt, List<object> paramLists = null)
+    public void InvokeEventMessageHandler(T evt, object[] paramLists = null)
     {
         lock (_lock)
         {
@@ -54,14 +54,14 @@ public class EventProxy<T>
         }
     }
 
-    public void InvokeEventMessageHandlerImmediately(T evt, List<object> paramLists = null)
+    public void InvokeEventMessageHandlerImmediately(T evt, object[] paramLists = null)
     {
         TriggeEventMessageHandler(evt, paramLists);
     }
 
-    private void TriggeEventMessageHandler(T t, List<object> paramLists)
+    private void TriggeEventMessageHandler(T t, object[] paramLists)
     {
-        List<Action<List<object>>> lst = _eventMessageMap.GetAllEventMessageHandler(t);
+        List<Action<object[]>> lst = _eventMessageMap.GetAllEventMessageHandler(t);
         if (lst != null)
         {
             for (int i = 0; i < lst.Count; i++)
@@ -73,9 +73,9 @@ public class EventProxy<T>
 
     private class EventMessagePararms
     {
-        T _eventId = default(T);
-        List<object> _paramLists = null;
-        public EventMessagePararms(T t, List<object> paramLists)
+        private T _eventId = default(T);
+        private object[] _paramLists = null;
+        public EventMessagePararms(T t, object[] paramLists)
         {
             _eventId = t;
             _paramLists = paramLists;
@@ -85,6 +85,6 @@ public class EventProxy<T>
         {
             return _eventId;
         }
-        public List<object> GetParams() { return _paramLists; }
+        public object[] GetParams() { return _paramLists; }
     }
 }
