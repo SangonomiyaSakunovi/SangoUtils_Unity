@@ -48,7 +48,7 @@ public class SangoHttpExampleRequest : BaseRequest
         base.OnInit(httpId);
     }
 
-    public override void OnOperationResponsed<T>(T data)
+    public override void OnOperationResponsed<T>(T data, int resCode)
     {
         List<SangoHttpExampleData> value = data as List<SangoHttpExampleData>;
         if (value != null)

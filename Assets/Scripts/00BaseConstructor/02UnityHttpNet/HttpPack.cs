@@ -39,13 +39,17 @@ public class HttpPack<T> : HttpPack where T : class
                 }
                 if (data != null)
                 {
-                    HttpService.Instance?.HttpBroadcast<T>(data, messageId);
+                    HttpService.Instance?.HttpBroadcast<T>(data, messageId, resCode);
                 }
             }
             else
             {
-                HttpService.Instance?.HttpBroadcast<T>(null, messageId);
+                HttpService.Instance?.HttpBroadcast<T>(null, messageId, resCode);
             }
+        }
+        else
+        {
+            HttpService.Instance?.HttpBroadcast<T>(null, messageId, resCode);
         }
     }
 }

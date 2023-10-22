@@ -121,12 +121,12 @@ public class HttpService : BaseService<HttpService>
         _httpClient.SendHttpRequest<string>(httpId, HttpType.Put, putParameStr);
     }
 
-    public void HttpBroadcast<T>(T data, int id) where T : class
+    public void HttpBroadcast<T>(T data, int requestId, int resCode) where T : class
     {
-        _requestDict.TryGetValue(id, out BaseRequest request);
+        _requestDict.TryGetValue(requestId, out BaseRequest request);
         if (request != null)
         {
-            request.OnOperationResponsed<T>(data);
+            request.OnOperationResponsed<T>(data, resCode);
         }
     }
 

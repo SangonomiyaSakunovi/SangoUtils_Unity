@@ -25,7 +25,7 @@ public class BaseRequest
         HttpService.Instance?.HttpPost<T>(HttpId, getParameDic);
     }
 
-    public virtual void OnOperationResponsed<T>(T data) where T : class
+    public virtual void OnOperationResponsed<T>(T data, int resCode) where T : class
     {
 
     }
