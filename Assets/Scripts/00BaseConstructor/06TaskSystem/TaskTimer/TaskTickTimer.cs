@@ -5,7 +5,7 @@ using System.Threading;
 public class TaskTickTimer : TaskBaseTimer
 {
     private readonly DateTime _utcInitialDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-    private readonly ConcurrentDictionary<int, TickTimerTask> _taskDict;
+    private readonly ConcurrentDictionary<uint, TickTimerTask> _taskDict;
     private readonly bool _isSetHandled;
     private readonly ConcurrentQueue<TickTimerTaskPack> _taskPackQueue;
     private const string _taskIdLock = "TaskTickTimer_Lock";
@@ -13,7 +13,7 @@ public class TaskTickTimer : TaskBaseTimer
 
     public TaskTickTimer(int intervalTime = 0, bool isSetHandled = true)
     {
-        _taskDict = new ConcurrentDictionary<int, TickTimerTask>();
+        _taskDict = new ConcurrentDictionary<uint, TickTimerTask>();
         _isSetHandled = isSetHandled;
         if (isSetHandled)
         {
@@ -41,12 +41,12 @@ public class TaskTickTimer : TaskBaseTimer
         }
     }
 
-    public override int AddTask(uint delayInvokeTaskTime, Action<int> doneTaskCallBack, Action<int> cancelTaskCallBack, int repeatTaskCount = 1)
+    public override uint AddTask(uint delayedInvokeTaskTime, Action<uint> completeTaskCallBack, Action<uint> cancelTaskCallBack, int repeatTaskCount = 1)
     {
-        int taskId = GenerateTaskId();
+        uint taskId = GenerateTaskId();
         double startTime = GetUTCMilliseconds();
-        double targetTime = startTime + delayInvokeTaskTime;
-        TickTimerTask tickTimerTask = new TickTimerTask(taskId, delayInvokeTaskTime, repeatTaskCount, targetTime, doneTaskCallBack, cancelTaskCallBack, startTime);
+        double targetTime = startTime + delayedInvokeTaskTime;
+        TickTimerTask tickTimerTask = new TickTimerTask(taskId, delayedInvokeTaskTime, repeatTaskCount, targetTime, completeTaskCallBack, cancelTaskCallBack, startTime);
         if (_taskDict.TryAdd(taskId, tickTimerTask))
         {
             return taskId;
@@ -54,16 +54,17 @@ public class TaskTickTimer : TaskBaseTimer
         else
         {
             LogWarnningFunc?.Invoke($"TaskTickTimer AddTask Warnning: [ {taskId} ] already Exist.");
-            return -1;
+            return 0;
         }
     }
 
-    public override bool RemoveTask(int taskId)
+    public override bool RemoveTask(uint taskId)
     {
         if (_taskDict.TryRemove(taskId, out TickTimerTask task))
         {
             if (_isSetHandled && task.CancelCallBack != null)
             {
+                LogInfoFunc?.Invoke($"TaskTickTimer RemoveTask Succeed: [ {taskId} ].");
                 _taskPackQueue.Enqueue(new TickTimerTaskPack(taskId, task.CancelCallBack));
             }
             else
@@ -108,18 +109,18 @@ public class TaskTickTimer : TaskBaseTimer
                 --task.RepeatCount;
                 if (task.RepeatCount == 0)
                 {
-                    DoneTask(task.TaskId);
+                    RunTask(task.TaskId);
                 }
                 else
                 {
                     task.TargetTime = task.StartTime + task.DelayInvokeTime * (task.LoopIndex + 1);
-                    InvokeTaskCallBack(task.TaskId, task.DoneCallBack);
+                    InvokeTaskCallBack(task.TaskId, task.CompleteCallBack);
                 }
             }
             else
             {
                 task.TargetTime = task.StartTime + task.DelayInvokeTime * (task.LoopIndex + 1);
-                InvokeTaskCallBack(task.TaskId, task.DoneCallBack);
+                InvokeTaskCallBack(task.TaskId, task.CompleteCallBack);
             }
         }
     }
@@ -129,21 +130,21 @@ public class TaskTickTimer : TaskBaseTimer
         {
             if (_taskPackQueue.TryDequeue(out TickTimerTaskPack pack))
             {
-                pack.TaskCallBack.Invoke(pack.TaskId);
+                pack.taskCallBack.Invoke(pack.taskId);
             }
             else
             {
-                LogErrorFunc?.Invoke("TaskTickTimer Handle Warnning: TickTaskPack Queue Dequeue Data Error.");
+                LogErrorFunc?.Invoke("TaskTickTimer Handle Error: TickTaskPack Queue Dequeue Failed.");
             }
         }
     }
 
-    private void DoneTask(int taskId)
+    private void RunTask(uint taskId)
     {
         if (_taskDict.TryRemove(taskId, out TickTimerTask task))
         {
-            InvokeTaskCallBack(taskId, task.DoneCallBack);
-            task.DoneCallBack = null;
+            InvokeTaskCallBack(taskId, task.CompleteCallBack);
+            task.CompleteCallBack = null;
         }
         else
         {
@@ -151,7 +152,7 @@ public class TaskTickTimer : TaskBaseTimer
         }
     }
 
-    private void InvokeTaskCallBack(int taskId, Action<int> taskCallBack)
+    private void InvokeTaskCallBack(uint taskId, Action<uint> taskCallBack)
     {
         if (_isSetHandled)
         {
@@ -169,16 +170,16 @@ public class TaskTickTimer : TaskBaseTimer
         return timeSpan.TotalMilliseconds;
     }
 
-    protected override int GenerateTaskId()
+    protected override uint GenerateTaskId()
     {
         lock (_taskIdLock)
         {
             while (true)
             {
                 ++_taskId;
-                if (_taskId == int.MaxValue)
+                if (_taskId == uint.MaxValue)
                 {
-                    _taskId = 0;
+                    _taskId = 1;
                 }
                 if (!_taskDict.ContainsKey(_taskId))
                 {
@@ -190,22 +191,22 @@ public class TaskTickTimer : TaskBaseTimer
 
     private class TickTimerTask
     {
-        public int TaskId { get; private set; }
+        public uint TaskId { get; private set; }
         public uint DelayInvokeTime { get; set; }
         public int RepeatCount { get; set; }
         public double TargetTime { get; set; }
-        public Action<int> DoneCallBack { get; set; }
-        public Action<int> CancelCallBack { get; set; }
+        public Action<uint> CompleteCallBack { get; set; }
+        public Action<uint> CancelCallBack { get; set; }
         public double StartTime { get; set; }
         public ulong LoopIndex { get; set; }
 
-        public TickTimerTask(int taskId, uint delayInvokeTime, int repeatCount, double targetTime, Action<int> doneCallBack, Action<int> cancelCallBack, double startTime)
+        public TickTimerTask(uint taskId, uint delayInvokeTime, int repeatCount, double targetTime, Action<uint> completeCallBack, Action<uint> cancelCallBack, double startTime)
         {
             TaskId = taskId;
             DelayInvokeTime = delayInvokeTime;
             RepeatCount = repeatCount;
             TargetTime = targetTime;
-            DoneCallBack = doneCallBack;
+            CompleteCallBack = completeCallBack;
             CancelCallBack = cancelCallBack;
             StartTime = startTime;
             LoopIndex = 0;
@@ -214,12 +215,12 @@ public class TaskTickTimer : TaskBaseTimer
 
     private class TickTimerTaskPack
     {
-        public int TaskId { get; private set; }
-        public Action<int> TaskCallBack { get; set; }
-        public TickTimerTaskPack(int taskId, Action<int> taskCallBack)
+        public uint taskId { get; private set; }
+        public Action<uint> taskCallBack { get; set; }
+        public TickTimerTaskPack(uint taskId, Action<uint> taskCallBack)
         {
-            TaskId = taskId;
-            TaskCallBack = taskCallBack;
+            this.taskId = taskId;
+            this.taskCallBack = taskCallBack;
         }
     }
 }

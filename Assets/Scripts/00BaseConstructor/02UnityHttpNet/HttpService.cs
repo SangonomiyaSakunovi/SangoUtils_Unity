@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine.Networking;
 
 public class HttpService : BaseService<HttpService>
 {
@@ -152,5 +153,10 @@ public class HttpService : BaseService<HttpService>
     public void RemoveRequest(BaseRequest req)
     {
         _requestDict.Remove(req.HttpId);
+    }
+
+    public void HttpResource(HttpBaseResourcePack httpBaseResourcePack)
+    {
+        _httpClient.SendHttpResourceRequest(httpBaseResourcePack);
     }
 }

@@ -3,6 +3,13 @@ using System;
 using UnityEngine;
 using UnityEngine.Networking;
 
+public enum HttpType
+{
+    Get,
+    Post,
+    Put
+}
+
 public abstract class HttpPack
 {
     public int id;
@@ -26,7 +33,7 @@ public class HttpPack<T> : HttpPack where T : class
         if (resCode == 0)
         {
             string recievedData = recvObj["data"].ToString();
-            if (recievedData != null)
+            if (!string.IsNullOrEmpty(recievedData))
             {
                 T data;
                 if (typeof(T).Name == "String")
@@ -52,11 +59,4 @@ public class HttpPack<T> : HttpPack where T : class
             HttpService.Instance?.HttpBroadcast<T>(null, messageId, resCode);
         }
     }
-}
-
-public enum HttpType
-{
-    Get,
-    Post,
-    Put
 }

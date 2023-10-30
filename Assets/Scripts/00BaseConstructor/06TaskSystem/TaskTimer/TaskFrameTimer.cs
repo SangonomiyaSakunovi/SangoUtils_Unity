@@ -3,113 +3,109 @@ using System.Collections.Generic;
 
 public class TaskFrameTimer : TaskBaseTimer
 {
-    private ulong currentFrame;
-    private readonly Dictionary<int, FrameTimerTask> taskDic;
-    private const string tidLock = "TaskFrameTimer_Lock";
-    private List<int> tidLst;
+    private ulong _currentFrame;
+    private readonly Dictionary<uint, FrameTimerTask> _taskDict;
+    private const string _taskIdLock = "TaskFrameTimer_Lock";
+    private List<uint> _taskIdLts;
 
-    public TaskFrameTimer(ulong frameID = 0)
+    public TaskFrameTimer(ulong frameId = 0)
     {
-        currentFrame = frameID;
-        taskDic = new Dictionary<int, FrameTimerTask>();
-        tidLst = new List<int>();
+        _currentFrame = frameId;
+        _taskDict = new Dictionary<uint, FrameTimerTask>();
+        _taskIdLts = new List<uint>();
     }
 
-    public override int AddTask(
-        uint delayInvokeTaskTime,
-        Action<int> doneTaskCallBack,
-        Action<int> cancelTaskCallBack,
-        int repeatTaskCount = 1)
+    public override uint AddTask(uint delayedInvokeTaskTime, Action<uint> completeTaskCallBack, Action<uint> cancelTaskCallBack, int repeatTaskCount = 1)
     {
-        int tid = GenerateTaskId();
-        ulong destFrame = currentFrame + delayInvokeTaskTime;
-        FrameTimerTask task = new FrameTimerTask(tid, delayInvokeTaskTime, repeatTaskCount, destFrame, doneTaskCallBack, cancelTaskCallBack);
-        if (taskDic.ContainsKey(tid))
+        uint taskId = GenerateTaskId();
+        ulong destFrame = _currentFrame + delayedInvokeTaskTime;
+        FrameTimerTask task = new FrameTimerTask(taskId, delayedInvokeTaskTime, repeatTaskCount, destFrame, completeTaskCallBack, cancelTaskCallBack);
+        if (_taskDict.ContainsKey(taskId))
         {
-            LogWarnningFunc?.Invoke($"key:{tid} already exist.");
-            return -1;
+            LogWarnningFunc?.Invoke($"TaskFrameTimer AddTask Warnning: [ {taskId} ] already Exist.");
+            return 0;
         }
         else
         {
-            taskDic.Add(tid, task);
-            return tid;
+            _taskDict.Add(taskId, task);
+            return taskId;
         }
     }
 
-    public override bool RemoveTask(int taskId)
+    public override bool RemoveTask(uint taskId)
     {
-        if (taskDic.TryGetValue(taskId, out FrameTimerTask task))
+        if (_taskDict.TryGetValue(taskId, out FrameTimerTask task))
         {
-            if (taskDic.Remove(taskId))
+            if (_taskDict.Remove(taskId))
             {
+                LogInfoFunc?.Invoke($"TaskFrameTimer RemoveTask Succeed: [ {taskId} ].");
                 task.CancelCallBack?.Invoke(taskId);
                 return true;
             }
             else
             {
-                LogErrorFunc?.Invoke($"Remove tid:{taskId} in taskDic failed.");
+                LogErrorFunc?.Invoke($"TaskFrameTimer RemoveTask Error: Try Remove [ {taskId} ] in TaskDic Failed.");
                 return false;
             }
         }
         else
         {
-            LogWarnningFunc?.Invoke($"tid:{taskId} is not exist.");
+            LogWarnningFunc?.Invoke($"TaskFrameTimer RemoveTask Warnning: [ {taskId} ] is Not Exist.");
             return false;
         }
     }
 
     public override void ResetTask()
     {
-        taskDic.Clear();
-        tidLst.Clear();
-        currentFrame = 0;
+        _taskDict.Clear();
+        _taskIdLts.Clear();
+        _currentFrame = 0;
     }
 
     public void UpdateTask()
     {
-        ++currentFrame;
-        tidLst.Clear();
+        ++_currentFrame;
+        _taskIdLts.Clear();
 
-        foreach (var item in taskDic)
+        foreach (FrameTimerTask task in _taskDict.Values)
         {
-            FrameTimerTask task = item.Value;
-            if (task.TargetFrame <= currentFrame)
+            if (task.TargetFrame <= _currentFrame)
             {
-                task.DoneCallBack.Invoke(task.TaskId);
+                task.CompleteCallBack.Invoke(task.TaskId);
                 task.TargetFrame += task.DelayInvokeTime;
                 --task.RepeatCount;
                 if (task.RepeatCount == 0)
                 {
-                    tidLst.Add(task.TaskId);
+                    _taskIdLts.Add(task.TaskId);
                 }
             }
         }
 
-        for (int i = 0; i < tidLst.Count; i++)
+        for (int i = 0; i < _taskIdLts.Count; i++)
         {
-            if (taskDic.Remove(tidLst[i]))
+            if (_taskDict.Remove(_taskIdLts[i]))
             {
-                LogInfoFunc?.Invoke($"Task tid:{tidLst[i]} run to completion.");
+                LogInfoFunc?.Invoke($"TaskFrameTimer UpdateTask Succeed: [ {_taskIdLts[i]} ] Run to Completion.");
             }
             else
             {
-                LogErrorFunc?.Invoke($"Remove tid:{tidLst[i]} task in taskDic failed.");
+                LogErrorFunc?.Invoke($"TaskFrameTimer UpdateTask Error: Remove [ {_taskIdLts[i]} ] in TaskDic Failed.");
             }
         }
     }
 
-    protected override int GenerateTaskId()
+    protected override uint GenerateTaskId()
     {
-        lock (tidLock)
+        lock (_taskIdLock)
         {
             while (true)
             {
                 ++_taskId;
-                if (_taskId == int.MaxValue)
+                if (_taskId == uint.MaxValue)
                 {
-                    _taskId = 0;
+                    _taskId = 1;
                 }
-                if (!taskDic.ContainsKey(_taskId))
+                if (!_taskDict.ContainsKey(_taskId))
                 {
                     return _taskId;
                 }
@@ -119,21 +115,21 @@ public class TaskFrameTimer : TaskBaseTimer
 
     private class FrameTimerTask
     {
-        public int TaskId { get; private set; }
+        public uint TaskId { get; private set; }
         public uint DelayInvokeTime { get; set; }
         public int RepeatCount { get; set; }
         public ulong TargetFrame { get; set; }
-        public Action<int> DoneCallBack { get; set; }
-        public Action<int> CancelCallBack { get; set; }
+        public Action<uint> CompleteCallBack { get; set; }
+        public Action<uint> CancelCallBack { get; set; }
 
-        public FrameTimerTask(int taskId, uint delayInvokeTime, int repeatCount, ulong targetFrame, Action<int> doneCallBack, Action<int> cancelCallBack)
+        public FrameTimerTask(uint taskId, uint delayInvokeTime, int repeatCount, ulong targetFrame, Action<uint> completeCallBack, Action<uint> cancelCallBack)
         {
-            this.TaskId = taskId;
-            this.DelayInvokeTime = delayInvokeTime;
-            this.RepeatCount = repeatCount;
-            this.TargetFrame = targetFrame;
-            this.DoneCallBack = doneCallBack;
-            this.CancelCallBack = cancelCallBack;
+            TaskId = taskId;
+            DelayInvokeTime = delayInvokeTime;
+            RepeatCount = repeatCount;
+            TargetFrame = targetFrame;
+            CompleteCallBack = completeCallBack;
+            CancelCallBack = cancelCallBack;
         }
     }
 }
