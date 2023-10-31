@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +9,7 @@ public class ResourceService : BaseService<ResourceService>
     private Dictionary<string, Sprite> _spriteDict = new Dictionary<string, Sprite>();
     private Dictionary<string, GameObject> _prefabDict = new Dictionary<string, GameObject>();
 
-    private Dictionary<string, Texture> _rawImageTextureDict = new Dictionary<string, Texture>(); 
+    private Dictionary<string, Texture> _rawImageTextureDict = new Dictionary<string, Texture>();
 
     public override void OnInit()
     {
@@ -66,17 +67,21 @@ public class ResourceService : BaseService<ResourceService>
         return prefab;
     }
 
-    public void LoadAndSetRawImageOnlineAsync(RawImage targetRawImage, string urlPath, bool isCahce)
+    public void LoadAndSetRawImageOnlineAsync(RawImage targetRawImage, string urlPath, bool isCahce, Action<object[]> callBack)
     {
-        _rawImageTextureDict.TryGetValue(urlPath,out Texture texture);
+        _rawImageTextureDict.TryGetValue(urlPath, out Texture texture);
         {
             if (texture == null)
             {
                 HttpRawImageResourcePack pack = new HttpRawImageResourcePack();
                 pack.url = urlPath;
-                pack.isCache = isCahce;
                 pack.targetRawImage = targetRawImage;
                 pack.resourceType = HttpResourceType.RawImage;
+                pack.onCompleteCallBack = callBack;
+                if (isCahce)
+                {
+                    pack.onLoadCallBack = AddRawImageTextureCacheCB;
+                }
                 HttpService.Instance?.HttpResource(pack);
             }
             else
@@ -88,9 +93,16 @@ public class ResourceService : BaseService<ResourceService>
             }
         }
     }
-
-    public void AddRawImageTextureCache(string urlPath, Texture texture)
+    private void AddRawImageTextureCacheCB(string urlPath, Texture texture)
     {
-        _rawImageTextureDict.Add(urlPath, texture);
+        if (!_rawImageTextureDict.ContainsKey(urlPath))
+        {
+            _rawImageTextureDict.Add(urlPath, texture);
+        }
+    }
+
+    public void LoadAndSetGLTFModelOnlineAsync(GameObject parentObject, string urlPath)
+    {
+        ResourcePerticularService.Instance?.LoadAndSetGLTFModelOnlineAsync(parentObject, urlPath);
     }
 }

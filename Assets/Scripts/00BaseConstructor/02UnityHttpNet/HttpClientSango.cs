@@ -4,7 +4,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class HttpClient
+public class HttpClientSango
 {
     private const int _webReqTimeout = 15;
     private const int _webReqTryCount = 3;
@@ -118,7 +118,8 @@ public class HttpClient
 
     private void HandleRequestResponsed()
     {
-        if (_receivedHttpPacks.Count == 0) return;
+        if (_receivedHttpPacks.Count == 0)
+            return;
 
         for (int i = _receivedHttpPacks.Count - 1; i >= 0; i--)
         {
@@ -129,35 +130,32 @@ public class HttpClient
                 continue;
             }
 
-            if (pack.webRequest.isDone) { }
+            if (pack.webRequest.isDone)
+            {
+                int responseCode = (int)pack.webRequest.responseCode;
+                string responseJson = pack.webRequest.downloadHandler.text;
+                if (responseCode != 200 && --pack.tryCount > 0)
+                {
+                    Debug.Log("Try reconnect Id: [" + pack.id + " ], try times: " + pack.tryCount);
+
+                    _sendHttpPacks.Add(pack);
+                    continue;
+                }
+                CheckResponseCode(pack.id, responseCode, responseJson);
+                pack.OnData(responseJson, responseCode, pack.id);
+            }
             else if (pack.webRequest.isHttpError || pack.webRequest.isNetworkError)
             {
-                Debug.LogError(pack.webRequest.error);
+
             }
             else
             {
                 continue;
             }
-
-            int responseCode = (int)pack.webRequest.responseCode;
-            string responseJson = pack.webRequest.downloadHandler.text;
-
             pack.webRequest.Abort();
             pack.webRequest.Dispose();
             pack.webRequest = null;
             _receivedHttpPacks.Remove(pack);
-
-            if (responseCode != 200 && --pack.tryCount > 0)
-            {
-                Debug.Log("Try reconnect Id: [" + pack.id + " ], try times: " + pack.tryCount);
-
-                _sendHttpPacks.Add(pack);
-                continue;
-            }
-
-            CheckResponseCode(pack.id, responseCode, responseJson);
-
-            pack.OnData(responseJson, responseCode, pack.id);
         }
     }
 
@@ -192,10 +190,10 @@ public class HttpClient
     private void HandleResourceRequestSend()
     {
         if (_sendHttpResourcePacks.Count == 0) return;
-
-        for (int i = 0; i < _receivedHttpResourcePacks.Count; i++)
+        for (int i = 0; i < _sendHttpResourcePacks.Count; i++)
         {
-            HttpBaseResourcePack pack = _receivedHttpResourcePacks[i];
+            HttpBaseResourcePack pack = _sendHttpResourcePacks[i];
+            pack.tryCount = _webReqTryCount;
             pack.OnRequest();
             _receivedHttpResourcePacks.Add(pack);
         }
@@ -206,7 +204,7 @@ public class HttpClient
     {
         if (_receivedHttpResourcePacks.Count == 0) return;
 
-        for (int i = _receivedHttpResourcePacks.Count - 1; i >=0; i--)
+        for (int i = _receivedHttpResourcePacks.Count - 1; i >= 0; i--)
         {
             HttpBaseResourcePack pack = _receivedHttpResourcePacks[i];
             if (pack.webRequest == null)
@@ -215,17 +213,28 @@ public class HttpClient
                 continue;
             }
 
-            if (pack.webRequest.isDone) { }
+            if (pack.webRequest.isDone)
+            {
+                int responseCode = (int)pack.webRequest.responseCode;
+                if (responseCode != 200 && --pack.tryCount > 0)
+                {
+                    _sendHttpResourcePacks.Add(pack);
+                    continue;
+                }
+                if (pack.webRequest.downloadHandler.isDone)
+                {
+                    pack.OnResponsed();
+                }
+            }
+
             else if (pack.webRequest.isHttpError || pack.webRequest.isNetworkError)
             {
-                Debug.LogError(pack.webRequest.error);
+
             }
             else
             {
                 continue;
             }
-
-            pack.OnResponsed();
             _receivedHttpResourcePacks.Remove(pack);
         }
     }

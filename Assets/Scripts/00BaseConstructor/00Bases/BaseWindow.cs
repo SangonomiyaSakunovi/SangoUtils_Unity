@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -88,23 +89,33 @@ public class BaseWindow : MonoBehaviour
     #endregion
 
     #region SetOnlineResource
-    public void SetRawImageOnlineAsync(RawImage rawImage, string urlPath, bool isCache = true)
+    public void SetRawImageOnlineAsync(RawImage rawImage, string urlPath, bool isCache = true, Action<object[]> callBack = null)
     {
-        ResourceService.Instance.LoadAndSetRawImageOnlineAsync(rawImage, urlPath, isCache);
+        ResourceService.Instance.LoadAndSetRawImageOnlineAsync(rawImage, urlPath, isCache, callBack);
     }
 
-    public void SetRawImageOnlineAsync(GameObject gameObject, string urlPath, bool isCache = true)
+    public void SetRawImageOnlineAsync(GameObject gameObject, string urlPath, bool isCache = true, Action<object[]> callBack = null)
     {
         RawImage rawImage = gameObject.GetComponent<RawImage>();
         if (rawImage != null)
         {
-            SetRawImageOnlineAsync(rawImage, urlPath, isCache);
+            SetRawImageOnlineAsync(rawImage, urlPath, isCache, callBack);
         }
     }
 
-    public void SetRawImageOnlineAsync(Transform transform, string urlPath, bool isCache = true)
+    public void SetRawImageOnlineAsync(Transform transform, string urlPath, bool isCache = true, Action<object[]> callBack = null)
     {
-        SetRawImageOnlineAsync(transform.gameObject, urlPath, isCache);
+        SetRawImageOnlineAsync(transform.gameObject, urlPath, isCache, callBack);
+    }
+
+    public void SetGLTFModelOnlineAsync(GameObject parentObject, string urlPath)
+    {
+        ResourceService.Instance.LoadAndSetGLTFModelOnlineAsync(parentObject,urlPath);
+    }
+
+    public void SetGLTFModelOnlineAsync(Transform parentTrans, string urlPath)
+    {
+        ResourceService.Instance.LoadAndSetGLTFModelOnlineAsync(parentTrans.gameObject, urlPath);
     }
     #endregion
 

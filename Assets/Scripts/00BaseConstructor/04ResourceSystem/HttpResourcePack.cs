@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using static UnityEngine.Application;
 
 public enum HttpResourceType
 {
@@ -11,9 +13,10 @@ public enum HttpResourceType
 public abstract class HttpBaseResourcePack
 {
     public string url;
-    public bool isCache;
+    public int tryCount;
     public HttpResourceType resourceType;
     public UnityWebRequest webRequest;
+    public Action<object[]> onCompleteCallBack;
 
     public abstract void OnRequest();
     public abstract void OnResponsed();
@@ -23,6 +26,7 @@ public class HttpRawImageResourcePack : HttpBaseResourcePack
 {
     public DownloadHandlerTexture downloadHandlerTexture;
     public RawImage targetRawImage;
+    public Action<string, Texture> onLoadCallBack;
 
     public override void OnRequest()
     {
@@ -38,10 +42,10 @@ public class HttpRawImageResourcePack : HttpBaseResourcePack
         if (targetRawImage != null)
         {
             targetRawImage.texture = downloadedTexture;
-        }
-        if (isCache)
+        }        
+        if (onLoadCallBack != null)
         {
-            ResourceService.Instance.AddRawImageTextureCache(url, downloadedTexture);
+            onLoadCallBack(url,downloadedTexture);
         }
         webRequest.Abort();
         webRequest.Dispose();
