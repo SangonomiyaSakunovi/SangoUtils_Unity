@@ -178,7 +178,7 @@ public class BaseWindow : MonoBehaviour
     protected void SetButtonListener(Button button, UnityAction<Button> callBack)
     {
         button.onClick.AddListener(() => callBack(button));
-    }
+    }    
 
     protected void SetButtonListener(GameObject gameObject, UnityAction<Button> callBack)
     {
@@ -189,9 +189,18 @@ public class BaseWindow : MonoBehaviour
         }
     }
 
-    protected void SetButtonListener(Transform transform, UnityAction<Button> callBack)
+    protected void SetButtonListeners(Transform buttonTrans, UnityAction<Button> callBack)
     {
-        SetButtonListener(transform.gameObject, callBack);
+        for (int i = 0; i < buttonTrans.childCount; i++)
+        {
+            Button button = buttonTrans.GetChild(i).GetComponent<Button>();
+            button.onClick.AddListener(() => callBack(button));
+        }
+    }
+
+    protected void SetButtonListeners(GameObject buttonObj, UnityAction<Button> callBack)
+    {
+        SetButtonListeners(buttonObj.transform, callBack);
     }
     #endregion
 
@@ -209,6 +218,30 @@ public class BaseWindow : MonoBehaviour
     protected void RemoveAllListeners(Slider slider)
     {
         slider.onValueChanged.RemoveAllListeners();
+    }
+
+    protected void RemoveAllListeners(Button[] buttons)
+    {
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            buttons[i].onClick.RemoveAllListeners();
+        }
+    }
+
+    protected void RemoveAllListeners(Toggle[] toggles)
+    {
+        for (int i = 0; i < toggles.Length; i++)
+        {
+            toggles[i].onValueChanged.RemoveAllListeners();
+        }
+    }
+
+    protected void RemoveAllListeners(Slider[] sliders)
+    {
+        for (int i = 0; i < sliders.Length; i++)
+        {
+            sliders[i].onValueChanged.RemoveAllListeners();
+        }
     }
     #endregion
 

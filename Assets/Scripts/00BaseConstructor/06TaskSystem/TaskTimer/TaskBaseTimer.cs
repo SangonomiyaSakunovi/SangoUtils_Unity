@@ -10,7 +10,7 @@ public abstract class TaskBaseTimer
 
     protected abstract uint GenerateTaskId();
 
-    public abstract uint AddTask(uint delayedInvokeTaskTime, Action<uint> doneTaskCallBack, Action<uint> cancelTaskCallBack, int repeatTaskCount = 1);
+    public abstract uint AddTask(uint delayedInvokeTaskTime, Action<uint> completeTaskCallBack, Action<uint> cancelTaskCallBack, int repeatTaskCount = 1);
 
     public abstract bool RemoveTask(uint taskId);
 
