@@ -110,7 +110,7 @@ public class BaseWindow : MonoBehaviour
 
     public void SetGLTFModelOnlineAsync(GameObject parentObject, string urlPath)
     {
-        ResourceService.Instance.LoadAndSetGLTFModelOnlineAsync(parentObject,urlPath);
+        ResourceService.Instance.LoadAndSetGLTFModelOnlineAsync(parentObject, urlPath);
     }
 
     public void SetGLTFModelOnlineAsync(Transform parentTrans, string urlPath)
@@ -178,7 +178,7 @@ public class BaseWindow : MonoBehaviour
     protected void SetButtonListener(Button button, UnityAction<Button> callBack)
     {
         button.onClick.AddListener(() => callBack(button));
-    }    
+    }
 
     protected void SetButtonListener(GameObject gameObject, UnityAction<Button> callBack)
     {
@@ -617,6 +617,23 @@ public class BaseWindow : MonoBehaviour
     protected void SetUnActiveAllChild(GameObject rootObject)
     {
         SetUnActiveAllChild(rootObject.transform);
+    }
+    #endregion
+
+    #region PlayUIAnimation
+    protected void AddUIAnimation(string id, SangoUIBaseAnimation sangoUIAnimation, Action completeCallBack = null, Action cancelCallBack = null)
+    {
+        UIAnimationService.Instance.AddAnimation(id, sangoUIAnimation, completeCallBack, cancelCallBack);
+    }
+
+    protected void PlayUIAnimation(string id, params string[] commands)
+    {
+        UIAnimationService.Instance.PlayAnimation(id, commands);
+    }
+
+    protected void PlayUIAnimationAsync(string id, params string[] commands)
+    {
+        UIAnimationService.Instance.PlayAnimationAsync(id, commands);
     }
     #endregion
 }

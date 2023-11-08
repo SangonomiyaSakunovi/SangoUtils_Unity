@@ -4,26 +4,53 @@ using UnityEngine;
 
 public class SangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
 {
+    private float _defalutDuration;
     private int _midPos = 0;
+    private Transform _parentTrans;
     private List<RectTransform> _imageRects;
 
-    public void InvokeAnimation(Transform parentTrans, bool isLeftSlide, float aniDurationTime)
+    public SangoUISlideBroadCastImageAnimation(Transform parentTrans, float aniDurationTime)
+    {
+        _parentTrans = parentTrans;
+        _defalutDuration = aniDurationTime;
+    }
+
+    public override void InitAnimation(params string[] commands)
     {
         _imageRects = new List<RectTransform>();
-        for (int i = 0; i < parentTrans.childCount; i++)
+
+        for (int i = 0; i < _parentTrans.childCount; i++)
         {
-            _imageRects.Add(parentTrans.GetChild(i).GetComponent<RectTransform>());
+            _imageRects.Add(_parentTrans.GetChild(i).GetComponent<RectTransform>());
         }
-        durationTime = aniDurationTime;
+        durationTime = _defalutDuration;
         _midPos = _imageRects.Count / 2;
-        if (isLeftSlide)
+        ChangeSibling();
+    }
+
+    public override void PlayAnimation(params string[] commands)
+    {
+
+        if (commands == null) return;
+        Debug.Log(commands.Length);
+        if (commands[0] == "-1")
         {
             LeftSlideAnimation();
         }
-        else
+        else if (commands[0] == "1")
         {
             RightSlideAnimation();
         }
+    }
+
+    public override void StopAnimation()
+    {
+
+    }
+
+    public override void ResetAnimation()
+    {
+        durationTime = _defalutDuration;
     }
 
     private void LeftSlideAnimation()
@@ -54,9 +81,9 @@ public class SangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
 
     private void RightSlideAnimation()
     {
-        for (int i = 0; i <= _imageRects.Count; i++)
+        for (int i = 0; i < _imageRects.Count; i++)
         {
-            if (i == _imageRects.Count)
+            if (i == _imageRects.Count - 1)
             {
                 _imageRects[i].DOAnchorPos(_imageRects[i - _imageRects.Count + 1].anchoredPosition, durationTime);
                 _imageRects[i].DOSizeDelta(_imageRects[i - _imageRects.Count + 1].sizeDelta, durationTime);

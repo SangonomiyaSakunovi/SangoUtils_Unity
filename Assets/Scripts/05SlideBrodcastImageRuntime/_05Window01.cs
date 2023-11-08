@@ -16,7 +16,7 @@ public class _05Window01 : MonoBehaviour
             tfs.Add(_parentTrans.GetChild(i).GetComponent<RectTransform>());
         }
         _midPos = tfs.Count / 2;
-        ChangeSibling();
+        //ChangeSibling();
     }
 
     void Update()
