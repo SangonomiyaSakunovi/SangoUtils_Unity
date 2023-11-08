@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BaseWindow : MonoBehaviour
@@ -634,6 +635,165 @@ public class BaseWindow : MonoBehaviour
     protected void PlayUIAnimationAsync(string id, params string[] commands)
     {
         UIAnimationService.Instance.PlayAnimationAsync(id, commands);
+    }
+    #endregion
+
+    #region UIPointerListener
+    protected void SetPointerClickListener(GameObject gameObject, Action<PointerEventData, GameObject, object[]> onPointerClickCallBack, params object[] commands)
+    {
+        UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+        listener.onPointerClickCallBack1 = onPointerClickCallBack;
+        listener.listenerObject = gameObject;
+        if (commands != null)
+        {
+            listener.commands = commands;
+        }
+    }
+
+    protected void SetPointerDownListener(GameObject gameObject, Action<PointerEventData, GameObject, object[]> onPointerDownCallBack, params object[] commands)
+    {
+        UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+        listener.onPointerDownCallBack1 = onPointerDownCallBack;
+        listener.listenerObject = gameObject;
+        if (commands != null)
+        {
+            listener.commands = commands;
+        }
+    }
+
+    protected void SetPointerUpListener(GameObject gameObject, Action<PointerEventData, GameObject, object[]> onPointerUpCallBack, params object[] commands)
+    {
+        UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+        listener.onPointerUpCallBack1 = onPointerUpCallBack;
+        listener.listenerObject = gameObject;
+        if (commands != null)
+        {
+            listener.commands = commands;
+        }
+    }
+
+    protected void SetPointerDragListener(GameObject gameObject, Action<PointerEventData, GameObject, object[]> onPointerDragCallBack, params object[] commands)
+    {
+        UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+        listener.onPointerDragCallBack1 = onPointerDragCallBack;
+        listener.listenerObject = gameObject;
+        if (commands != null)
+        {
+            listener.commands = commands;
+        }
+    }
+
+    protected void SetPointerClickListener(Transform transform, Action<PointerEventData, GameObject, object[]> onPointerClickCallBack, params object[] commands)
+    {
+        SetPointerClickListener(transform.gameObject, onPointerClickCallBack, commands);
+    }
+
+    protected void SetPointerDownListener(Transform transform, Action<PointerEventData, GameObject, object[]> onPointerDownCallBack, params object[] commands)
+    {
+        SetPointerDownListener(transform.gameObject, onPointerDownCallBack, commands);
+    }
+
+    protected void SetPointerUpListener(Transform transform, Action<PointerEventData, GameObject, object[]> onPointerUpCallBack, params object[] commands)
+    {
+        SetPointerUpListener(transform.gameObject, onPointerUpCallBack, commands);
+    }
+
+    protected void SetPointerDragListener(Transform transform, Action<PointerEventData, GameObject, object[]> onPointerDragCallBack, params object[] commands)
+    {
+        SetPointerDragListener(transform.gameObject, onPointerDragCallBack, commands);
+    }
+
+    protected void SetPointerClickListener(GameObject gameObject, Action<GameObject, object[]> onPointerClickCallBack, params object[] commands)
+    {
+        UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+        listener.onPointerClickCallBack0 = onPointerClickCallBack;
+        listener.listenerObject = gameObject;
+        if (commands != null)
+        {
+            listener.commands = commands;
+        }
+    }
+
+    protected void SetPointerDownListener(GameObject gameObject, Action<GameObject, object[]> onPointerDownCallBack, params object[] commands)
+    {
+        UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+        listener.onPointerDownCallBack0 = onPointerDownCallBack;
+        listener.listenerObject = gameObject;
+        if (commands != null)
+        {
+            listener.commands = commands;
+        }
+    }
+
+    protected void SetPointerUpListener(GameObject gameObject, Action<GameObject, object[]> onPointerUpCallBack, params object[] commands)
+    {
+        UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+        listener.onPointerUpCallBack0 = onPointerUpCallBack;
+        listener.listenerObject = gameObject;
+        if (commands != null)
+        {
+            listener.commands = commands;
+        }
+    }
+
+    protected void SetPointerDragListener(GameObject gameObject, Action<GameObject, object[]> onPointerDragCallBack, params object[] commands)
+    {
+        UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+        listener.onPointerDragCallBack0 = onPointerDragCallBack;
+        listener.listenerObject = gameObject;
+        if (commands != null)
+        {
+            listener.commands = commands;
+        }
+    }
+
+    protected void SetPointerClickListener(Transform transform, Action<GameObject, object[]> onPointerClickCallBack, params object[] commands)
+    {
+        SetPointerClickListener(transform.gameObject, onPointerClickCallBack, commands);
+    }
+
+    protected void SetPointerDownListener(Transform transform, Action<GameObject, object[]> onPointerDownCallBack, params object[] commands)
+    {
+        SetPointerDownListener(transform.gameObject, onPointerDownCallBack, commands);
+    }
+
+    protected void SetPointerUpListener(Transform transform, Action<GameObject, object[]> onPointerUpCallBack, params object[] commands)
+    {
+        SetPointerUpListener(transform.gameObject, onPointerUpCallBack, commands);
+    }
+
+    protected void SetPointerDragListener(Transform transform, Action<GameObject, object[]> onPointerDragCallBack, params object[] commands)
+    {
+        SetPointerDragListener(transform.gameObject, onPointerDragCallBack, commands);
+    }
+    #endregion
+
+    #region PointerSlideListener
+    protected void SetPointerSlideListener(GameObject gameObject, Action<GameObject, object[]> onPointerSlideCallBack, Action<GameObject, object[]> onPointerClickDoneCallBack, params object[] commands)
+    {
+        SetPointerDownListener(gameObject, (PointerEventData eventData, GameObject gameObject, object[] strs) =>
+        {
+            UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+            listener.clickDownPosition = eventData.position;
+        });
+        SetPointerDragListener(gameObject, (PointerEventData eventData, GameObject gameObject, object[] strs) =>
+        {
+            UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+            Vector2 direction = eventData.position - listener.clickDownPosition;
+            onPointerSlideCallBack?.Invoke(gameObject, new object[] { direction });
+        }, 
+        commands);
+        SetPointerUpListener(gameObject, (PointerEventData eventData, GameObject gameObject, object[] strs) =>
+        {
+            UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
+            Vector2 direction = eventData.position - listener.clickDownPosition;
+            onPointerClickDoneCallBack?.Invoke(gameObject, new object[] {direction});
+        });
+    }
+
+    protected void SetPointerSlideListener(Transform transform, Action<GameObject, object[]> onPointerSlideCallBack, Action<GameObject, object[]> onPointerClickDoneCallBack, params object[] commands)
+    {
+        SetPointerSlideListener(transform.gameObject, onPointerSlideCallBack, onPointerClickDoneCallBack, commands);
     }
     #endregion
 }

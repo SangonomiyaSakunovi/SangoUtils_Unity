@@ -32,7 +32,6 @@ public class ResSangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
     {
 
         if (commands == null) return;
-        Debug.Log(commands.Length);
         if (commands[0] == "-1")
         {
             LeftSlideAnimation();
