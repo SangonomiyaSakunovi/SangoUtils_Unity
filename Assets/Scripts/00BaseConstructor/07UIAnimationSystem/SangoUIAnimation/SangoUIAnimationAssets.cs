@@ -2,9 +2,9 @@ using UnityEngine;
 
 public static class SangoUIAnimationAssets
 {
-    public static SangoUISlideBroadCastImageAnimation SangoUISlideBroadCastImageAnimation(Transform parentTrans, float aniDurationTime)
+    public static ResSangoUISlideBroadCastImageAnimation SangoUISlideBroadCastImageAnimation(Transform parentTrans, float aniDurationTime)
     {
-        SangoUISlideBroadCastImageAnimation animation = new SangoUISlideBroadCastImageAnimation(parentTrans, aniDurationTime);
+        ResSangoUISlideBroadCastImageAnimation animation = new ResSangoUISlideBroadCastImageAnimation(parentTrans, aniDurationTime);
         animation.InitAnimation();
         return animation;
     }

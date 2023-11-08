@@ -2,14 +2,14 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
+public class ResSangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
 {
     private float _defalutDuration;
     private int _midPos = 0;
     private Transform _parentTrans;
     private List<RectTransform> _imageRects;
 
-    public SangoUISlideBroadCastImageAnimation(Transform parentTrans, float aniDurationTime)
+    public ResSangoUISlideBroadCastImageAnimation(Transform parentTrans, float aniDurationTime)
     {
         _parentTrans = parentTrans;
         _defalutDuration = aniDurationTime;
