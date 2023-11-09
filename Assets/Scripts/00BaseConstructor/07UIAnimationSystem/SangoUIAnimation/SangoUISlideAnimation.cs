@@ -2,14 +2,14 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResSangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
+public class SangoUIAnimationAssets_ResSangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
 {
     private float _defalutDuration;
     private int _midPos = 0;
     private Transform _parentTrans;
     private List<RectTransform> _imageRects;
 
-    public ResSangoUISlideBroadCastImageAnimation(Transform parentTrans, float aniDurationTime)
+    public SangoUIAnimationAssets_ResSangoUISlideBroadCastImageAnimation(Transform parentTrans, float aniDurationTime)
     {
         _parentTrans = parentTrans;
         _defalutDuration = aniDurationTime;
@@ -58,13 +58,13 @@ public class ResSangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
         {
             if (i == 0)
             {
-                _imageRects[i].DOAnchorPos(_imageRects[i + _imageRects.Count - 1].anchoredPosition, durationTime);
-                _imageRects[i].DOSizeDelta(_imageRects[i + _imageRects.Count - 1].sizeDelta, durationTime);
+                _imageRects[i].DOAnchorPos(_imageRects[i + _imageRects.Count - 1].anchoredPosition, durationTime);              
+                _imageRects[i].DOScale(_imageRects[i + _imageRects.Count - 1].localScale, durationTime);
             }
             else
             {
-                _imageRects[i].DOAnchorPos(_imageRects[i - 1].anchoredPosition, durationTime);
-                _imageRects[i].DOSizeDelta(_imageRects[i - 1].sizeDelta, durationTime);
+                _imageRects[i].DOAnchorPos(_imageRects[i - 1].anchoredPosition, durationTime);                
+                _imageRects[i].DOScale(_imageRects[i - 1].localScale, durationTime);
             }
         }
         if (_midPos < _imageRects.Count - 1)
@@ -85,12 +85,12 @@ public class ResSangoUISlideBroadCastImageAnimation : SangoUIBaseAnimation
             if (i == _imageRects.Count - 1)
             {
                 _imageRects[i].DOAnchorPos(_imageRects[i - _imageRects.Count + 1].anchoredPosition, durationTime);
-                _imageRects[i].DOSizeDelta(_imageRects[i - _imageRects.Count + 1].sizeDelta, durationTime);
+                _imageRects[i].DOScale(_imageRects[i - _imageRects.Count + 1].localScale, durationTime);
             }
             else
             {
                 _imageRects[i].DOAnchorPos(_imageRects[i + 1].anchoredPosition, durationTime);
-                _imageRects[i].DOSizeDelta(_imageRects[i + 1].sizeDelta, durationTime);
+                _imageRects[i].DOScale(_imageRects[i + 1].localScale, durationTime);
             }
         }
         if (_midPos > 0)

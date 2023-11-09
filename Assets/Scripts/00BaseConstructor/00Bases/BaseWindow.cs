@@ -1,6 +1,8 @@
+using RenderHeads.Media.AVProVideo;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -781,19 +783,52 @@ public class BaseWindow : MonoBehaviour
             UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
             Vector2 direction = eventData.position - listener.clickDownPosition;
             onPointerSlideCallBack?.Invoke(gameObject, new object[] { direction });
-        }, 
+        },
         commands);
         SetPointerUpListener(gameObject, (PointerEventData eventData, GameObject gameObject, object[] strs) =>
         {
             UIPointerListener listener = GetOrAddComponent<UIPointerListener>(gameObject);
             Vector2 direction = eventData.position - listener.clickDownPosition;
-            onPointerClickDoneCallBack?.Invoke(gameObject, new object[] {direction});
+            onPointerClickDoneCallBack?.Invoke(gameObject, new object[] { direction });
         });
     }
 
     protected void SetPointerSlideListener(Transform transform, Action<GameObject, object[]> onPointerSlideCallBack, Action<GameObject, object[]> onPointerClickDoneCallBack, params object[] commands)
     {
         SetPointerSlideListener(transform.gameObject, onPointerSlideCallBack, onPointerClickDoneCallBack, commands);
+    }
+    #endregion
+
+    #region MediaPlayController
+    private Dictionary<string, MediaPlayController> _mediaPlayControllerDict = null;
+
+    protected void AddMediaPlayController(string videoControllerId, MediaPlayer.FileLocation fileLocation, GameObject mediaPosWithOnlyCanvasRender, Texture2D mediaPosDefaultTexture, Slider mediaPlayProgressSlider = null, Button mediaPlayOrPauseButton = null, Action<bool> hasMediaTrunToPlayCallBack = null)
+    {
+        MediaPlayController controller = transform.GetOrAddComponent<MediaPlayController>();
+        controller.InitComponent(fileLocation, mediaPosWithOnlyCanvasRender, mediaPosDefaultTexture, mediaPlayProgressSlider, mediaPlayOrPauseButton, hasMediaTrunToPlayCallBack);
+        if (_mediaPlayControllerDict == null)
+        {
+            _mediaPlayControllerDict = new Dictionary<string, MediaPlayController>();
+        }
+        _mediaPlayControllerDict.Add(videoControllerId, controller);
+    }
+
+    protected void SetMediaPlayControllerContentFromFile(string videoControllerId, MediaPlayer.FileLocation fileLocation, string path, Action faildToOpenVideoCallBack = null)
+    {
+        _mediaPlayControllerDict.TryGetValue(videoControllerId, out MediaPlayController controller);
+        if (controller != null)
+        {
+            controller.OpenMediaFromFile(fileLocation, path, faildToOpenVideoCallBack);
+        }
+    }
+
+    protected void ResetMediaPlayController(string videoControllerId)
+    {
+        _mediaPlayControllerDict.TryGetValue(videoControllerId, out MediaPlayController controller);
+        if (controller != null)
+        {
+            controller.ResetMedia();
+        }
     }
     #endregion
 }
