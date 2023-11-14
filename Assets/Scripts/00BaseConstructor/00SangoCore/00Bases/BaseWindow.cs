@@ -221,29 +221,29 @@ public class BaseWindow : MonoBehaviour
     protected void RemoveAllListeners(Slider slider)
     {
         slider.onValueChanged.RemoveAllListeners();
-    }
+    }    
 
-    protected void RemoveAllListeners(Button[] buttons)
+    protected void RemoveTransListenersButton(Transform transform)
     {
-        for (int i = 0; i < buttons.Length; i++)
+        for (int i = 0; i< transform.childCount; i++)
         {
-            buttons[i].onClick.RemoveAllListeners();
+            transform.GetChild(i).GetComponent<Button>().onClick.RemoveAllListeners();
         }
     }
 
-    protected void RemoveAllListeners(Toggle[] toggles)
+    protected void RemoveTransListenersToggle(Transform transform)
     {
-        for (int i = 0; i < toggles.Length; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            toggles[i].onValueChanged.RemoveAllListeners();
+            transform.GetChild(i).GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
         }
     }
 
-    protected void RemoveAllListeners(Slider[] sliders)
+    protected void RemoveTransListenersSlider(Transform transform)
     {
-        for (int i = 0; i < sliders.Length; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
-            sliders[i].onValueChanged.RemoveAllListeners();
+            transform.GetChild(i).GetComponent<Slider>().onValueChanged.RemoveAllListeners();
         }
     }
     #endregion
