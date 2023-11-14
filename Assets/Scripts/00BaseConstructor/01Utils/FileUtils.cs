@@ -32,7 +32,7 @@ public static class TextureUtils
     private static string _texture2DType = "*.PNG|*.JPG";
 
     public static List<Texture> LoadTextureFolder(string folderPath, int width, int length)
-    {       
+    {
         if (!Directory.Exists(folderPath))
         {
             return null;

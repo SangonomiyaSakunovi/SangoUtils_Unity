@@ -28,6 +28,10 @@ public class _07Window : MonoBehaviour
         if (_textureLists != null)
         {
             Debug.Log("找到图片的数量为"+ _textureLists.Count);
+            if (_textureLists.Count == 0) 
+            {
+                return;
+            }
             _rawImage.texture = _textureLists[_currentIndex];
             if (_currentIndex < _textureLists.Count - 1)
             {
