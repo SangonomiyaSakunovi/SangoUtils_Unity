@@ -20,14 +20,14 @@ public abstract class HttpPack
     public int tryCount;
     public UnityWebRequest webRequest;
 
-    public abstract void OnData(string dataStr, int code, int messageId);
+    public abstract void OnDataReceived(string dataStr, int code, int messageId);
 }
 
 public class HttpPack<T> : HttpPack where T : class
 {
-    public override void OnData(string dataStr, int code, int messageId)
+    public override void OnDataReceived(string dataStr, int code, int messageId)
     {
-        Debug.Log("OperationId:[" + code + "], ReceivedStr: " + dataStr);
+        Debug.Log("HttpMessageId:[" + messageId + "], ReceivedStr: " + dataStr);
         JObject recvObj = JObject.Parse(dataStr);
         int resCode = recvObj["res"].Value<int>();
         if (resCode == 0)

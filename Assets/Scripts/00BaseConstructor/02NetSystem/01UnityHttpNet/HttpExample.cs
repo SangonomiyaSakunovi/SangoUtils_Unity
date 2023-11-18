@@ -40,11 +40,10 @@ public class HttpExample : MonoBehaviour
     }
 }
 
-public class SangoHttpExampleRequest : BaseRequest
+public class SangoHttpExampleRequest : BaseHttpRequest
 {
     public override void OnInit(int httpId)
     {
-        HttpId = httpId;
         base.OnInit(httpId);
     }
 

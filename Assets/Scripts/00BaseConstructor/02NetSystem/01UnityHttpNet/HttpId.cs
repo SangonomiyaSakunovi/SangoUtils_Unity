@@ -12,24 +12,24 @@ public class HttpId
     {
         System.Reflection.FieldInfo[] fields = typeof(HttpId).GetFields();
 
-        Type attType = typeof(HttpApiKey);
+        Type attributeType = typeof(HttpApiKey);
         for (int i = 0; i < fields.Length; i++)
         {
-            if (fields[i].IsDefined(attType, false))
+            if (fields[i].IsDefined(attributeType, false))
             {
                 int id = (int)fields[i].GetValue(null);
-                object attribute = fields[i].GetCustomAttributes(attType, false)[0];
+                object attribute = fields[i].GetCustomAttributes(attributeType, false)[0];
                 string api = (attribute as HttpApiKey).httpApi;
-                idDic[id] = api;
+                idDict[id] = api;
             }
         }
     }
 
-    private static Dictionary<int, string> idDic = new Dictionary<int, string>();
+    private static Dictionary<int, string> idDict = new Dictionary<int, string>();
 
     public static string GetHttpApi(int httpId)
     {
-        idDic.TryGetValue(httpId, out var api);
+        idDict.TryGetValue(httpId, out var api);
         return api;
     }
 }
@@ -37,9 +37,10 @@ public class HttpId
 
 public class HttpApiKey : Attribute
 {
-    public HttpApiKey(string _httpApi)
-    {
-        httpApi = _httpApi;
-    }
     public string httpApi;
+
+    public HttpApiKey(string httpApi)
+    {
+        this.httpApi = httpApi;
+    }
 }

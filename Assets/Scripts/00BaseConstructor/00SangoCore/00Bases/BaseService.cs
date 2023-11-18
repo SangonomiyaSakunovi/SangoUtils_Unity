@@ -2,11 +2,6 @@
 
 public class BaseService<T> : UnitySingleton<T> where T : MonoBehaviour
 {
-    private void Awake()
-    {
-        OnInit();
-    }
-
     private void Update()
     {
         OnUpdate();

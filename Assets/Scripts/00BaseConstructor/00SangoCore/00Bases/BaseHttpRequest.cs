@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-public class BaseRequest
+public class BaseHttpRequest
 {
-    public int HttpId { get; protected set; }
+    public int HttpId { get; private set; }
     protected Dictionary<string, string> _contentDict;
 
     public virtual void DefaultRequest<T>() where T : class
@@ -32,6 +32,7 @@ public class BaseRequest
 
     public virtual void OnInit(int httpId)
     {
+        HttpId = httpId;
         _contentDict = new Dictionary<string, string>();
         HttpService.Instance.AddRequest(this);
     }

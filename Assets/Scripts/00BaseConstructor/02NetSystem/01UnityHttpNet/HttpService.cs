@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine.Networking;
 
 public class HttpService : BaseService<HttpService>
 {
     private HttpClientSango _httpClient;
-    private Dictionary<int, BaseRequest> _requestDict = null;
+    private Dictionary<int, BaseHttpRequest> _requestDict = null;
 
     public override void OnInit()
     {
         base.OnInit();
-        _requestDict = new Dictionary<int, BaseRequest>();
+        _requestDict = new Dictionary<int, BaseHttpRequest>();
         _httpClient = new HttpClientSango();
         _httpClient.Init();
     }
@@ -124,19 +123,18 @@ public class HttpService : BaseService<HttpService>
 
     public void HttpBroadcast<T>(T data, int requestId, int resCode) where T : class
     {
-        _requestDict.TryGetValue(requestId, out BaseRequest request);
-        if (request != null)
+        if (_requestDict.TryGetValue(requestId, out BaseHttpRequest request))
         {
             request.OnOperationResponsed<T>(data, resCode);
         }
     }
 
-    public void AddRequest(BaseRequest req)
+    public void AddRequest(BaseHttpRequest req)
     {
         _requestDict.Add(req.HttpId, req);
     }
 
-    public T GetRequest<T>(int httpId) where T : BaseRequest, new()
+    public T GetRequest<T>(int httpId) where T : BaseHttpRequest, new()
     {
         if (_requestDict.ContainsKey(httpId))
         {
@@ -150,7 +148,7 @@ public class HttpService : BaseService<HttpService>
         }
     }
 
-    public void RemoveRequest(BaseRequest req)
+    public void RemoveRequest(BaseHttpRequest req)
     {
         _requestDict.Remove(req.HttpId);
     }
