@@ -34,6 +34,7 @@ public class UdpEventService : BaseService<UdpEventService>
 
     private void HandleEventReceivedData()
     {
+
         if (_udpDatas.Count == 0) return;
         for (int i = 0; i < _udpDatas.Count; i++)
         {
@@ -53,10 +54,10 @@ public class UdpEventService : BaseService<UdpEventService>
 
     public void UdpEventBroadcast<T>(T data, int eventId) where T : class
     {
-        if(_eventDict.TryGetValue(eventId, out BaseUdpEvent netEvent))
+        if (_eventDict.TryGetValue(eventId, out BaseUdpEvent netEvent))
         {
             netEvent.OnEventDataReceived<T>(data);
-        }       
+        }
     }
 
     public void AddUdpEvent(BaseUdpEvent evt)

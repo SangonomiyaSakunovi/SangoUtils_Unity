@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class _08UdpEvent : BaseUdpEvent
 {
     public override void OnInit(int eventPortId)
@@ -12,7 +10,7 @@ public class _08UdpEvent : BaseUdpEvent
         string value = data as string;
         if (value != null)
         {
-            Debug.Log("收到的数据: [ " + value + " ]");
+            _08UdpEventTestWindow.Instance.OnReceivedObj(value);
         }
     }
 }

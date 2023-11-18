@@ -51,7 +51,7 @@ public class UdpEventPack<T> : UdpEventPack where T : class
             Debug.LogError(ex.Message);
             throw;
         }
-    }
+    }    
 }
 
 public abstract class UdpData
