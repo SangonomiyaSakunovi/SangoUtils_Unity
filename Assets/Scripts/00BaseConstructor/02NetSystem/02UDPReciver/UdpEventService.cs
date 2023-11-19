@@ -72,9 +72,9 @@ public class UdpEventService : BaseService<UdpEventService>
         }
         else
         {
-            T request = new T();
-            request.OnInit(udpEventPortId);
-            return request;
+            T udpEvent = new T();
+            udpEvent.OnInit(udpEventPortId);
+            return udpEvent;
         }
     }
 
