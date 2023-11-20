@@ -17,15 +17,15 @@ public class BaseWindow : MonoBehaviour
         if (gameObject.activeSelf != isActive)
         {
             gameObject.SetActive(isActive);
-        }
-        if (isActive)
-        {
-            OnInit();
-        }
-        else
-        {
-            OnDispose();
-        }
+            if (isActive)
+            {
+                OnInit();
+            }
+            else
+            {
+                OnDispose();
+            }
+        }        
     }
 
     protected virtual void OnInit() { }
