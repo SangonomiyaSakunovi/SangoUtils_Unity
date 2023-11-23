@@ -6,4 +6,9 @@ public class BaseSystem : MonoBehaviour
     {
 
     }
+
+    public virtual void SetSystem()
+    {
+
+    }
 }
