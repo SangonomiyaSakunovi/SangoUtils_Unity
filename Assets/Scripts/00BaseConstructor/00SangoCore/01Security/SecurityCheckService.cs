@@ -3,41 +3,51 @@ using UnityEngine;
 
 public class SecurityCheckService : BaseService<SecurityCheckService>
 {
-    private const string newRegistLimitTimeStamp = "1645467742";
-    private const string _defaultRegistLimitTimestamp = "1645467742";
+    private string _secretTimestamp = "1645467742";
+    private string _defaultRegistLimitTimestamp = "1645467742";
 
-    private const string apiKey = "SangoSecurityRegistKey";
-    private const string apiSecret = "SangoSecurityRegistSecret";
+    private string _apiKey = "SangoSecurityRegistKey";
+    private string _apiSecret = "SangoSecurityRegistSecret";
 
     private SignMethodCode _signMethodCode = SignMethodCode.Md5;
+    private RegistInfoCode _registInfoCode = RegistInfoCode.Timestamp;
 
-    private const string limitTimestampKey = "key1";
-    private const string lastRunTimestampKey = "key2";
+    private string _limitTimestampKey = "key1";
+    private string _lastRunTimestampKey = "key2";
 
     private float _currentTickTime = 1;
     private float _maxTickTime = 60;
 
-    private void Awake()
-    {
-        PublishNewSignData("");
-    }
+    private bool _isApplicationRunValid = false;
 
-    public override void OnInit()
+    public void OnInit(SecurityCheckServiceConfig config)
     {
         base.OnInit();
+        if (config != null)
+        {
+            _secretTimestamp = config.secretTimestamp;
+            _defaultRegistLimitTimestamp = config.defaultRegistLimitTimestamp;
+            _apiKey = config.apiKey;
+            _apiSecret = config.apiSecret;
+            _signMethodCode = config.signMethodCode;
+            _registInfoCode = config.registInfoCode;
+        }
     }
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
-        if (_currentTickTime > 0)
+        if (_isApplicationRunValid)
         {
-            _currentTickTime -= Time.deltaTime;
-        }
-        else
-        {
-            _currentTickTime = _maxTickTime;
-            TickUpdateRunTime();
+            if (_currentTickTime > 0)
+            {
+                _currentTickTime -= Time.deltaTime;
+            }
+            else
+            {
+                _currentTickTime = _maxTickTime;
+                TickUpdateRunTime();
+            }
         }
     }
 
@@ -46,8 +56,19 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         bool res = false;
         if (CheckSignDataValid(registLimitTimestampNew, signData))
         {
-            string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(registLimitTimestampNew);
-            res = PersistDataService.Instance.AddPersistData(limitTimestampKey, registLastRunTimestampDataNew);
+            if (Convert.ToInt64(registLimitTimestampNew) > TimeUtils.GetUnixDateTimeSeconds(DateTime.Now))
+            {
+                string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(registLimitTimestampNew);
+                res = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLastRunTimestampDataNew);
+                if (res)
+                {
+                    _isApplicationRunValid = true;
+                }
+            }
+            else
+            {
+                Debug.Log("RegistFaild, the NewRegistLimitTimestamp should newer than NowTimestamp.");
+            }
         }
         return res;
     }
@@ -56,21 +77,25 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
     {
         long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
 
-        string registLimitTimestampData = PersistDataService.Instance.GetPersistData(limitTimestampKey);
-        string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(lastRunTimestampKey);
+        string registLimitTimestampData = PersistDataService.Instance.GetPersistData(_limitTimestampKey);
+        string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(_lastRunTimestampKey);
 
-        if (String.IsNullOrEmpty(registLimitTimestampData) || String.IsNullOrEmpty(registLastRunTimestampData))
+        if (string.IsNullOrEmpty(registLimitTimestampData) || string.IsNullOrEmpty(registLastRunTimestampData))
         {
             registLimitTimestampData = TimeCryptoUtils.EncryptTimestamp(_defaultRegistLimitTimestamp);
             registLastRunTimestampData = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
-            PersistDataService.Instance.AddPersistData(limitTimestampKey, registLimitTimestampData);
-            PersistDataService.Instance.AddPersistData(lastRunTimestampKey, registLastRunTimestampData);
+            Debug.Log("That`s the First Time open this software, we give the default registLimitTimestamp is: [ " + _defaultRegistLimitTimestamp + " ]");
+            PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampData);
+            PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampData);
             return true;
         }
         else
         {
             long registLimitTimestamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLimitTimestampData));
             long registLastRunTimestamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLastRunTimestampData));
+            Debug.Log("The RegistLimitTimestamp is: [ " + registLimitTimestamp + " ]");
+            Debug.Log("The LastRunTimestamp is: [ " + registLastRunTimestamp + " ]");
+            Debug.Log("The NowTimestamp is: [ " + nowTimestamp + " ]");
             if (nowTimestamp < registLastRunTimestamp)
             {
                 Debug.LogError("Error: SystemTime has in Changed");
@@ -80,6 +105,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             {
                 if (nowTimestamp < registLimitTimestamp)
                 {
+                    _isApplicationRunValid = true;
                     return true;
                 }
                 else
@@ -90,13 +116,13 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         }
     }
 
-    private void PublishNewSignData(string rawData)
+    public void GetNewRegistInfo(string rawData)
     {
         string signData = "";
         switch (_signMethodCode)
         {
             case SignMethodCode.Md5:
-                signData = Md5SignatureUtils.GenerateMd5SignData(rawData, newRegistLimitTimeStamp, apiKey, apiSecret);
+                signData = Md5SignatureUtils.GenerateMd5SignData(rawData, _secretTimestamp, _apiKey, _apiSecret);
                 break;
         }
         Debug.Log("====================SignRawData====================");
@@ -111,7 +137,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
     private void TickUpdateRunTime()
     {
         long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
-        string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(lastRunTimestampKey);
+        string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(_lastRunTimestampKey);
         if (string.IsNullOrEmpty(registLastRunTimestampData))
         {
             return;
@@ -124,7 +150,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         else
         {
             string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
-            PersistDataService.Instance.AddPersistData(lastRunTimestampKey, registLastRunTimestampDataNew);
+            PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampDataNew);
         }
     }
 
@@ -134,7 +160,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         switch (_signMethodCode)
         {
             case SignMethodCode.Md5:
-                res = Md5SignatureUtils.CheckMd5SignDataValid(rawData, signData, newRegistLimitTimeStamp, apiKey, apiSecret);
+                res = Md5SignatureUtils.CheckMd5SignDataValid(rawData, signData, _secretTimestamp, _apiKey, _apiSecret);
                 break;
         }
         return res;
@@ -144,4 +170,19 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
 public enum SignMethodCode
 {
     Md5
+}
+
+public enum RegistInfoCode
+{
+    Timestamp
+}
+
+public class SecurityCheckServiceConfig
+{
+    public string apiKey;
+    public string apiSecret;
+    public string secretTimestamp;
+    public string defaultRegistLimitTimestamp;
+    public SignMethodCode signMethodCode;
+    public RegistInfoCode registInfoCode;
 }

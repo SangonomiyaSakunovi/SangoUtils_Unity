@@ -1071,7 +1071,7 @@ GameObject:
   - component: {fileID: 929376647}
   - component: {fileID: 929376646}
   - component: {fileID: 929376645}
-  - component: {fileID: 929376649}
+  - component: {fileID: 929376650}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1163,7 +1163,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &929376649
+--- !u!114 &929376650
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1172,15 +1172,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 929376644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 625ccade56f9b3c40969d0bb1d6cfe26, type: 3}
+  m_Script: {fileID: 11500000, guid: 13acc129c6ecc5341aae870217a72371, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _keyboardTrans: {fileID: 1274825779}
-  _timestamp: {fileID: 280874505}
-  _signData: {fileID: 1593803720}
-  _callKeyboardBtn: {fileID: 1407163159}
-  _closeKeyboardBtn: {fileID: 1547144217}
-  _registBtn: {fileID: 653652278}
+  _09Window: {fileID: 1720065195}
 --- !u!1 &1055978047
 GameObject:
   m_ObjectHideFlags: 0
@@ -2025,13 +2020,14 @@ GameObject:
   - component: {fileID: 1720065192}
   - component: {fileID: 1720065194}
   - component: {fileID: 1720065193}
+  - component: {fileID: 1720065195}
   m_Layer: 5
   m_Name: SecurityCheckBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1720065192
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2094,6 +2090,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1720065191}
   m_CullTransparentMesh: 1
+--- !u!114 &1720065195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720065191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 625ccade56f9b3c40969d0bb1d6cfe26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _keyboardTrans: {fileID: 1274825779}
+  _timestamp: {fileID: 280874505}
+  _signData: {fileID: 1593803720}
+  _callKeyboardBtn: {fileID: 1407163159}
+  _closeKeyboardBtn: {fileID: 1547144217}
+  _registBtn: {fileID: 653652278}
 --- !u!1 &1787296347
 GameObject:
   m_ObjectHideFlags: 0

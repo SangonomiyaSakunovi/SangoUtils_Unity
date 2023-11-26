@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class BaseRoot : MonoBehaviour
-{
+{    
     public virtual void InitRoot()
     {
 
@@ -12,8 +12,18 @@ public class BaseRoot : MonoBehaviour
         return SecurityCheckService.Instance.CheckRegistValidation();
     }
 
-    protected bool UpdateRegistInfo(string registLimitTimestampNew, string signData)
+    public virtual bool UpdateRegistInfo(string registLimitTimestampNew, string signData)
     {
         return SecurityCheckService.Instance.UpdateRegistInfo(registLimitTimestampNew, signData);
+    }
+
+    protected void GetNewRegistInfo(string rawData)
+    {
+        SecurityCheckService.Instance.GetNewRegistInfo(rawData);
+    }
+
+    protected void InitSecurityCheckService(SecurityCheckServiceConfig config)
+    {
+        SecurityCheckService.Instance.OnInit(config);
     }
 }

@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class _09Window : BaseWindow
 {
+    private _09Root _09Root = null;
+
     public Transform _keyboardTrans;
 
     public TMP_InputField _timestamp;
@@ -17,8 +19,14 @@ public class _09Window : BaseWindow
 
     private TMP_InputField _currentTypeInField;
 
-    private void Awake()
+    public void SetRoot(_09Root root)
     {
+        _09Root = root;
+    }
+
+    protected override void OnInit()
+    {
+        base.OnInit();
         SetButtonListener(_callKeyboardBtn, OnCallKeyboardBtnClicked);
         SetButtonListener(_closeKeyboardBtn, OnCloseKeyboardBtnClicked);
         SetButtonListener(_registBtn, OnRegistSoftwareBtnClicked);
@@ -37,8 +45,7 @@ public class _09Window : BaseWindow
     }
     private void OnRegistSoftwareBtnClicked(Button button)
     {
-        bool res = SecurityCheckService.Instance.UpdateRegistInfo(_timestamp.text, _signData.text);
-        Debug.Log("×¢²áÊÇ·ñ³É¹¦£¿£¿£¿£¿ [ "+res+" ]");
+        bool res = _09Root.UpdateRegistInfo(_timestamp.text, _signData.text);
     }
 
     private void OnTypedInWordCallBack(TypeInCommand typeInCommand, string words)
