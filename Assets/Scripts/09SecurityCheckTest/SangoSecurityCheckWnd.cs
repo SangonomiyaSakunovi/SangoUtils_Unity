@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SangoSecurityCheckWnd : BaseWindow
 {
-    private SangoSecurityCheckRoot _09Root = null;
+    private SangoSecurityCheckRoot _sangoSecurityCheckRoot = null;
 
     public Transform _keyboardTrans;
 
@@ -22,7 +22,7 @@ public class SangoSecurityCheckWnd : BaseWindow
 
     public void SetRoot(SangoSecurityCheckRoot root)
     {
-        _09Root = root;
+        _sangoSecurityCheckRoot = root;
     }
 
     public void UpdateResult(string result)
@@ -51,7 +51,7 @@ public class SangoSecurityCheckWnd : BaseWindow
     }
     private void OnRegistSoftwareBtnClicked(Button button)
     {
-        _09Root.UpdateRegistInfo(_timestamp.text, _signData.text);
+        _sangoSecurityCheckRoot.UpdateRegistInfo(_timestamp.text, _signData.text);
     }
 
     private void OnTypedInWordCallBack(TypeInCommand typeInCommand, string words)
