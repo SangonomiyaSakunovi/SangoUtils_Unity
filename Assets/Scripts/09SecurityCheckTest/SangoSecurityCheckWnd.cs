@@ -36,8 +36,8 @@ public class SangoSecurityCheckWnd : BaseWindow
         SetButtonListener(_callKeyboardBtn, OnCallKeyboardBtnClicked);
         SetButtonListener(_closeKeyboardBtn, OnCloseKeyboardBtnClicked);
         SetButtonListener(_registBtn, OnRegistSoftwareBtnClicked);
-        AddGameObjectClickEvent(_timestamp, OnInputFieldClicked);
-        AddGameObjectClickEvent(_signData, OnInputFieldClicked);
+        SetGameObjectClickListener(_timestamp, OnInputFieldClicked);
+        SetGameObjectClickListener(_signData, OnInputFieldClicked);
     }
 
     private void OnCallKeyboardBtnClicked(Button button)

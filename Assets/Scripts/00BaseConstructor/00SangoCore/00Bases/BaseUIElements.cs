@@ -833,7 +833,7 @@ public class BaseUIElements : MonoBehaviour
     #endregion
 
     #region EventTrigger
-    protected void AddGameObjectClickEvent(GameObject gameObject, UnityAction<BaseEventData> actionCallBack)
+    protected void SetGameObjectClickListener(GameObject gameObject, UnityAction<BaseEventData> actionCallBack)
     {
         var eventTrigger = GetOrAddComponent<EventTrigger>(gameObject);
         UnityAction<BaseEventData> selectEvent = actionCallBack;
@@ -845,19 +845,19 @@ public class BaseUIElements : MonoBehaviour
         eventTrigger.triggers.Add(onClick);
     }
 
-    protected void AddGameObjectClickEvent(Transform transform, UnityAction<BaseEventData> actionCallBack)
+    protected void SetGameObjectClickListener(Transform transform, UnityAction<BaseEventData> actionCallBack)
     {
-        AddGameObjectClickEvent(transform.gameObject, actionCallBack);
+        SetGameObjectClickListener(transform.gameObject, actionCallBack);
     }
 
-    protected void AddGameObjectClickEvent(TMP_InputField inputField, UnityAction<BaseEventData> actionCallBack)
+    protected void SetGameObjectClickListener(TMP_InputField inputField, UnityAction<BaseEventData> actionCallBack)
     {
-        AddGameObjectClickEvent(inputField.gameObject, actionCallBack);
+        SetGameObjectClickListener(inputField.gameObject, actionCallBack);
     }
 
-    protected void AddGameObjectClickEvent(Image image, UnityAction<BaseEventData> actionCallBack)
+    protected void SetGameObjectClickListener(Image image, UnityAction<BaseEventData> actionCallBack)
     {
-        AddGameObjectClickEvent(image.gameObject, actionCallBack);
+        SetGameObjectClickListener(image.gameObject, actionCallBack);
     }
     #endregion
 }
