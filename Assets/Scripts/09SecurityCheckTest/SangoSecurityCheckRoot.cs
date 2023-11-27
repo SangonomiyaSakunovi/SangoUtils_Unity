@@ -17,7 +17,7 @@ public class SangoSecurityCheckRoot : BaseRoot
 
         InitSecurityCheckService(config);
         CheckRegistValidation();
-        GetNewRegistInfo("1700859600");
+        GetNewRegistInfo("1701122197");
     }
 
     public override void RegistInfoCheckResultActionCallBack(RegistInfoCheckResult result)
