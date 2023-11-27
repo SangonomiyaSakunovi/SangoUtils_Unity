@@ -831,4 +831,33 @@ public class BaseUIElements : MonoBehaviour
         }
     }
     #endregion
+
+    #region EventTrigger
+    protected void AddGameObjectClickEvent(GameObject gameObject, UnityAction<BaseEventData> actionCallBack)
+    {
+        var eventTrigger = GetOrAddComponent<EventTrigger>(gameObject);
+        UnityAction<BaseEventData> selectEvent = actionCallBack;
+        EventTrigger.Entry onClick = new EventTrigger.Entry()
+        {
+            eventID = EventTriggerType.PointerClick
+        };
+        onClick.callback.AddListener(selectEvent);
+        eventTrigger.triggers.Add(onClick);
+    }
+
+    protected void AddGameObjectClickEvent(Transform transform, UnityAction<BaseEventData> actionCallBack)
+    {
+        AddGameObjectClickEvent(transform.gameObject, actionCallBack);
+    }
+
+    protected void AddGameObjectClickEvent(TMP_InputField inputField, UnityAction<BaseEventData> actionCallBack)
+    {
+        AddGameObjectClickEvent(inputField.gameObject, actionCallBack);
+    }
+
+    protected void AddGameObjectClickEvent(Image image, UnityAction<BaseEventData> actionCallBack)
+    {
+        AddGameObjectClickEvent(image.gameObject, actionCallBack);
+    }
+    #endregion
 }

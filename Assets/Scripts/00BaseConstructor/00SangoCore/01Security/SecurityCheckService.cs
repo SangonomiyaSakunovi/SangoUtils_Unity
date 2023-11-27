@@ -20,6 +20,8 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
 
     private bool _isApplicationRunValid = false;
 
+    private Action<RegistInfoCheckResult> _resultActionCallBack = null;
+
     public void OnInit(SecurityCheckServiceConfig config)
     {
         base.OnInit();
@@ -31,6 +33,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             _apiSecret = config.apiSecret;
             _signMethodCode = config.signMethodCode;
             _registInfoCode = config.registInfoCode;
+            _resultActionCallBack = config.resultActionCallBack;
         }
     }
 
@@ -51,66 +54,102 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         }
     }
 
-    public bool UpdateRegistInfo(string registLimitTimestampNew, string signData)
+    public void UpdateRegistInfo(string registLimitTimestampNew, string signData)
     {
-        bool res = false;
+        if (string.IsNullOrEmpty(registLimitTimestampNew) || string.IsNullOrEmpty(signData))
+        {
+            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo);
+            return;
+        }
+        if (!long.TryParse(registLimitTimestampNew, out long result))
+        {
+            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError);
+            return;
+        }
+        
+        long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
         if (CheckSignDataValid(registLimitTimestampNew, signData))
         {
-            if (Convert.ToInt64(registLimitTimestampNew) > TimeUtils.GetUnixDateTimeSeconds(DateTime.Now))
+            if (Convert.ToInt64(registLimitTimestampNew) > nowTimestamp)
             {
-                string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(registLimitTimestampNew);
-                res = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLastRunTimestampDataNew);
-                if (res)
+                string registLimitTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(registLimitTimestampNew);
+                string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
+                bool res1 = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampDataNew);
+                bool res2 = PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampDataNew);
+                if (res1 && res2)
                 {
                     _isApplicationRunValid = true;
+                    _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateOK_Success);
+                }
+                else
+                {
+                    _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
                 }
             }
             else
             {
                 Debug.Log("RegistFaild, the NewRegistLimitTimestamp should newer than NowTimestamp.");
+                _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_OutData);
             }
         }
-        return res;
+        else
+        {
+            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_SignError);
+        }
     }
 
-    public bool CheckRegistValidation()
+    public void CheckRegistValidation()
     {
         long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
 
         string registLimitTimestampData = PersistDataService.Instance.GetPersistData(_limitTimestampKey);
         string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(_lastRunTimestampKey);
+        Debug.Log("Now is time to Find the RegistInfo, please wait....................................");
+        Debug.Log("The RegistLimitTimestampInfo Found: [ " + registLimitTimestampData + " ]");
+        Debug.Log("The LastRunTimestampInfo Found: [ " + registLastRunTimestampData + " ]");
 
         if (string.IsNullOrEmpty(registLimitTimestampData) || string.IsNullOrEmpty(registLastRunTimestampData))
         {
+            bool res = false;
             registLimitTimestampData = TimeCryptoUtils.EncryptTimestamp(_defaultRegistLimitTimestamp);
             registLastRunTimestampData = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
             Debug.Log("That`s the First Time open this software, we give the default registLimitTimestamp is: [ " + _defaultRegistLimitTimestamp + " ]");
-            PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampData);
-            PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampData);
-            return true;
+            bool res1 = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampData);
+            bool res2 = PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampData);
+            if (res1 && res2)
+            {
+                res = true;
+                _resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_FirstRun);
+            }
+            else
+            {
+                _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
+            }
+            Debug.Log("Is first regist OK? [ " + res + " ]");
         }
         else
         {
             long registLimitTimestamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLimitTimestampData));
             long registLastRunTimestamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLastRunTimestampData));
+            Debug.Log("We DeCrypt the RegistInfo, please wait....................................");
             Debug.Log("The RegistLimitTimestamp is: [ " + registLimitTimestamp + " ]");
             Debug.Log("The LastRunTimestamp is: [ " + registLastRunTimestamp + " ]");
             Debug.Log("The NowTimestamp is: [ " + nowTimestamp + " ]");
             if (nowTimestamp < registLastRunTimestamp)
             {
                 Debug.LogError("Error: SystemTime has in Changed");
-                return false;
+                _resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckError_SystemTimeChanged);
             }
             else
             {
                 if (nowTimestamp < registLimitTimestamp)
                 {
                     _isApplicationRunValid = true;
-                    return true;
+                    _resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_Valid);
                 }
                 else
                 {
-                    return false;
+                    _resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckFailed_OutData);
                 }
             }
         }
@@ -125,6 +164,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
                 signData = Md5SignatureUtils.GenerateMd5SignData(rawData, _secretTimestamp, _apiKey, _apiSecret);
                 break;
         }
+        Debug.Log("Generate New SignRegistInfo, please wait....................................");
         Debug.Log("====================SignRawData====================");
         Debug.Log(rawData);
         Debug.Log("==================================================");
@@ -132,7 +172,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         Debug.Log("====================SignedData====================");
         Debug.Log(signData);
         Debug.Log("==================================================");
-    }    
+    }
 
     private void TickUpdateRunTime()
     {
@@ -141,7 +181,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         if (string.IsNullOrEmpty(registLastRunTimestampData))
         {
             return;
-        }        
+        }
         long lastRunTimetamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLastRunTimestampData));
         if (lastRunTimetamp > nowTimestamp)
         {
@@ -177,6 +217,20 @@ public enum RegistInfoCode
     Timestamp
 }
 
+public enum RegistInfoCheckResult
+{
+    CheckOK_Valid,
+    CheckOK_FirstRun,
+    CheckFailed_OutData,
+    CheckError_SystemTimeChanged,
+    UpdateOK_Success,
+    UpdateFailed_OutData,
+    UpdateFailed_SignError,
+    UpdateFailed_WriteInfoError,
+    UpdateError_NullInfo,
+    UpdateError_SyntexError
+}
+
 public class SecurityCheckServiceConfig
 {
     public string apiKey;
@@ -185,4 +239,5 @@ public class SecurityCheckServiceConfig
     public string defaultRegistLimitTimestamp;
     public SignMethodCode signMethodCode;
     public RegistInfoCode registInfoCode;
+    public Action<RegistInfoCheckResult> resultActionCallBack;
 }

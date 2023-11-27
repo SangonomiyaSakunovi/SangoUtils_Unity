@@ -7,14 +7,14 @@ public class BaseRoot : MonoBehaviour
 
     }
 
-    protected bool CheckRegistValidation()
+    protected void CheckRegistValidation()
     {
-        return SecurityCheckService.Instance.CheckRegistValidation();
+        SecurityCheckService.Instance.CheckRegistValidation();
     }
 
-    public virtual bool UpdateRegistInfo(string registLimitTimestampNew, string signData)
+    public void UpdateRegistInfo(string registLimitTimestampNew, string signData)
     {
-        return SecurityCheckService.Instance.UpdateRegistInfo(registLimitTimestampNew, signData);
+        SecurityCheckService.Instance.UpdateRegistInfo(registLimitTimestampNew, signData);
     }
 
     protected void GetNewRegistInfo(string rawData)
@@ -25,5 +25,15 @@ public class BaseRoot : MonoBehaviour
     protected void InitSecurityCheckService(SecurityCheckServiceConfig config)
     {
         SecurityCheckService.Instance.OnInit(config);
+    }
+
+    public virtual void RegistInfoCheckResultActionCallBack(RegistInfoCheckResult result)
+    {
+
+    }
+
+    protected virtual void OnSecurityCheckResultValid()
+    {
+
     }
 }
