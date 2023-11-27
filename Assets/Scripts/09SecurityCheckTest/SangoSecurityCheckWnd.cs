@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -56,7 +55,7 @@ public class SangoSecurityCheckWnd : BaseWindow
     }
 
     private void OnTypedInWordCallBack(TypeInCommand typeInCommand, string words)
-    {            
+    {
         switch (typeInCommand)
         {
             case TypeInCommand.TypeIn:
@@ -83,7 +82,7 @@ public class SangoSecurityCheckWnd : BaseWindow
                 OnCloseKeyboardBtnClicked(null);
                 break;
             case TypeInCommand.EnAlt:
-
+                //TODO
                 break;
         }
     }
