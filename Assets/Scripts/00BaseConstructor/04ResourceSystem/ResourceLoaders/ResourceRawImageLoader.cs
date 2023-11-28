@@ -68,7 +68,6 @@ public class ResourceRawImageLoader : BaseASyncPackManager
 
     public override bool RemovePackCallBack(uint packId)
     {
-        Debug.Log("调用一次回调删除Pack操作");
         if (_packDict.TryGetValue(packId, out var value))
         {
             _packDict.Remove(packId);

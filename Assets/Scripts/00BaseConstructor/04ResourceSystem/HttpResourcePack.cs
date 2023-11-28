@@ -17,6 +17,7 @@ public abstract class HttpBaseResourcePack
     public int tryCount;
     public HttpResourceType resourceType;
     public UnityWebRequest webRequest;
+
     public Action<object[]> onCompleteCallBack;
     public Action<object[]> onCanceledCallBack;
     public Action<object[]> onErroredCallBack;
