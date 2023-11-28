@@ -92,23 +92,29 @@ public class BaseUIElements : MonoBehaviour
     #endregion
 
     #region SetOnlineResource
-    public void SetRawImageOnlineAsync(RawImage rawImage, string urlPath, bool isCache = true, Action<object[]> callBack = null)
+    public uint SetRawImageOnlineAsync(RawImage rawImage, string urlPath, bool isCache = true, Action<object[]> completeCallBack = null, Action<object[]> canceledCallBack = null, Action<object[]> erroredCallBack = null)
     {
-        ResourceService.Instance.LoadAndSetRawImageOnlineAsync(rawImage, urlPath, isCache, callBack);
+        return ResourceService.Instance.LoadAndSetRawImageOnlineAsync(rawImage, urlPath, isCache, completeCallBack, canceledCallBack, erroredCallBack);
     }
 
-    public void SetRawImageOnlineAsync(GameObject gameObject, string urlPath, bool isCache = true, Action<object[]> callBack = null)
+    public uint SetRawImageOnlineAsync(GameObject gameObject, string urlPath, bool isCache = true, Action<object[]> completeCallBack = null, Action<object[]> canceledCallBack = null, Action<object[]> erroredCallBack = null)
     {
         RawImage rawImage = gameObject.GetComponent<RawImage>();
         if (rawImage != null)
         {
-            SetRawImageOnlineAsync(rawImage, urlPath, isCache, callBack);
+            return SetRawImageOnlineAsync(rawImage, urlPath, isCache, completeCallBack, canceledCallBack, erroredCallBack);
         }
+        return 0;
     }
 
-    public void SetRawImageOnlineAsync(Transform transform, string urlPath, bool isCache = true, Action<object[]> callBack = null)
+    public uint SetRawImageOnlineAsync(Transform transform, string urlPath, bool isCache = true, Action<object[]> completeCallBack = null, Action<object[]> canceledCallBack = null, Action<object[]> erroredCallBack = null)
     {
-        SetRawImageOnlineAsync(transform.gameObject, urlPath, isCache, callBack);
+        return SetRawImageOnlineAsync(transform.gameObject, urlPath, isCache, completeCallBack, canceledCallBack, erroredCallBack);
+    }
+
+    public bool RemoveRawImageOnlineAsyncPack(uint packId)
+    {
+        return ResourceService.Instance.RemoveRawImageOnlineAsyncPack(packId);
     }
 
     public void SetGLTFModelOnlineAsync(GameObject parentObject, string urlPath)

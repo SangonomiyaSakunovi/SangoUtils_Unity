@@ -220,16 +220,20 @@ public class HttpClientSango
                 {
                     _sendHttpResourcePacks.Add(pack);
                     continue;
-                }
+                }               
                 if (pack.webRequest.downloadHandler.isDone)
                 {
                     pack.OnResponsed();
+                }
+                else
+                {
+                    pack.OnErrored();
                 }
             }
 
             else if (pack.webRequest.isHttpError || pack.webRequest.isNetworkError)
             {
-
+                pack.OnErrored();
             }
             else
             {

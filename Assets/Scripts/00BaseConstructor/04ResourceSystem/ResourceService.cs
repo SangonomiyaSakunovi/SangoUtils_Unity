@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ResourceService : BaseService<ResourceService>
 {
+    private ResourceRawImageLoader _resourceRawImageLoader = new ResourceRawImageLoader();
+
     private Dictionary<string, AudioClip> _audioClipDict = new Dictionary<string, AudioClip>();
     private Dictionary<string, Sprite> _spriteDict = new Dictionary<string, Sprite>();
     private Dictionary<string, GameObject> _prefabDict = new Dictionary<string, GameObject>();
@@ -67,32 +69,32 @@ public class ResourceService : BaseService<ResourceService>
         return prefab;
     }
 
-    public void LoadAndSetRawImageOnlineAsync(RawImage targetRawImage, string urlPath, bool isCahce, Action<object[]> callBack)
+    public uint LoadAndSetRawImageOnlineAsync(RawImage targetRawImage, string urlPath, bool isCahce, Action<object[]> completeCallBack, Action<object[]> canceledCallBack, Action<object[]> erroredCallBack)
     {
+        uint packId = 0;
         _rawImageTextureDict.TryGetValue(urlPath, out Texture texture);
         {
             if (texture == null)
             {
-                HttpRawImageResourcePack pack = new HttpRawImageResourcePack();
-                pack.url = urlPath;
-                pack.targetRawImage = targetRawImage;
-                pack.resourceType = HttpResourceType.RawImage;
-                pack.onCompleteCallBack = callBack;
-                if (isCahce)
-                {
-                    pack.onLoadCallBack = AddRawImageTextureCacheCB;
-                }
-                HttpService.Instance?.HttpResource(pack);
+                packId = _resourceRawImageLoader.AddPack(targetRawImage, urlPath, isCahce, AddRawImageTextureCacheCB, completeCallBack, canceledCallBack, erroredCallBack);                
             }
             else
             {
                 if (targetRawImage != null)
                 {
                     targetRawImage.texture = texture;
+                    completeCallBack?.Invoke(null);
                 }
             }
         }
+        return packId;
     }
+
+    public bool RemoveRawImageOnlineAsyncPack(uint packId)
+    {
+        return _resourceRawImageLoader.RemovePack(packId);
+    }
+
     private void AddRawImageTextureCacheCB(string urlPath, Texture texture)
     {
         if (!_rawImageTextureDict.ContainsKey(urlPath))

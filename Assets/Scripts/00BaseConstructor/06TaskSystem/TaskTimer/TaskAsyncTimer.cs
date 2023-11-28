@@ -10,11 +10,11 @@ public class TaskAsyncTimer : TaskBaseTimer
     private ConcurrentQueue<AsyncTimerTaskPack> _taskPackQueue;
     private const string _taskIdLock = "TaskAsyncTimer_Lock";
 
-    public TaskAsyncTimer(bool setHandle)
+    public TaskAsyncTimer(bool isSetHandled)
     {
         _taskDict = new ConcurrentDictionary<uint, AsyncTimerTask>();
-        _isSetHandled = setHandle;
-        if (setHandle)
+        _isSetHandled = isSetHandled;
+        if (isSetHandled)
         {
             _taskPackQueue = new ConcurrentQueue<AsyncTimerTaskPack>();
         }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 public class BaseService<T> : UnitySingleton<T> where T : MonoBehaviour
-{
+{    
     private void Update()
     {
         OnUpdate();
