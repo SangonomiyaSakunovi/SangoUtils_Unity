@@ -1,4 +1,3 @@
-using System.Xml.Serialization;
 using UnityEngine;
 
 public class UnitySingleton<T> : MonoBehaviour where T : MonoBehaviour
@@ -19,7 +18,6 @@ public class UnitySingleton<T> : MonoBehaviour where T : MonoBehaviour
                     DontDestroyOnLoad(singleton);
                 }
             }
-
             return _instance;
         }
     }
