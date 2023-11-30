@@ -9,4 +9,18 @@ public static class TimeUtils
         TimeSpan timeSpan = dateTime - _startTime;
         return Convert.ToInt64(timeSpan.TotalSeconds);
     }
+
+    public static DateTime GetDateTimeFromDateNumer(int year, int month, int day)
+    {
+        if (year < 1970 || year > 2100 || month < 1 || month > 12)
+        {
+            return DateTime.MinValue;
+        }
+        int daysInMonth = DateTime.DaysInMonth(year, month);
+        if (day < 1 || day > daysInMonth)
+        {
+            return DateTime.MinValue;
+        }
+        return new DateTime(year, month, day, 0, 0, 0);
+    }
 }

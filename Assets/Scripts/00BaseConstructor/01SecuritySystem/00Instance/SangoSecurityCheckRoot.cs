@@ -1,3 +1,5 @@
+using System;
+
 public class SangoSecurityCheckRoot : BaseRoot
 {
     public SangoSecurityCheckWnd _sangoSecurityCheckWnd;
@@ -6,12 +8,14 @@ public class SangoSecurityCheckRoot : BaseRoot
     {
         SecurityCheckServiceConfig config = new SecurityCheckServiceConfig
         {
-            apiKey = "SangoSecurityRegistKey",
-            apiSecret = "SangoSecurityRegistSecret",
-            defaultRegistLimitTimestamp = "1701053130",
-            secretTimestamp = "1645467742",
+            apiKey = "s",
+            apiSecret = "s",
+            defaultRegistLimitDateTime = new DateTime(2022, 2, 22, 0, 0, 0),
+            secretTimestamp = "0",
             registInfoCode = RegistInfoCode.Timestamp,
             signMethodCode = SignMethodCode.Md5,
+            checkLength = 5,
+            registMixSignDataProtocol = RegistMixSignDataProtocol.AA_B_SIGNDATA,
             resultActionCallBack = RegistInfoCheckResultActionCallBack
         };
 
@@ -60,6 +64,9 @@ public class SangoSecurityCheckRoot : BaseRoot
                 break;
             case RegistInfoCheckResult.UpdateError_SyntexError:
                 _sangoSecurityCheckWnd.UpdateResult("注册失败，请输入正确的格式数据");
+                break;
+            case RegistInfoCheckResult.UpdateError_LenghthError:
+                _sangoSecurityCheckWnd.UpdateResult("注册失败，输入的数据长度不正确");
                 break;
         }
     }

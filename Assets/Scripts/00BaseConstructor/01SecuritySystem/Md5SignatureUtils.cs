@@ -12,16 +12,28 @@ public static class Md5SignatureUtils
         return md5Str;
     }
 
-    public static bool CheckMd5SignDataValid(string rawData, string md5Data, string timestamp, string apiKey, string apiSecret)
+    public static bool CheckMd5SignDataValid(string rawData, string md5Data, string timestamp, string apiKey, string apiSecret, int checkLenth)
     {
         string signData = apiKey + apiSecret + timestamp;
         string signParameterMd5 = rawData + signData;
         string md5Str = GetMd5Str(signParameterMd5);
-        if (md5Str == md5Data)
+        if (checkLenth == 0)
         {
-            return true;
+            if (md5Str == md5Data)
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
+        else
+        {
+            string md5StrPart = md5Str.Substring(0, checkLenth);
+            if (md5StrPart == md5Data)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
     private static string GetMd5Str(string str)

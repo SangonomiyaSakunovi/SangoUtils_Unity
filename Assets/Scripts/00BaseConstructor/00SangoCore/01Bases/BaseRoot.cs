@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class BaseRoot : MonoBehaviour
-{    
+{
     public virtual void InitRoot()
     {
 
@@ -15,6 +15,11 @@ public class BaseRoot : MonoBehaviour
     public void UpdateRegistInfo(string registLimitTimestampNew, string signData)
     {
         SecurityCheckService.Instance.UpdateRegistInfo(registLimitTimestampNew, signData);
+    }
+
+    public void UpdateRegistInfo(string mixSignData)
+    {
+        SecurityCheckService.Instance.UpdateRegistInfo(mixSignData);
     }
 
     protected void GetNewRegistInfo(string rawData)

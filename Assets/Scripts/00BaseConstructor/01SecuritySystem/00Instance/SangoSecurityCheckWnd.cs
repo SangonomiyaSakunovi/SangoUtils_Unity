@@ -9,7 +9,6 @@ public class SangoSecurityCheckWnd : BaseWindow
 
     public Transform _keyboardTrans;
 
-    public TMP_InputField _timestamp;
     public TMP_InputField _signData;
 
     public Button _callKeyboardBtn;
@@ -36,7 +35,6 @@ public class SangoSecurityCheckWnd : BaseWindow
         SetButtonListener(_callKeyboardBtn, OnCallKeyboardBtnClicked);
         SetButtonListener(_closeKeyboardBtn, OnCloseKeyboardBtnClicked);
         SetButtonListener(_registBtn, OnRegistSoftwareBtnClicked);
-        SetGameObjectClickListener(_timestamp, OnInputFieldClicked);
         SetGameObjectClickListener(_signData, OnInputFieldClicked);
     }
 
@@ -51,7 +49,7 @@ public class SangoSecurityCheckWnd : BaseWindow
     }
     private void OnRegistSoftwareBtnClicked(Button button)
     {
-        _sangoSecurityCheckRoot.UpdateRegistInfo(_timestamp.text, _signData.text);
+        _sangoSecurityCheckRoot.UpdateRegistInfo(_signData.text);
     }
 
     private void OnTypedInWordCallBack(TypeInCommand typeInCommand, string words)
@@ -89,11 +87,7 @@ public class SangoSecurityCheckWnd : BaseWindow
 
     private void OnInputFieldClicked(BaseEventData data)
     {
-        if (data.selectedObject.name == _timestamp.name)
-        {
-            _currentTypeInField = _timestamp;
-        }
-        else
+        if (data.selectedObject.name == _signData.name)
         {
             _currentTypeInField = _signData;
         }

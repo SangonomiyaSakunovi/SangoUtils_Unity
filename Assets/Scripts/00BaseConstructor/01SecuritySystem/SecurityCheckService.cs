@@ -3,14 +3,7 @@ using UnityEngine;
 
 public class SecurityCheckService : BaseService<SecurityCheckService>
 {
-    private string _secretTimestamp = "1645467742";
-    private string _defaultRegistLimitTimestamp = "1645467742";
-
-    private string _apiKey = "SangoSecurityRegistKey";
-    private string _apiSecret = "SangoSecurityRegistSecret";
-
-    private SignMethodCode _signMethodCode = SignMethodCode.Md5;
-    private RegistInfoCode _registInfoCode = RegistInfoCode.Timestamp;
+    private SecurityCheckServiceConfig _securityCheckServiceConfig = null;
 
     private string _limitTimestampKey = "key1";
     private string _lastRunTimestampKey = "key2";
@@ -27,13 +20,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         base.OnInit();
         if (config != null)
         {
-            _secretTimestamp = config.secretTimestamp;
-            _defaultRegistLimitTimestamp = config.defaultRegistLimitTimestamp;
-            _apiKey = config.apiKey;
-            _apiSecret = config.apiSecret;
-            _signMethodCode = config.signMethodCode;
-            _registInfoCode = config.registInfoCode;
-            _resultActionCallBack = config.resultActionCallBack;
+            _securityCheckServiceConfig = config;
         }
     }
 
@@ -66,41 +53,54 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError);
             return;
         }
-        
-        long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
-        if (CheckSignDataValid(registLimitTimestampNew, signData))
+        SecurityCheckMapSango.CheckProtocl_SIGNDATA(registLimitTimestampNew, signData, _securityCheckServiceConfig, WriteRegistInfo);        
+    }
+
+    public void UpdateRegistInfo(string mixSignData)
+    {
+        if (string.IsNullOrEmpty(mixSignData))
         {
-            if (Convert.ToInt64(registLimitTimestampNew) > nowTimestamp)
+            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo);
+            return;
+        }
+        switch (_securityCheckServiceConfig.registMixSignDataProtocol)
+        {
+            case RegistMixSignDataProtocol.AA_B_SIGNDATA:
+                SecurityCheckMapSango.CheckProtocol_AA_B_SIGNDATA(mixSignData, _securityCheckServiceConfig, WriteRegistInfo);
+                break;
+        }
+    }
+
+    private void WriteRegistInfo(string registLimitTimestampNew)
+    {
+        long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
+        if (Convert.ToInt64(registLimitTimestampNew) > nowTimestamp)
+        {
+            string registLimitTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(registLimitTimestampNew);
+            string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
+            bool res1 = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampDataNew);
+            bool res2 = PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampDataNew);
+            if (res1 && res2)
             {
-                string registLimitTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(registLimitTimestampNew);
-                string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
-                bool res1 = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampDataNew);
-                bool res2 = PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampDataNew);
-                if (res1 && res2)
-                {
-                    _isApplicationRunValid = true;
-                    _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateOK_Success);
-                }
-                else
-                {
-                    _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
-                }
+                _isApplicationRunValid = true;
+                _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateOK_Success);
             }
             else
             {
-                Debug.Log("RegistFaild, the NewRegistLimitTimestamp should newer than NowTimestamp.");
-                _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_OutData);
+                _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
             }
         }
         else
         {
-            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_SignError);
+            Debug.Log("RegistFaild, the NewRegistLimitTimestamp should newer than NowTimestamp.");
+            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_OutData);
         }
     }
 
     public void CheckRegistValidation()
     {
         long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
+        long defaultRegistLimitTimestamp = TimeUtils.GetUnixDateTimeSeconds(_securityCheckServiceConfig.defaultRegistLimitDateTime);
 
         string registLimitTimestampData = PersistDataService.Instance.GetPersistData(_limitTimestampKey);
         string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(_lastRunTimestampKey);
@@ -111,9 +111,9 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         if (string.IsNullOrEmpty(registLimitTimestampData) || string.IsNullOrEmpty(registLastRunTimestampData))
         {
             bool res = false;
-            registLimitTimestampData = TimeCryptoUtils.EncryptTimestamp(_defaultRegistLimitTimestamp);
+            registLimitTimestampData = TimeCryptoUtils.EncryptTimestamp(defaultRegistLimitTimestamp);
             registLastRunTimestampData = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
-            Debug.Log("That`s the First Time open this software, we give the default registLimitTimestamp is: [ " + _defaultRegistLimitTimestamp + " ]");
+            Debug.Log("That`s the First Time open this software, we give the default registLimitTimestamp is: [ " + defaultRegistLimitTimestamp + " ]");
             bool res1 = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampData);
             bool res2 = PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampData);
             if (res1 && res2)
@@ -158,17 +158,17 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
     public void GetNewRegistInfo(string rawData)
     {
         string signData = "";
-        switch (_signMethodCode)
+        switch (_securityCheckServiceConfig.signMethodCode)
         {
             case SignMethodCode.Md5:
-                signData = Md5SignatureUtils.GenerateMd5SignData(rawData, _secretTimestamp, _apiKey, _apiSecret);
+                signData = Md5SignatureUtils.GenerateMd5SignData(rawData, _securityCheckServiceConfig.secretTimestamp, _securityCheckServiceConfig.apiKey, _securityCheckServiceConfig.apiSecret);
                 break;
         }
         Debug.Log("Generate New SignRegistInfo, please wait....................................");
         Debug.Log("====================SignRawData====================");
         Debug.Log(rawData);
         Debug.Log("==================================================");
-        Debug.Log("SignMethod: [ " + _signMethodCode + " ]");
+        Debug.Log("SignMethod: [ " + _securityCheckServiceConfig.signMethodCode + " ]");
         Debug.Log("====================SignedData====================");
         Debug.Log(signData);
         Debug.Log("==================================================");
@@ -194,17 +194,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         }
     }
 
-    private bool CheckSignDataValid(string rawData, string signData)
-    {
-        bool res = false;
-        switch (_signMethodCode)
-        {
-            case SignMethodCode.Md5:
-                res = Md5SignatureUtils.CheckMd5SignDataValid(rawData, signData, _secretTimestamp, _apiKey, _apiSecret);
-                break;
-        }
-        return res;
-    }
+
 }
 
 public enum SignMethodCode
@@ -228,7 +218,8 @@ public enum RegistInfoCheckResult
     UpdateFailed_SignError,
     UpdateFailed_WriteInfoError,
     UpdateError_NullInfo,
-    UpdateError_SyntexError
+    UpdateError_SyntexError,
+    UpdateError_LenghthError
 }
 
 public class SecurityCheckServiceConfig
@@ -236,8 +227,10 @@ public class SecurityCheckServiceConfig
     public string apiKey;
     public string apiSecret;
     public string secretTimestamp;
-    public string defaultRegistLimitTimestamp;
+    public DateTime defaultRegistLimitDateTime;
     public SignMethodCode signMethodCode;
     public RegistInfoCode registInfoCode;
+    public int checkLength;
+    public RegistMixSignDataProtocol registMixSignDataProtocol;
     public Action<RegistInfoCheckResult> resultActionCallBack;
 }

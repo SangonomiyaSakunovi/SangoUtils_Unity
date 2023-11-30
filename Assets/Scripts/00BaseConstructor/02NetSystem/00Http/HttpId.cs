@@ -6,7 +6,11 @@ public class HttpId
     [HttpApiKey("Register")]
     public const int registerId = 10001;
     [HttpApiKey("Login")]
-    public const int loginId = 10002;
+    public const int loginId = 10002; 
+    [HttpApiKey("testPath/path1/path2")]
+    public const int testId = 10003;
+
+    private static Dictionary<int, string> idDict = new Dictionary<int, string>();
 
     static HttpId()
     {
@@ -24,8 +28,6 @@ public class HttpId
             }
         }
     }
-
-    private static Dictionary<int, string> idDict = new Dictionary<int, string>();
 
     public static string GetHttpApi(int httpId)
     {
