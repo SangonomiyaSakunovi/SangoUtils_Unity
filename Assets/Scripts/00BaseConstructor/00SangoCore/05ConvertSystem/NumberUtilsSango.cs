@@ -2,11 +2,11 @@ public static class NumberUtilsSango
 {
     public static int GetNumberFormNumberMapChar(char inputChar, NumberConvertProtocol protocol)
     {
-        int res = 0;
+        int res = -1;
         switch (protocol)
         {
-            case NumberConvertProtocol.ASCII_A_1:
-                res = NumberMapSango.GetNumberFormConvertProtocol_ASCII_A_1(inputChar);
+            case NumberConvertProtocol.ASCII_A0a26:
+                res = NumberMapSango.GetNumberConvertProtocol_ASCII_A0a26(inputChar);
                 break;
         }
         return res;
@@ -15,5 +15,5 @@ public static class NumberUtilsSango
 
 public enum NumberConvertProtocol
 {
-    ASCII_A_1,
+    ASCII_A0a26,
 }

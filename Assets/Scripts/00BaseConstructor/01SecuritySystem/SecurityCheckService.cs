@@ -53,7 +53,12 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError);
             return;
         }
-        SecurityCheckMapSango.CheckProtocl_SIGNDATA(registLimitTimestampNew, signData, _securityCheckServiceConfig, WriteRegistInfo);        
+        switch (_securityCheckServiceConfig.registMixSignDataProtocol)
+        {
+            case RegistMixSignDataProtocol.SIGN:
+                SecurityCheckMapSango.CheckProtocl_SIGNDATA(registLimitTimestampNew, signData, _securityCheckServiceConfig, WriteRegistInfo);
+                break;
+        }   
     }
 
     public void UpdateRegistInfo(string mixSignData)
@@ -65,8 +70,8 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         }
         switch (_securityCheckServiceConfig.registMixSignDataProtocol)
         {
-            case RegistMixSignDataProtocol.AA_B_SIGNDATA:
-                SecurityCheckMapSango.CheckProtocol_AA_B_SIGNDATA(mixSignData, _securityCheckServiceConfig, WriteRegistInfo);
+            case RegistMixSignDataProtocol.A_B_C_SIGN:
+                SecurityCheckMapSango.CheckProtocol_A_B_C_SIGN(mixSignData, _securityCheckServiceConfig, WriteRegistInfo);
                 break;
         }
     }
@@ -193,8 +198,6 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampDataNew);
         }
     }
-
-
 }
 
 public enum SignMethodCode

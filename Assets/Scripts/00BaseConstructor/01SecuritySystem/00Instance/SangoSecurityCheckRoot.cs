@@ -15,7 +15,7 @@ public class SangoSecurityCheckRoot : BaseRoot
             registInfoCode = RegistInfoCode.Timestamp,
             signMethodCode = SignMethodCode.Md5,
             checkLength = 5,
-            registMixSignDataProtocol = RegistMixSignDataProtocol.AA_B_SIGNDATA,
+            registMixSignDataProtocol = RegistMixSignDataProtocol.A_B_C_SIGN,
             resultActionCallBack = RegistInfoCheckResultActionCallBack
         };
 

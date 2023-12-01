@@ -30,29 +30,28 @@ public static class SecurityCheckMapSango
         }
     }
 
-    public static void CheckProtocol_AA_B_SIGNDATA(string mixSignData, SecurityCheckServiceConfig config, Action<string> writeRegistInfoCallBack)
+    public static void CheckProtocol_A_B_C_SIGN(string mixSignData, SecurityCheckServiceConfig config, Action<string> writeRegistInfoCallBack)
     {
         if (mixSignData.Length != 3 + config.checkLength)
         {
             config.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_LenghthError);
             return;
         }
-        bool decodeRes = true;
-        int numYearIndex3 = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[0], NumberConvertProtocol.ASCII_A_1);
-        if (numYearIndex3 < 0 || numYearIndex3 > 9) { decodeRes = false; }
-        int numYearIndex4 = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[1], NumberConvertProtocol.ASCII_A_1);
-        if (numYearIndex4 < 0 || numYearIndex4 > 9) { decodeRes = false; }
-        int numMonth = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[2], NumberConvertProtocol.ASCII_A_1);
-        if (numMonth < 1 || numMonth > 12) { decodeRes = false; }
-        int numDay = config.defaultRegistLimitDateTime.Day;
-        if (!decodeRes)
+        int numYearPostNum = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[0], NumberConvertProtocol.ASCII_A0a26);
+        if (numYearPostNum == -1)
+        {
+            config.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_LenghthError);
+            return;
+        }
+        int numYear = 2000 + numYearPostNum;
+        int numMonth = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[1], NumberConvertProtocol.ASCII_A0a26);
+        int numDay = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[2], NumberConvertProtocol.ASCII_A0a26);        
+        DateTime newRegistLimitDateTime = TimeUtils.GetDateTimeFromDateNumer(numYear, numMonth, numDay);
+        if (newRegistLimitDateTime == DateTime.MinValue)
         {
             config.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError);
             return;
         }
-        string yearStr = "20" + numYearIndex3 + numYearIndex4;
-        int numYear = int.Parse(yearStr);
-        DateTime newRegistLimitDateTime = TimeUtils.GetDateTimeFromDateNumer(numYear, numMonth, numDay);
         string md5DataStr = mixSignData.Substring(3, config.checkLength);
         long registLimitTimestampNew = TimeUtils.GetUnixDateTimeSeconds(newRegistLimitDateTime);
         if (CheckSignDataValid(registLimitTimestampNew, md5DataStr, config))
@@ -69,6 +68,6 @@ public static class SecurityCheckMapSango
 
 public enum RegistMixSignDataProtocol
 {
-    SIGNDATA,
-    AA_B_SIGNDATA
+    SIGN,
+    A_B_C_SIGN
 }
