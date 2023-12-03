@@ -1,6 +1,6 @@
 using System;
 
-public class SangoSecurityCheckRoot : BaseRoot
+public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
 {
     public SangoSecurityCheckWnd _sangoSecurityCheckWnd;
 
@@ -21,10 +21,9 @@ public class SangoSecurityCheckRoot : BaseRoot
 
         InitSecurityCheckService(config);
         CheckRegistValidation();
-        GetNewRegistInfo("1701122197");
     }
 
-    public override void RegistInfoCheckResultActionCallBack(RegistInfoCheckResult result)
+    private void RegistInfoCheckResultActionCallBack(RegistInfoCheckResult result)
     {
         switch (result)
         {
@@ -71,9 +70,8 @@ public class SangoSecurityCheckRoot : BaseRoot
         }
     }
 
-    protected override void OnSecurityCheckResultValid()
-    {
-        base.OnSecurityCheckResultValid();
+    private void OnSecurityCheckResultValid()
+    {       
         //TODO
     }
 }

@@ -37,15 +37,15 @@ public static class SecurityCheckMapSango
             config.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_LenghthError);
             return;
         }
-        int numYearPostNum = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[0], NumberConvertProtocol.ASCII_A0a26);
+        int numYearPostNum = NumberUtilsSango.GetNumberFromNumberToCharProtocol(mixSignData[0], NumberConvertProtocol.ASCII_A0a26);
         if (numYearPostNum == -1)
         {
             config.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_LenghthError);
             return;
         }
         int numYear = 2000 + numYearPostNum;
-        int numMonth = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[1], NumberConvertProtocol.ASCII_A0a26);
-        int numDay = NumberUtilsSango.GetNumberFormNumberMapChar(mixSignData[2], NumberConvertProtocol.ASCII_A0a26);        
+        int numMonth = NumberUtilsSango.GetNumberFromNumberToCharProtocol(mixSignData[1], NumberConvertProtocol.ASCII_A0a26);
+        int numDay = NumberUtilsSango.GetNumberFromNumberToCharProtocol(mixSignData[2], NumberConvertProtocol.ASCII_A0a26);        
         DateTime newRegistLimitDateTime = TimeUtils.GetDateTimeFromDateNumer(numYear, numMonth, numDay);
         if (newRegistLimitDateTime == DateTime.MinValue)
         {

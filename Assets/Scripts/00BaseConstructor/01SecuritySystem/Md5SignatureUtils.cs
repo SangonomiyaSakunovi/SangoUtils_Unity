@@ -4,12 +4,20 @@ using System.Text;
 
 public static class Md5SignatureUtils
 {
-    public static string GenerateMd5SignData(string rawData, string timestamp, string apiKey, string apiSecret)
+    public static string GenerateMd5SignData(string rawData, string timestamp, string apiKey, string apiSecret, int checkLenth)
     {
         string signData = apiKey + apiSecret + timestamp;
         string signPatameterMd5 = rawData + signData;
         string md5Str = GetMd5Str(signPatameterMd5);
-        return md5Str;
+        if (checkLenth == 0)
+        {
+            return md5Str;
+        }
+        else
+        {
+            string md5StrPart = md5Str.Substring(0, checkLenth);
+            return md5StrPart;
+        }
     }
 
     public static bool CheckMd5SignDataValid(string rawData, string md5Data, string timestamp, string apiKey, string apiSecret, int checkLenth)

@@ -1,8 +1,23 @@
 using UnityEngine;
 
-public class BaseRoot : MonoBehaviour
+public class BaseRoot<T> : UnitySingleton<T> where T : MonoBehaviour
 {
-    public virtual void InitRoot()
+    private void Update()
+    {
+        OnUpdate();
+    }
+
+    public virtual void OnInit()
+    {
+
+    }
+
+    protected virtual void OnUpdate()
+    {
+
+    }
+
+    public virtual void OnDispose()
     {
 
     }
@@ -22,23 +37,8 @@ public class BaseRoot : MonoBehaviour
         SecurityCheckService.Instance.UpdateRegistInfo(mixSignData);
     }
 
-    protected void GetNewRegistInfo(string rawData)
-    {
-        SecurityCheckService.Instance.GetNewRegistInfo(rawData);
-    }
-
     protected void InitSecurityCheckService(SecurityCheckServiceConfig config)
     {
         SecurityCheckService.Instance.OnInit(config);
-    }
-
-    public virtual void RegistInfoCheckResultActionCallBack(RegistInfoCheckResult result)
-    {
-
-    }
-
-    protected virtual void OnSecurityCheckResultValid()
-    {
-
     }
 }

@@ -158,26 +158,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
                 }
             }
         }
-    }
-
-    public void GetNewRegistInfo(string rawData)
-    {
-        string signData = "";
-        switch (_securityCheckServiceConfig.signMethodCode)
-        {
-            case SignMethodCode.Md5:
-                signData = Md5SignatureUtils.GenerateMd5SignData(rawData, _securityCheckServiceConfig.secretTimestamp, _securityCheckServiceConfig.apiKey, _securityCheckServiceConfig.apiSecret);
-                break;
-        }
-        Debug.Log("Generate New SignRegistInfo, please wait....................................");
-        Debug.Log("====================SignRawData====================");
-        Debug.Log(rawData);
-        Debug.Log("==================================================");
-        Debug.Log("SignMethod: [ " + _securityCheckServiceConfig.signMethodCode + " ]");
-        Debug.Log("====================SignedData====================");
-        Debug.Log(signData);
-        Debug.Log("==================================================");
-    }
+    }   
 
     private void TickUpdateRunTime()
     {
