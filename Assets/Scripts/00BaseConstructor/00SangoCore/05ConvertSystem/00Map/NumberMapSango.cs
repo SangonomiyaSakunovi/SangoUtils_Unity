@@ -18,7 +18,7 @@ public static class NumberMapSango
         }
     }
 
-    public static char GetCharConverterProtocol_ASCII_A0a26(int inputNum)
+    public static char GetCharConvertProtocol_ASCII_A0a26(int inputNum)
     {
         if (inputNum >= 0 && inputNum <= 25)
         {

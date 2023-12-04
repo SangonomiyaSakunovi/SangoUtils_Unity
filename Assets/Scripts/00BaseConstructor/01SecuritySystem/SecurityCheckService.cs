@@ -13,8 +13,6 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
 
     private bool _isApplicationRunValid = false;
 
-    private Action<RegistInfoCheckResult> _resultActionCallBack = null;
-
     public void OnInit(SecurityCheckServiceConfig config)
     {
         base.OnInit();
@@ -45,12 +43,12 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
     {
         if (string.IsNullOrEmpty(registLimitTimestampNew) || string.IsNullOrEmpty(signData))
         {
-            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo);
+            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo);
             return;
         }
         if (!long.TryParse(registLimitTimestampNew, out long result))
         {
-            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError);
+            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError);
             return;
         }
         switch (_securityCheckServiceConfig.registMixSignDataProtocol)
@@ -65,7 +63,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
     {
         if (string.IsNullOrEmpty(mixSignData))
         {
-            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo);
+            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo);
             return;
         }
         switch (_securityCheckServiceConfig.registMixSignDataProtocol)
@@ -88,17 +86,17 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             if (res1 && res2)
             {
                 _isApplicationRunValid = true;
-                _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateOK_Success);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateOK_Success);
             }
             else
             {
-                _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
             }
         }
         else
         {
             Debug.Log("RegistFaild, the NewRegistLimitTimestamp should newer than NowTimestamp.");
-            _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_OutData);
+            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_OutData);
         }
     }
 
@@ -124,11 +122,11 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             if (res1 && res2)
             {
                 res = true;
-                _resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_FirstRun);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_FirstRun);
             }
             else
             {
-                _resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
             }
             Debug.Log("Is first regist OK? [ " + res + " ]");
         }
@@ -143,18 +141,18 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             if (nowTimestamp < registLastRunTimestamp)
             {
                 Debug.LogError("Error: SystemTime has in Changed");
-                _resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckError_SystemTimeChanged);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckError_SystemTimeChanged);
             }
             else
             {
                 if (nowTimestamp < registLimitTimestamp)
                 {
                     _isApplicationRunValid = true;
-                    _resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_Valid);
+                    _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_Valid);
                 }
                 else
                 {
-                    _resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckFailed_OutData);
+                    _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckFailed_OutData);
                 }
             }
         }

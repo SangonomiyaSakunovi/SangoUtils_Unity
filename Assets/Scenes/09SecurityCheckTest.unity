@@ -617,13 +617,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2551239760705539405, guid: 1c53cbf71363cb143829fbe2a5633d66,
+        type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2761900542139258024, guid: 1c53cbf71363cb143829fbe2a5633d66,
         type: 3}
       propertyPath: m_Name
       value: SangoSecurityCheckRoot
       objectReference: {fileID: 0}
+    - target: {fileID: 7627308506521354593, guid: 1c53cbf71363cb143829fbe2a5633d66,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8474342042431445328, guid: 1c53cbf71363cb143829fbe2a5633d66,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9171984224082527295, guid: 1c53cbf71363cb143829fbe2a5633d66,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 384
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7468051877427938766, guid: 1c53cbf71363cb143829fbe2a5633d66, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c53cbf71363cb143829fbe2a5633d66, type: 3}

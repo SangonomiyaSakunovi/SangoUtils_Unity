@@ -20,7 +20,7 @@ public static class Md5SignatureUtils
         }
     }
 
-    public static bool CheckMd5SignDataValid(string rawData, string md5Data, string timestamp, string apiKey, string apiSecret, int checkLenth)
+    public static bool CheckMd5SignDataValid(string rawData, string md5Data, string timestamp, string apiKey, string apiSecret, int checkLenth, SecuritySignConvertProtocol signConvertProtocol)
     {
         string signData = apiKey + apiSecret + timestamp;
         string signParameterMd5 = rawData + signData;
@@ -36,7 +36,8 @@ public static class Md5SignatureUtils
         else
         {
             string md5StrPart = md5Str.Substring(0, checkLenth);
-            if (md5StrPart == md5Data)
+            string md5StrPartConverted = SecuritySignConvertUtilsSango.GetSecuritySignInfoFromSrcuritySignConvertProtocol(md5StrPart, signConvertProtocol);
+            if (md5StrPartConverted == md5Data)
             {
                 return true;
             }

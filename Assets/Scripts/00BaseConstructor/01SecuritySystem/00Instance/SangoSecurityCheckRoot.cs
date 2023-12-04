@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
 {
@@ -25,10 +26,11 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
 
     private void RegistInfoCheckResultActionCallBack(RegistInfoCheckResult result)
     {
+        Debug.Log("开始运行回调");
         switch (result)
         {
             case RegistInfoCheckResult.CheckOK_Valid:
-                _sangoSecurityCheckWnd.SetWindowState(false);
+                _sangoSecurityCheckWnd.SetWindowState();
                 OnSecurityCheckResultValid();
                 break;
             case RegistInfoCheckResult.CheckOK_FirstRun:

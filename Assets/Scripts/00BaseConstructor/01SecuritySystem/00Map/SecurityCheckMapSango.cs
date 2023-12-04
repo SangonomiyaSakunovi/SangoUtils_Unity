@@ -2,25 +2,25 @@ using System;
 
 public static class SecurityCheckMapSango
 {
-    private static bool CheckSignDataValid(string rawData, string signData, SecurityCheckServiceConfig config)
+    private static bool CheckSignDataValid(string rawData, string signData, SecurityCheckServiceConfig config, SecuritySignConvertProtocol signConvertProtocol)
     {
         bool res = false;
         switch (config.signMethodCode)
         {
             case SignMethodCode.Md5:
-                res = Md5SignatureUtils.CheckMd5SignDataValid(rawData, signData, config.secretTimestamp, config.apiKey, config.apiSecret, config.checkLength);
+                res = Md5SignatureUtils.CheckMd5SignDataValid(rawData, signData, config.secretTimestamp, config.apiKey, config.apiSecret, config.checkLength, signConvertProtocol);
                 break;
         }
         return res;
     }
-    private static bool CheckSignDataValid(long rawData, string signData, SecurityCheckServiceConfig config)
+    private static bool CheckSignDataValid(long rawData, string signData, SecurityCheckServiceConfig config, SecuritySignConvertProtocol signConvertProtocol)
     {
-        return CheckSignDataValid(rawData.ToString(), signData, config);
+        return CheckSignDataValid(rawData.ToString(), signData, config, signConvertProtocol);
     }
 
     public static void CheckProtocl_SIGNDATA(string registLimitTimestampNew, string signData, SecurityCheckServiceConfig config, Action<string> writeRegistInfoCallBack)
     {
-        if (CheckSignDataValid(registLimitTimestampNew, signData, config))
+        if (CheckSignDataValid(registLimitTimestampNew, signData, config, SecuritySignConvertProtocol.RawData))
         {
             writeRegistInfoCallBack?.Invoke(registLimitTimestampNew);
         }
@@ -37,15 +37,15 @@ public static class SecurityCheckMapSango
             config.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_LenghthError);
             return;
         }
-        int numYearPostNum = NumberUtilsSango.GetNumberFromNumberToCharProtocol(mixSignData[0], NumberConvertProtocol.ASCII_A0a26);
+        int numYearPostNum = NumberUtilsSango.GetNumberFromNumberConvertProtocol(mixSignData[0], NumberConvertProtocol.ASCII_A0a26);
         if (numYearPostNum == -1)
         {
             config.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_LenghthError);
             return;
         }
-        int numYear = 2000 + numYearPostNum;
-        int numMonth = NumberUtilsSango.GetNumberFromNumberToCharProtocol(mixSignData[1], NumberConvertProtocol.ASCII_A0a26);
-        int numDay = NumberUtilsSango.GetNumberFromNumberToCharProtocol(mixSignData[2], NumberConvertProtocol.ASCII_A0a26);        
+        int numYear = 2023 + numYearPostNum;
+        int numMonth = NumberUtilsSango.GetNumberFromNumberConvertProtocol(mixSignData[1], NumberConvertProtocol.ASCII_A0a26);
+        int numDay = NumberUtilsSango.GetNumberFromNumberConvertProtocol(mixSignData[2], NumberConvertProtocol.ASCII_A0a26);        
         DateTime newRegistLimitDateTime = TimeUtils.GetDateTimeFromDateNumer(numYear, numMonth, numDay);
         if (newRegistLimitDateTime == DateTime.MinValue)
         {
@@ -54,7 +54,7 @@ public static class SecurityCheckMapSango
         }
         string md5DataStr = mixSignData.Substring(3, config.checkLength);
         long registLimitTimestampNew = TimeUtils.GetUnixDateTimeSeconds(newRegistLimitDateTime);
-        if (CheckSignDataValid(registLimitTimestampNew, md5DataStr, config))
+        if (CheckSignDataValid(registLimitTimestampNew, md5DataStr, config, SecuritySignConvertProtocol.AllToUpperChar))
         {
             writeRegistInfoCallBack?.Invoke(registLimitTimestampNew.ToString());
         }

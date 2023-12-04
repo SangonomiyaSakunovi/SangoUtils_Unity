@@ -1,6 +1,6 @@
 public static class NumberUtilsSango
 {
-    public static int GetNumberFromNumberToCharProtocol(char inputChar, NumberConvertProtocol protocol)
+    public static int GetNumberFromNumberConvertProtocol(char inputChar, NumberConvertProtocol protocol)
     {
         int res = -1;
         switch (protocol)
@@ -12,13 +12,13 @@ public static class NumberUtilsSango
         return res;
     }
 
-    public static char GetCharFromNumberToCharProtocol(int inputNumber, NumberConvertProtocol protocol)
+    public static char GetCharFromNumberConvertProtocol(int inputNumber, NumberConvertProtocol protocol)
     {
         char res = '\0';
         switch (protocol)
         {
             case NumberConvertProtocol.ASCII_A0a26:
-                res = NumberMapSango.GetCharConverterProtocol_ASCII_A0a26(inputNumber);
+                res = NumberMapSango.GetCharConvertProtocol_ASCII_A0a26(inputNumber);
                 break;
         }
         return res;
