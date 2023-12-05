@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SangoSecurityCheckWnd : BaseWindow
@@ -8,13 +7,8 @@ public class SangoSecurityCheckWnd : BaseWindow
     private SangoSecurityCheckRoot _sangoSecurityCheckRoot = null;
 
     public Transform _keyboardTrans;
-
     public TMP_InputField _signData;
-
-    public Button _callKeyboardBtn;
-    public Button _closeKeyboardBtn;
     public Button _registBtn;
-
     public TMP_Text _resultShow;
 
     private TMP_InputField _currentTypeInField;
@@ -32,24 +26,46 @@ public class SangoSecurityCheckWnd : BaseWindow
     protected override void OnInit()
     {
         base.OnInit();
-        SetButtonListener(_callKeyboardBtn, OnCallKeyboardBtnClicked);
-        SetButtonListener(_closeKeyboardBtn, OnCloseKeyboardBtnClicked);
         SetButtonListener(_registBtn, OnRegistSoftwareBtnClicked);
-        SetGameObjectClickListener(_signData, OnInputFieldClicked);
+        _currentTypeInField = _signData;
+        ShowKeyboard(KeyboardTypeCode.UpperCharKeyboard);
+        UpdateRegistBtnText("¼¤»î");
     }
 
-    private void OnCallKeyboardBtnClicked(Button button)
+    protected override void OnDispose()
+    {
+        base.OnDispose();
+        HideKeyboard();
+        RemoveAllListeners(_registBtn);
+    }
+
+    public void UpdateRegistBtnText(string text)
+    {
+        if (text == "È·¶¨")
+        {
+            RemoveAllListeners(_registBtn);
+            SetButtonListener(_registBtn, OnRegistOKBtnClicked);
+        }
+        SetText(_registBtn, text);
+    }
+
+    private void ShowKeyboard(KeyboardTypeCode type)
     {
         TypeInService.Instance.SetKeyboardDefaultTransform(_keyboardTrans);
-        TypeInService.Instance.ShowKeyboard(OnTypedInWordCallBack);
+        TypeInService.Instance.ShowKeyboard(type, OnTypedInWordCallBack);
     }
-    private void OnCloseKeyboardBtnClicked(Button button)
+    private void HideKeyboard()
     {
         TypeInService.Instance.HideKeyboard();
     }
     private void OnRegistSoftwareBtnClicked(Button button)
     {
         _sangoSecurityCheckRoot.UpdateRegistInfo(_signData.text);
+    }
+
+    private void OnRegistOKBtnClicked(Button button)
+    {
+        _sangoSecurityCheckRoot.OnSecurityCheckResultValid();
     }
 
     private void OnTypedInWordCallBack(TypeInCommand typeInCommand, string words)
@@ -65,31 +81,6 @@ public class SangoSecurityCheckWnd : BaseWindow
                 if (_currentTypeInField.text.Length == 0) return;
                 _currentTypeInField.text = _currentTypeInField.text.Remove(_currentTypeInField.text.Length - 1, 1);
                 break;
-            case TypeInCommand.Space:
-                if (_currentTypeInField == null) return;
-                _currentTypeInField.text += " ";
-                break;
-            case TypeInCommand.Clear:
-                if (_currentTypeInField == null) return;
-                _currentTypeInField.text = "";
-                break;
-            case TypeInCommand.Confirm:
-                OnCloseKeyboardBtnClicked(null);
-                break;
-            case TypeInCommand.Cancel:
-                OnCloseKeyboardBtnClicked(null);
-                break;
-            case TypeInCommand.EnAlt:
-                //TODO
-                break;
-        }
-    }
-
-    private void OnInputFieldClicked(BaseEventData data)
-    {
-        if (data.selectedObject.name == _signData.name)
-        {
-            _currentTypeInField = _signData;
         }
     }
 }

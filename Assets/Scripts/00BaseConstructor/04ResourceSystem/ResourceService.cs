@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class ResourceService : BaseService<ResourceService>
     private Dictionary<string, AudioClip> _audioClipDict = new Dictionary<string, AudioClip>();
     private Dictionary<string, Sprite> _spriteDict = new Dictionary<string, Sprite>();
     private Dictionary<string, GameObject> _prefabDict = new Dictionary<string, GameObject>();
+    private Dictionary<string, TMP_FontAsset> _fontDict = new Dictionary<string, TMP_FontAsset>();
 
     private Dictionary<string, Texture> _rawImageTextureDict = new Dictionary<string, Texture>();
 
@@ -67,6 +69,23 @@ public class ResourceService : BaseService<ResourceService>
             }
         }
         return prefab;
+    }
+
+    public TMP_FontAsset LoadFont(string fontPath, bool isCache)
+    {
+        _fontDict.TryGetValue(fontPath, out TMP_FontAsset font);
+        if (font == null)
+        {
+            font = Resources.Load<TMP_FontAsset>(fontPath);
+            if (isCache)
+            {
+                if (!_fontDict.ContainsKey(fontPath))
+                {
+                    _fontDict.Add(fontPath, font);
+                }
+            }
+        }
+        return font;
     }
 
     public uint LoadAndSetRawImageOnlineAsync(RawImage targetRawImage, string urlPath, bool isCahce, Action<object[]> completeCallBack, Action<object[]> canceledCallBack, Action<object[]> erroredCallBack)

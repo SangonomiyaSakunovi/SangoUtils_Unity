@@ -1,20 +1,32 @@
 using System;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 public class FloatableKeyboardKeyPrefab : BasePrefab
 {
-    [Header("StandardKey")]
-    public Button _keyButton;
-    public TMP_Text _keyTextMiddle;
-    public TMP_Text _keyTextLeftUp;
+    private Button _keyButton;
+    private TMP_Text _keyTextMiddle;
+    private TMP_Text _keyTextLeftUp;
 
-    [Header("SpecialKey")]
-    public Button _specialKeyButton;
+    private Button _specialKeyButton;
 
     private string _typeInWord;
     private Action<string> _specialButtonClickedCallBack;
+
+    public void InitStandardKey(TMP_FontAsset fontAsset)
+    {
+        _keyButton = GetComponent<Button>();
+        _keyTextLeftUp = transform.GetChild(0).GetComponent<TMP_Text>();
+        _keyTextMiddle = transform.GetChild(1).GetComponent<TMP_Text>();
+        _keyTextLeftUp.font = fontAsset;
+        _keyTextMiddle.font = fontAsset;
+    }
+
+    public void InitSpecialKey(TMP_FontAsset fontAsset)
+    {
+        _specialKeyButton = GetComponent<Button>();
+        transform.GetChild(0).GetComponent<TMP_Text>().font = fontAsset;
+    }
 
     public void UpdateStandardButtonListener(string middleText, string leftUpText, bool isDispose)
     {

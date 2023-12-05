@@ -23,4 +23,13 @@ public static class TimeUtils
         }
         return new DateTime(year, month, day, 0, 0, 0);
     }
+
+    public static DateTime GetDateTimeFromTimestamp(long timestamp)
+    {
+        return DateTimeOffset.FromUnixTimeSeconds(timestamp).DateTime;
+    }
+    public static DateTime GetDateTimeFromTimestamp(string timestamp)
+    {
+        return GetDateTimeFromTimestamp(Convert.ToInt64(timestamp));
+    }
 }

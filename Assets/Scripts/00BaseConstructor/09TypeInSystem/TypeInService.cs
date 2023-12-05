@@ -1,9 +1,10 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TypeInService : BaseService<TypeInService>
 {
-    private TypeInMode _currentTypeInMode = TypeInMode.FloatableKeyboard;
+    private KeyboardTypeCode _currentKeyboardType = KeyboardTypeCode.FloatableKeyboard;
     private TypeInLanguage _currentTypeInLanguage = TypeInLanguage.English;
 
     private GameObject _currentKeyboardObject = null;
@@ -32,18 +33,22 @@ public class TypeInService : BaseService<TypeInService>
         _keyboardDefaultTransform = parentTrans;
     }
 
-    public void ShowKeyboard(Action<TypeInCommand, string> onTypeInWordCallBack)
+    public void ShowKeyboard(KeyboardTypeCode type, Action<TypeInCommand, string> onTypeInWordCallBack)
     {
         _onTypeInWordCallBack = onTypeInWordCallBack;
+        _currentKeyboardType = type;
         if (_currentKeyboardObject == null)
         {
-            GameObject prefab = null;
-            switch (_currentTypeInMode)
+            switch (_currentKeyboardType)
             {
-                case TypeInMode.FloatableKeyboard:
-                    prefab = ResourceService.Instance.LoadPrefab(TypeInConstant.TypeInPanelPrefabPath, false);
-                    _currentKeyboardObject = Instantiate(prefab, _keyboardDefaultTransform);
+                case KeyboardTypeCode.FloatableKeyboard:
+                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_FloatableKeyboard_PrefabPath);
                     _currentKeyboardSystem = _currentKeyboardObject.GetComponent<FloatableKeyboardSystem>();
+                    _currentKeyboardSystem.SetSystem();
+                    break;
+                case KeyboardTypeCode.UpperCharKeyboard:
+                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_PrefabPath);
+                    _currentKeyboardSystem = _currentKeyboardObject.GetComponent<UpperCharKeyboardSystem>();
                     _currentKeyboardSystem.SetSystem();
                     break;
             }

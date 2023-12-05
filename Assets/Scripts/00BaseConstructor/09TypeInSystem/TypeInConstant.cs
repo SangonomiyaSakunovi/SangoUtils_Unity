@@ -1,6 +1,7 @@
 public class TypeInConstant : BaseConstant
 {
-    public const string TypeInPanelPrefabPath = "Prefabs/TypeInSystemPrefab/FloatableKeyboradPanel";
+    public const string TypeInPanel_FloatableKeyboard_PrefabPath = "Prefabs/TypeInSystemPrefab/FloatableKeyboradPanel";
+    public const string TypeInPanel_UpperCharKeyboard_PrefabPath = "Prefabs/TypeInSystemPrefab/UpperCharKeyboradPanel";
 }
 
 public enum TypeInCommand
@@ -19,7 +20,8 @@ public enum TypeInLanguage
     English,
 }
 
-public enum TypeInMode
+public enum KeyboardTypeCode
 {
     FloatableKeyboard,
+    UpperCharKeyboard
 }

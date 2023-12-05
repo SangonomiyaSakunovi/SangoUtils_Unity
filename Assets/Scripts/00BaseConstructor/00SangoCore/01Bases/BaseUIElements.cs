@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class BaseUIElements : MonoBehaviour
 {
@@ -76,6 +77,26 @@ public class BaseUIElements : MonoBehaviour
     protected void SetAudio(Transform transform, string path, bool isCache = false)
     {
         SetAudio(transform.gameObject, path, isCache);
+    }
+
+    protected void SetFont(TMP_Text text, string path, bool isChache = true)
+    {
+        TMP_FontAsset font = ResourceService.Instance.LoadFont(path, isChache);
+        text.font = font;
+    }
+
+    protected void SetFont(GameObject gameObject, string path, bool isChache = true)
+    {
+        TMP_Text text = gameObject.GetComponent<TMP_Text>();
+        if (text != null)
+        {
+            SetFont(text, path, isChache);
+        }
+    }
+
+    protected void SetFont(Transform transform, string path, bool isChache = true)
+    {
+        SetFont(transform.gameObject, path, isChache);
     }
 
     protected GameObject InstantiateGameObject(Transform parentTrans, string path, bool isCache = false)
@@ -842,8 +863,15 @@ public class BaseUIElements : MonoBehaviour
     protected void SetGameObjectClickListener(GameObject gameObject, UnityAction<BaseEventData> actionCallBack)
     {
         var eventTrigger = GetOrAddComponent<EventTrigger>(gameObject);
+        foreach (var existedEntry in eventTrigger.triggers)
+        {
+            if (existedEntry.eventID == EventTriggerType.PointerClick)
+            {
+                return;
+            }
+        }
         UnityAction<BaseEventData> selectEvent = actionCallBack;
-        EventTrigger.Entry onClick = new EventTrigger.Entry()
+        Entry onClick = new Entry()
         {
             eventID = EventTriggerType.PointerClick
         };

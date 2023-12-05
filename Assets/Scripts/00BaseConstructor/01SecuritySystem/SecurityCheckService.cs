@@ -43,12 +43,12 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
     {
         if (string.IsNullOrEmpty(registLimitTimestampNew) || string.IsNullOrEmpty(signData))
         {
-            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo);
+            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo, "");
             return;
         }
         if (!long.TryParse(registLimitTimestampNew, out long result))
         {
-            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError);
+            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError, "");
             return;
         }
         switch (_securityCheckServiceConfig.registMixSignDataProtocol)
@@ -56,14 +56,14 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             case RegistMixSignDataProtocol.SIGN:
                 SecurityCheckMapSango.CheckProtocl_SIGNDATA(registLimitTimestampNew, signData, _securityCheckServiceConfig, WriteRegistInfo);
                 break;
-        }   
+        }
     }
 
     public void UpdateRegistInfo(string mixSignData)
     {
         if (string.IsNullOrEmpty(mixSignData))
         {
-            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo);
+            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateError_NullInfo, "");
             return;
         }
         switch (_securityCheckServiceConfig.registMixSignDataProtocol)
@@ -86,17 +86,18 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             if (res1 && res2)
             {
                 _isApplicationRunValid = true;
-                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateOK_Success);
+                DateTime registNewLimitDateTime = TimeUtils.GetDateTimeFromTimestamp(registLimitTimestampNew);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateOK_Success, registNewLimitDateTime.ToString("yyyy-MM-dd"));
             }
             else
             {
-                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError, "");
             }
         }
         else
         {
             Debug.Log("RegistFaild, the NewRegistLimitTimestamp should newer than NowTimestamp.");
-            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_OutData);
+            _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_OutData, "");
         }
     }
 
@@ -122,11 +123,11 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             if (res1 && res2)
             {
                 res = true;
-                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_FirstRun);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_FirstRun, "");
             }
             else
             {
-                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError, "");
             }
             Debug.Log("Is first regist OK? [ " + res + " ]");
         }
@@ -141,22 +142,32 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             if (nowTimestamp < registLastRunTimestamp)
             {
                 Debug.LogError("Error: SystemTime has in Changed");
-                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckError_SystemTimeChanged);
+                _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckError_SystemTimeChanged, "");
             }
             else
             {
                 if (nowTimestamp < registLimitTimestamp)
                 {
-                    _isApplicationRunValid = true;
-                    _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_Valid);
+                    long timestampSpan = Math.Abs(registLastRunTimestamp - nowTimestamp);
+                    int daySpan = Convert.ToInt32(timestampSpan / (24 * 60 * 60));
+                    if (daySpan <= 3)
+                    {
+                        _isApplicationRunValid = true;
+                        _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckWarnning_ValidationLessThan3Days, daySpan.ToString());
+                    }
+                    else
+                    {
+                        _isApplicationRunValid = true;
+                        _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckOK_Valid, "");
+                    }
                 }
                 else
                 {
-                    _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckFailed_OutData);
+                    _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckFailed_OutData, "");
                 }
             }
         }
-    }   
+    }
 
     private void TickUpdateRunTime()
     {
@@ -193,6 +204,7 @@ public enum RegistInfoCheckResult
 {
     CheckOK_Valid,
     CheckOK_FirstRun,
+    CheckWarnning_ValidationLessThan3Days,
     CheckFailed_OutData,
     CheckError_SystemTimeChanged,
     UpdateOK_Success,
@@ -214,5 +226,5 @@ public class SecurityCheckServiceConfig
     public RegistInfoCode registInfoCode;
     public int checkLength;
     public RegistMixSignDataProtocol registMixSignDataProtocol;
-    public Action<RegistInfoCheckResult> resultActionCallBack;
+    public Action<RegistInfoCheckResult, string> resultActionCallBack;
 }
