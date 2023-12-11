@@ -1,11 +1,11 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TypeInService : BaseService<TypeInService>
 {
     private KeyboardTypeCode _currentKeyboardType = KeyboardTypeCode.FloatableKeyboard;
     private TypeInLanguage _currentTypeInLanguage = TypeInLanguage.English;
+    private KeyboradDirectionCode _currentKeyboradDirection = KeyboradDirectionCode.Horizontal;
 
     private GameObject _currentKeyboardObject = null;
     private TypeInBaseSystem _currentKeyboardSystem = null;
@@ -33,25 +33,31 @@ public class TypeInService : BaseService<TypeInService>
         _keyboardDefaultTransform = parentTrans;
     }
 
-    public void ShowKeyboard(KeyboardTypeCode type, Action<TypeInCommand, string> onTypeInWordCallBack)
+    public void ShowKeyboard(TypeInConfig config, Action<TypeInCommand, string> onTypeInWordCallBack)
     {
         _onTypeInWordCallBack = onTypeInWordCallBack;
-        _currentKeyboardType = type;
+        _currentKeyboardType = config.keyboardTypeCode;
+        _currentKeyboradDirection = config.keyboradDirectionCode;
         if (_currentKeyboardObject == null)
         {
             switch (_currentKeyboardType)
             {
                 case KeyboardTypeCode.FloatableKeyboard:
-                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_FloatableKeyboard_PrefabPath);
-                    _currentKeyboardSystem = _currentKeyboardObject.GetComponent<FloatableKeyboardSystem>();
-                    _currentKeyboardSystem.SetSystem();
+                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_FloatableKeyboard_PrefabPath);                 
                     break;
                 case KeyboardTypeCode.UpperCharKeyboard:
                     _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_PrefabPath);
-                    _currentKeyboardSystem = _currentKeyboardObject.GetComponent<UpperCharKeyboardSystem>();
-                    _currentKeyboardSystem.SetSystem();
+                    break;
+                case KeyboardTypeCode.UpperCharKeyboard_4K:
+                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_4K_PrefabPath);
+                    break;
+                case KeyboardTypeCode.UpperCharKeyboard_Vertical_4K:
+                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_Vertical_4K_PrefabPath);
                     break;
             }
+            _currentKeyboardSystem = _currentKeyboardObject.GetComponent<UpperCharKeyboardSystem>();
+            _currentKeyboardSystem.SetKeyboardDirection(_currentKeyboradDirection);
+            _currentKeyboardSystem.SetSystem();
         }
         _currentKeyboardObject.SetActive(true);
         _currentKeyboardSystem.ShowKeyboard();
@@ -68,5 +74,4 @@ public class TypeInService : BaseService<TypeInService>
     {
         _onTypeInWordCallBack?.Invoke(typeInCommand, words);
     }
-
 }

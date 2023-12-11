@@ -148,7 +148,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             {
                 if (nowTimestamp < registLimitTimestamp)
                 {
-                    long timestampSpan = Math.Abs(registLastRunTimestamp - nowTimestamp);
+                    long timestampSpan = Math.Abs(registLimitTimestamp - nowTimestamp);
                     int daySpan = Convert.ToInt32(timestampSpan / (24 * 60 * 60));
                     if (daySpan <= 3)
                     {

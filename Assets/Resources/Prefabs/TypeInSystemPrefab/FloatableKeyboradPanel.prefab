@@ -14381,12 +14381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d652fd13c99470f439a7405819b845e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _keyboardLine1: {fileID: 8539882677213576020}
-  _keyboardLine2: {fileID: 4381091078507062260}
-  _keyboardLine3: {fileID: 8352592612423901605}
-  _keyboardLine4: {fileID: 3710634642389054805}
-  _keyboardLine5: {fileID: 56443265060609742}
-  _standardKeyFont: {fileID: 11400000, guid: 47aff5cbc0c2d0343a68826c4e302c9e, type: 2}
+  _standardKeyFont: {fileID: 11400000, guid: 0a8a835e5b64e304aa216a63d74c13fa, type: 2}
   _specialKeyFont: {fileID: 11400000, guid: 47aff5cbc0c2d0343a68826c4e302c9e, type: 2}
 --- !u!114 &8678587310099226543
 MonoBehaviour:

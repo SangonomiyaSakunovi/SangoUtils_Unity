@@ -25,4 +25,12 @@ public static class PlayerPrefsUtils
         }
         return res;
     }
+
+    public static void RemovePersistData(string key)
+    {        
+        if (PlayerPrefs.HasKey(key))
+        {
+            PlayerPrefs.DeleteKey(key);
+        }
+    }
 }

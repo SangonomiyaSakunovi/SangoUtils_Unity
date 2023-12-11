@@ -23,6 +23,12 @@ public class UpperCharKeyboardSystem : TypeInBaseSystem
         _upperCharKeyboardPanel.HideKeyboard();
     }
 
+    public override void SetKeyboardDirection(KeyboradDirectionCode directionCode)
+    {
+        base.SetKeyboardDirection(directionCode);
+        _upperCharKeyboardPanel.SetKeyboradDirection(directionCode);
+    }
+
     public void OnSpecialButtonClickedCallBack(string buttonName)
     {
         switch (buttonName)

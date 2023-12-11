@@ -5,17 +5,23 @@ using UnityEngine.UI;
 public class SangoSecurityCheckWnd : BaseWindow
 {
     private SangoSecurityCheckRoot _sangoSecurityCheckRoot = null;
+    private TypeInConfig _currentTypeInfConfig = null;
 
     public Transform _keyboardTrans;
-    public TMP_InputField _signData;
+    public Transform _inputShowParentTrans;
     public Button _registBtn;
+    public Button _skipBtn;
     public TMP_Text _resultShow;
 
-    private TMP_InputField _currentTypeInField;
+    private int _maxInputStrLenth = 8;
+    private string _inputStr = "";
 
-    public void SetRoot(SangoSecurityCheckRoot root)
+    private TMP_Text[] _inputShowTexts = null;
+
+    public void SetRoot(SangoSecurityCheckRoot root, TypeInConfig config)
     {
         _sangoSecurityCheckRoot = root;
+        _currentTypeInfConfig = config;
     }
 
     public void UpdateResult(string result)
@@ -26,10 +32,12 @@ public class SangoSecurityCheckWnd : BaseWindow
     protected override void OnInit()
     {
         base.OnInit();
+
         SetButtonListener(_registBtn, OnRegistSoftwareBtnClicked);
-        _currentTypeInField = _signData;
-        ShowKeyboard(KeyboardTypeCode.UpperCharKeyboard);
-        UpdateRegistBtnText("激活");
+        SetActive(_skipBtn, false);
+        ShowKeyboard(_currentTypeInfConfig);
+        UpdateBtnInfo("RegistBtn", "激活");
+        _inputShowTexts = _inputShowParentTrans.GetComponentsInChildren<TMP_Text>();
     }
 
     protected override void OnDispose()
@@ -39,20 +47,30 @@ public class SangoSecurityCheckWnd : BaseWindow
         RemoveAllListeners(_registBtn);
     }
 
-    public void UpdateRegistBtnText(string text)
+    public void UpdateBtnInfo(string btnName, string commands)
     {
-        if (text == "确定")
+        switch (btnName)
         {
-            RemoveAllListeners(_registBtn);
-            SetButtonListener(_registBtn, OnRegistOKBtnClicked);
+            case "RegistBtn":
+                if (commands == "确定")
+                {
+                    RemoveAllListeners(_registBtn);
+                    SetButtonListener(_registBtn, OnRegistOKBtnClicked);
+                    SetActive(_skipBtn, false);
+                }
+                SetText(_registBtn, commands);
+                break;
+            case "SkipBtn":
+                SetActive(_skipBtn);
+                SetButtonListener(_skipBtn, OnRegistOKBtnClicked);
+                break;
         }
-        SetText(_registBtn, text);
     }
 
-    private void ShowKeyboard(KeyboardTypeCode type)
+    private void ShowKeyboard(TypeInConfig config)
     {
         TypeInService.Instance.SetKeyboardDefaultTransform(_keyboardTrans);
-        TypeInService.Instance.ShowKeyboard(type, OnTypedInWordCallBack);
+        TypeInService.Instance.ShowKeyboard(config, OnTypedInWordCallBack);
     }
     private void HideKeyboard()
     {
@@ -60,7 +78,7 @@ public class SangoSecurityCheckWnd : BaseWindow
     }
     private void OnRegistSoftwareBtnClicked(Button button)
     {
-        _sangoSecurityCheckRoot.UpdateRegistInfo(_signData.text);
+        _sangoSecurityCheckRoot.UpdateRegistInfo(_inputStr);
     }
 
     private void OnRegistOKBtnClicked(Button button)
@@ -73,14 +91,26 @@ public class SangoSecurityCheckWnd : BaseWindow
         switch (typeInCommand)
         {
             case TypeInCommand.TypeIn:
-                if (_currentTypeInField == null) return;
-                _currentTypeInField.text += words;
+                if (_inputStr.Length == _maxInputStrLenth) { return; }
+                _inputStr += words;
                 break;
             case TypeInCommand.Delet:
-                if (_currentTypeInField == null) return;
-                if (_currentTypeInField.text.Length == 0) return;
-                _currentTypeInField.text = _currentTypeInField.text.Remove(_currentTypeInField.text.Length - 1, 1);
+                if (_inputStr.Length == 0) { return; }
+                _inputStr = _inputStr.Remove(_inputStr.Length - 1, 1);
                 break;
+        }
+        UpdateInputShow();
+    }
+
+    private void UpdateInputShow()
+    {
+        for (int i = 0; i < _inputShowTexts.Length; i++)
+        {
+            _inputShowTexts[i].text = " ";
+        }
+        for (int k = 0; k < _inputStr.Length; k++)
+        {
+            _inputShowTexts[k].text = _inputStr[k].ToString();
         }
     }
 }

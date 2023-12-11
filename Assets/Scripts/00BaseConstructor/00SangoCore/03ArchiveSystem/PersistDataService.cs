@@ -35,6 +35,19 @@ public class PersistDataService : BaseService<PersistDataService>
         }
         return res;
     }
+
+    public bool RemovePersistData(string key)
+    {
+        bool res = false;
+        switch (_persistDataType)
+        {
+            case PersistDataType.PlayerPrefs:
+                PlayerPrefsUtils.RemovePersistData(key);
+                res = true;
+                break;
+        }
+        return res;
+    }
 }
 
 public enum PersistDataType
