@@ -62,14 +62,14 @@ public class TaskTickTimer : TaskBaseTimer
     {
         if (_taskDict.TryRemove(taskId, out TickTimerTask task))
         {
-            if (_isSetHandled && task.CancelCallBack != null)
+            if (_isSetHandled && task.onCanceledCallBack != null)
             {
                 LogInfoFunc?.Invoke($"TaskTickTimer RemoveTask Succeed: [ {taskId} ].");
-                _taskPackQueue.Enqueue(new TickTimerTaskPack(taskId, task.CancelCallBack));
+                _taskPackQueue.Enqueue(new TickTimerTaskPack(taskId, task.onCanceledCallBack));
             }
             else
             {
-                task.CancelCallBack?.Invoke(taskId);
+                task.onCanceledCallBack?.Invoke(taskId);
             }
             return true;
         }
@@ -98,29 +98,29 @@ public class TaskTickTimer : TaskBaseTimer
         double nowTime = GetUTCMilliseconds();
         foreach (TickTimerTask task in _taskDict.Values)
         {
-            if (nowTime < task.TargetTime)
+            if (nowTime < task.targetTime)
             {
                 continue;
             }
 
-            ++task.LoopIndex;
-            if (task.RepeatCount > 0)
+            ++task.loopIndex;
+            if (task.repeatCount > 0)
             {
-                --task.RepeatCount;
-                if (task.RepeatCount == 0)
+                --task.repeatCount;
+                if (task.repeatCount == 0)
                 {
-                    RunTask(task.TaskId);
+                    RunTask(task.taskId);
                 }
                 else
                 {
-                    task.TargetTime = task.StartTime + task.DelayInvokeTime * (task.LoopIndex + 1);
-                    InvokeTaskCallBack(task.TaskId, task.CompleteCallBack);
+                    task.targetTime = task.startTime + task.delayInvokeTime * (task.loopIndex + 1);
+                    InvokeTaskCallBack(task.taskId, task.onCompletedCallBack);
                 }
             }
             else
             {
-                task.TargetTime = task.StartTime + task.DelayInvokeTime * (task.LoopIndex + 1);
-                InvokeTaskCallBack(task.TaskId, task.CompleteCallBack);
+                task.targetTime = task.startTime + task.delayInvokeTime * (task.loopIndex + 1);
+                InvokeTaskCallBack(task.taskId, task.onCompletedCallBack);
             }
         }
     }
@@ -143,8 +143,8 @@ public class TaskTickTimer : TaskBaseTimer
     {
         if (_taskDict.TryRemove(taskId, out TickTimerTask task))
         {
-            InvokeTaskCallBack(taskId, task.CompleteCallBack);
-            task.CompleteCallBack = null;
+            InvokeTaskCallBack(taskId, task.onCompletedCallBack);
+            task.onCompletedCallBack = null;
         }
         else
         {
@@ -191,32 +191,32 @@ public class TaskTickTimer : TaskBaseTimer
 
     private class TickTimerTask
     {
-        public uint TaskId { get; private set; }
-        public uint DelayInvokeTime { get; set; }
-        public int RepeatCount { get; set; }
-        public double TargetTime { get; set; }
-        public Action<uint> CompleteCallBack { get; set; }
-        public Action<uint> CancelCallBack { get; set; }
-        public double StartTime { get; set; }
-        public ulong LoopIndex { get; set; }
+        public uint taskId;
+        public uint delayInvokeTime;
+        public int repeatCount;
+        public double targetTime;
+        public Action<uint> onCompletedCallBack;
+        public Action<uint> onCanceledCallBack;
+        public double startTime;
+        public ulong loopIndex;
 
         public TickTimerTask(uint taskId, uint delayInvokeTime, int repeatCount, double targetTime, Action<uint> completeCallBack, Action<uint> cancelCallBack, double startTime)
         {
-            TaskId = taskId;
-            DelayInvokeTime = delayInvokeTime;
-            RepeatCount = repeatCount;
-            TargetTime = targetTime;
-            CompleteCallBack = completeCallBack;
-            CancelCallBack = cancelCallBack;
-            StartTime = startTime;
-            LoopIndex = 0;
+            this.taskId = taskId;
+            this.delayInvokeTime = delayInvokeTime;
+            this.repeatCount = repeatCount;
+            this.targetTime = targetTime;
+            this.onCompletedCallBack = completeCallBack;
+            this.onCanceledCallBack = cancelCallBack;
+            this.startTime = startTime;
+            loopIndex = 0;
         }
     }
 
     private class TickTimerTaskPack
     {
-        public uint taskId { get; private set; }
-        public Action<uint> taskCallBack { get; set; }
+        public uint taskId;
+        public Action<uint> taskCallBack;
         public TickTimerTaskPack(uint taskId, Action<uint> taskCallBack)
         {
             this.taskId = taskId;

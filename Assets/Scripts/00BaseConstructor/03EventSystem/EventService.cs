@@ -2,12 +2,12 @@
 
 public class EventService : BaseService<EventService>
 {
-    private EventProxy<EventId> _eventProxy;
+    private EventProxy _eventProxy;
 
     public override void OnInit()
     {
         base.OnInit();
-        _eventProxy = new EventProxy<EventId>();
+        _eventProxy = new EventProxy();
         _eventProxy.Init();
     }
 
@@ -23,14 +23,18 @@ public class EventService : BaseService<EventService>
         _eventProxy.Clear();
     }
 
-    public void AddEventListener(EventId evt, Action<object[]> cb)
+    public void AddEventListener<T>(Action<IEventMessageBase> eventMessage) where T : IEventMessageBase
     {
-        _eventProxy.AddEventMessageHandler(evt, cb);
+        Type eventType = typeof(T);
+        int eventId = eventType.GetHashCode();
+        _eventProxy.AddEventMessageHandler(eventId, eventMessage);
     }
 
-    public void RemoveEventListener(EventId evt)
+    public void RemoveEventListener<T>() where T : IEventMessageBase
     {
-        _eventProxy.RemoveEventMessageHandlerByEventId(evt);
+        Type eventType = typeof(T);
+        int eventId = eventType.GetHashCode();
+        _eventProxy.RemoveEventMessageHandlerByEventId(eventId);
     }
 
     public void RemoveTargetListener(object target)
@@ -38,13 +42,18 @@ public class EventService : BaseService<EventService>
         _eventProxy.RemoveEventMessageHandlerByTarget(target);
     }
 
-    public void InvokeEventListener(EventId evt, object[] paramList = null)
+    public void SendEventMessage(IEventMessageBase eventMessage)
     {
-        _eventProxy.InvokeEventMessageHandler(evt, paramList);
+        _eventProxy.InvokeEventMessageImmediately(eventMessage);
     }
 
-    public void InvokeEventListenerImmediately(EventId evt, object[] paramList = null)
+    public void PostEventMessage(IEventMessageBase eventMessage)
     {
-        _eventProxy.InvokeEventMessageHandlerImmediately(evt, paramList);
+        _eventProxy.InvokeEventMessageProxyMode(eventMessage);
     }
+}
+
+public interface IEventMessageBase
+{
+
 }

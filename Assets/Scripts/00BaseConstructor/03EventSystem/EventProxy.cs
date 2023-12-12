@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class EventProxy<T>
+public class EventProxy
 {
     private static string _lock = "_eventMessageLock";
-    private Queue<EventMessagePararms> _eventMessageQueue = new Queue<EventMessagePararms>();
-    private EventMessageMap<T> _eventMessageMap = new EventMessageMap<T>();
+    private Queue<IEventMessageBase> _eventMessageQueue = new Queue<IEventMessageBase>();
+    private EventMessageMap _eventMessageMap = new EventMessageMap();
 
     public void Init()
     {
@@ -17,25 +17,27 @@ public class EventProxy<T>
         {
             while (_eventMessageQueue.Count > 0)
             {
-                EventMessagePararms data = _eventMessageQueue.Dequeue();
-                TriggeEventMessageHandler(data.GetEventId(), data.GetParams());
+                IEventMessageBase eventMessage = _eventMessageQueue.Dequeue();
+                Type eventType = eventMessage.GetType();
+                int eventId = eventType.GetHashCode();
+                TriggeEventMessageHandler(eventId, eventMessage);
             }
         }
     }
     public void Clear() { }
 
-    public void AddEventMessageHandler(T evt, Action<object[]> cb)
+    public void AddEventMessageHandler(int eventId, Action<IEventMessageBase> eventMessage)
     {
         lock (_lock)
         {
-            _eventMessageMap.AddEventMessageHandler(evt, cb);
+            _eventMessageMap.AddEventMessageHandler(eventId, eventMessage);
         }
     }
-    public void RemoveEventMessageHandlerByEventId(T id)
+    public void RemoveEventMessageHandlerByEventId(int eventId)
     {
         lock (_lock)
         {
-            _eventMessageMap.RemoveEventMessageHandler(id);
+            _eventMessageMap.RemoveEventMessageHandler(eventId);
         }
     }
     public void RemoveEventMessageHandlerByTarget(object target)
@@ -46,45 +48,30 @@ public class EventProxy<T>
         }
     }
 
-    public void InvokeEventMessageHandler(T evt, object[] paramLists = null)
+    public void InvokeEventMessageProxyMode(IEventMessageBase eventMessage)
     {
         lock (_lock)
         {
-            _eventMessageQueue.Enqueue(new EventMessagePararms(evt, paramLists));
+            _eventMessageQueue.Enqueue(eventMessage);
         }
     }
 
-    public void InvokeEventMessageHandlerImmediately(T evt, object[] paramLists = null)
+    public void InvokeEventMessageImmediately(IEventMessageBase eventMessage)
     {
-        TriggeEventMessageHandler(evt, paramLists);
+        Type eventType = eventMessage.GetType();
+        int eventId = eventType.GetHashCode();
+        TriggeEventMessageHandler(eventId, eventMessage);
     }
 
-    private void TriggeEventMessageHandler(T t, object[] paramLists)
+    private void TriggeEventMessageHandler(int eventId, IEventMessageBase eventMessage)
     {
-        List<Action<object[]>> lst = _eventMessageMap.GetAllEventMessageHandler(t);
-        if (lst != null)
+        List<Action<IEventMessageBase>> eventMessageList = _eventMessageMap.GetAllEventMessageHandler(eventId);
+        if (eventMessageList != null)
         {
-            for (int i = 0; i < lst.Count; i++)
+            for (int i = 0; i < eventMessageList.Count; i++)
             {
-                lst[i](paramLists);
+                eventMessageList[i].Invoke(eventMessage);
             }
         }
-    }
-
-    private class EventMessagePararms
-    {
-        private T _eventId = default(T);
-        private object[] _paramLists = null;
-        public EventMessagePararms(T t, object[] paramLists)
-        {
-            _eventId = t;
-            _paramLists = paramLists;
-        }
-
-        public T GetEventId()
-        {
-            return _eventId;
-        }
-        public object[] GetParams() { return _paramLists; }
     }
 }

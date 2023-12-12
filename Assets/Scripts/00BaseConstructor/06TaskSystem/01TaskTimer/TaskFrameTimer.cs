@@ -39,7 +39,7 @@ public class TaskFrameTimer : TaskBaseTimer
             if (_taskDict.Remove(taskId))
             {
                 LogInfoFunc?.Invoke($"TaskFrameTimer RemoveTask Succeed: [ {taskId} ].");
-                task.CancelCallBack?.Invoke(taskId);
+                task.onCanceledCallBack?.Invoke(taskId);
                 return true;
             }
             else
@@ -69,14 +69,14 @@ public class TaskFrameTimer : TaskBaseTimer
 
         foreach (FrameTimerTask task in _taskDict.Values)
         {
-            if (task.TargetFrame <= _currentFrame)
+            if (task.targetFrame <= _currentFrame)
             {
-                task.CompleteCallBack.Invoke(task.TaskId);
-                task.TargetFrame += task.DelayInvokeTime;
-                --task.RepeatCount;
-                if (task.RepeatCount == 0)
+                task.onCompletedCallBack.Invoke(task.taskId);
+                task.targetFrame += task.delayInvokeTime;
+                --task.repeatCount;
+                if (task.repeatCount == 0)
                 {
-                    _taskIdLts.Add(task.TaskId);
+                    _taskIdLts.Add(task.taskId);
                 }
             }
         }
@@ -115,21 +115,21 @@ public class TaskFrameTimer : TaskBaseTimer
 
     private class FrameTimerTask
     {
-        public uint TaskId { get; private set; }
-        public uint DelayInvokeTime { get; set; }
-        public int RepeatCount { get; set; }
-        public ulong TargetFrame { get; set; }
-        public Action<uint> CompleteCallBack { get; set; }
-        public Action<uint> CancelCallBack { get; set; }
+        public uint taskId;
+        public uint delayInvokeTime;
+        public int repeatCount;
+        public ulong targetFrame;
+        public Action<uint> onCompletedCallBack;
+        public Action<uint> onCanceledCallBack;
 
         public FrameTimerTask(uint taskId, uint delayInvokeTime, int repeatCount, ulong targetFrame, Action<uint> completeCallBack, Action<uint> cancelCallBack)
         {
-            TaskId = taskId;
-            DelayInvokeTime = delayInvokeTime;
-            RepeatCount = repeatCount;
-            TargetFrame = targetFrame;
-            CompleteCallBack = completeCallBack;
-            CancelCallBack = cancelCallBack;
+            this.taskId = taskId;
+            this.delayInvokeTime = delayInvokeTime;
+            this.repeatCount = repeatCount;
+            this.targetFrame = targetFrame;
+            this.onCompletedCallBack = completeCallBack;
+            this.onCanceledCallBack = cancelCallBack;
         }
     }
 }

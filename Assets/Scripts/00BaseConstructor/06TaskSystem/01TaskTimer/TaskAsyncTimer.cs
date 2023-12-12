@@ -43,21 +43,21 @@ public class TaskAsyncTimer : TaskBaseTimer
         {
             LogInfoFunc?.Invoke($"TaskAsyncTimer RemoveTask Succeed: [ {taskId} ].");
 
-            task.CancellationTokenSource.Cancel();
+            task.cancellationTokenSource.Cancel();
 
-            if (_isSetHandled && task.CancelCallBack != null)
+            if (_isSetHandled && task.onCanceledCallBack != null)
             {
-                _taskPackQueue.Enqueue(new AsyncTimerTaskPack(taskId, task.CancelCallBack));
+                _taskPackQueue.Enqueue(new AsyncTimerTaskPack(taskId, task.onCanceledCallBack));
             }
             else
             {
-                task.CancelCallBack?.Invoke(taskId);
+                task.onCanceledCallBack?.Invoke(taskId);
             }
             return true;
         }
         else
         {
-            LogErrorFunc?.Invoke($"TaskAsyncTimer RemoveTask Error: Try Remove [ {task.TaskId} ] in TaskDic Failed.");
+            LogErrorFunc?.Invoke($"TaskAsyncTimer RemoveTask Error: Try Remove [ {task.taskId} ] in TaskDic Failed.");
             return false;
         }
     }
@@ -91,34 +91,34 @@ public class TaskAsyncTimer : TaskBaseTimer
     {
         Task.Run(async () =>
         {
-            if (task.RepeatCount > 0)    //We define that token 0 is repeated forever.
+            if (task.repeatCount > 0)    //We define that token 0 is repeated forever.
             {
                 do
                 {
-                    --task.RepeatCount;
-                    ++task.LoopIndex;
-                    int delay = (int)(task.DelayInvokeTime + task.FixedDeltaTime);
+                    --task.repeatCount;
+                    ++task.loopIndex;
+                    int delay = (int)(task.delayInvokeTime + task.fixedDeltaTime);
                     if (delay > 0)
                     {
-                        await Task.Delay(delay, task.CancellationToken);
+                        await Task.Delay(delay, task.cancellationToken);
                     }
-                    TimeSpan ts = DateTime.UtcNow - task.StartTime;
-                    task.FixedDeltaTime = (int)(task.DelayInvokeTime * task.LoopIndex - ts.TotalMilliseconds);
+                    TimeSpan ts = DateTime.UtcNow - task.startTime;
+                    task.fixedDeltaTime = (int)(task.delayInvokeTime * task.loopIndex - ts.TotalMilliseconds);
                     InvokeTaskCallBack(task);
-                } while (task.RepeatCount > 0);
+                } while (task.repeatCount > 0);
             }
             else
             {
                 while (true)
                 {
-                    ++task.LoopIndex;
-                    int delay = (int)(task.DelayInvokeTime + task.FixedDeltaTime);
+                    ++task.loopIndex;
+                    int delay = (int)(task.delayInvokeTime + task.fixedDeltaTime);
                     if (delay > 0)
                     {
-                        await Task.Delay(delay, task.CancellationToken);
+                        await Task.Delay(delay, task.cancellationToken);
                     }
-                    TimeSpan ts = DateTime.UtcNow - task.StartTime;
-                    task.FixedDeltaTime = (int)(task.DelayInvokeTime * task.LoopIndex - ts.TotalMilliseconds);
+                    TimeSpan ts = DateTime.UtcNow - task.startTime;
+                    task.fixedDeltaTime = (int)(task.delayInvokeTime * task.loopIndex - ts.TotalMilliseconds);
                     InvokeTaskCallBack(task);
                 }
             }
@@ -129,22 +129,22 @@ public class TaskAsyncTimer : TaskBaseTimer
     {
         if (_isSetHandled)
         {
-            _taskPackQueue.Enqueue(new AsyncTimerTaskPack(task.TaskId, task.CompleteCallBack));
+            _taskPackQueue.Enqueue(new AsyncTimerTaskPack(task.taskId, task.onCompletedCallBack));
         }
         else
         {
-            task.CompleteCallBack.Invoke(task.TaskId);
+            task.onCompletedCallBack.Invoke(task.taskId);
         }
 
-        if (task.RepeatCount == 0)
+        if (task.repeatCount == 0)
         {
-            if (_taskDict.TryRemove(task.TaskId, out AsyncTimerTask temp))
+            if (_taskDict.TryRemove(task.taskId, out AsyncTimerTask temp))
             {
-                LogInfoFunc?.Invoke($"TaskAsyncTimer UpdateTask Succeed: [ {task.TaskId} ] Run to Completion.");
+                LogInfoFunc?.Invoke($"TaskAsyncTimer UpdateTask Succeed: [ {task.taskId} ] Run to Completion.");
             }
             else
             {
-                LogErrorFunc?.Invoke($"TaskAsyncTimer UpdateTask Error: Remove [ {task.TaskId} ] in TaskDic Failed.");
+                LogErrorFunc?.Invoke($"TaskAsyncTimer UpdateTask Error: Remove [ {task.taskId} ] in TaskDic Failed.");
             }
         }
     }
@@ -170,36 +170,36 @@ public class TaskAsyncTimer : TaskBaseTimer
 
     private class AsyncTimerTask
     {
-        public uint TaskId { get; private set; }
-        public uint DelayInvokeTime { get; set; }
-        public int RepeatCount { get; set; }
-        public Action<uint> CompleteCallBack { get; set; }
-        public Action<uint> CancelCallBack { get; set; }
-        public DateTime StartTime { get; set; }
-        public ulong LoopIndex { get; set; }
-        public int FixedDeltaTime { get; set; }
-        public CancellationTokenSource CancellationTokenSource { get; set; }
-        public CancellationToken CancellationToken { get; set; }
+        public uint taskId;
+        public uint delayInvokeTime;
+        public int repeatCount;
+        public Action<uint> onCompletedCallBack;
+        public Action<uint> onCanceledCallBack;
+        public DateTime startTime;
+        public ulong loopIndex;
+        public int fixedDeltaTime;
+        public CancellationTokenSource cancellationTokenSource;
+        public CancellationToken cancellationToken;
 
         public AsyncTimerTask(uint taskId, uint delayInvokeTime, int repeatCount, Action<uint> completeCallBack, Action<uint> cancelCallBack)
         {
-            TaskId = taskId;
-            DelayInvokeTime = delayInvokeTime;
-            RepeatCount = repeatCount;
-            CompleteCallBack = completeCallBack;
-            CancelCallBack = cancelCallBack;
-            StartTime = DateTime.UtcNow;
-            LoopIndex = 0;
-            FixedDeltaTime = 0;
-            CancellationTokenSource = new CancellationTokenSource();
-            CancellationToken = CancellationTokenSource.Token;
+            this.taskId = taskId;
+            this.delayInvokeTime = delayInvokeTime;
+            this.repeatCount = repeatCount;
+            this.onCompletedCallBack = completeCallBack;
+            this.onCanceledCallBack = cancelCallBack;
+            startTime = DateTime.UtcNow;
+            loopIndex = 0;
+            fixedDeltaTime = 0;
+            cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
         }
     }
 
     private class AsyncTimerTaskPack
     {
-        public uint taskId { get; private set; }
-        public Action<uint> taskCallBack { get; set; }
+        public uint taskId;
+        public Action<uint> taskCallBack;
 
         public AsyncTimerTaskPack(uint taskId, Action<uint> taskCallBack)
         {

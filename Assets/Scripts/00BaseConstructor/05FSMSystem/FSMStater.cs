@@ -3,7 +3,9 @@ using System.Collections.Generic;
 
 public class FSMStater<T> where T : struct
 {
-    public Action<T, T> TransCallBack { get; private set; }
+    private Dictionary<string, object> _blackboard;
+
+    private Action<T, T> _transCallBack;
     public T _currentState { get; private set; }
 
     private Dictionary<T, List<FSMStaterItem<T>>> _transToOtherStateDict;
@@ -12,15 +14,17 @@ public class FSMStater<T> where T : struct
     private bool _isProcessingTransition = false;
     private Queue<FSMTransCommandBase> _transCommandQueue;
 
-    public FSMStater(T initialState, Action<T, T> transCallBack = null)
+    public FSMStater(object owner, Action<T, T> transCallBack = null)
     {
-        _currentState = initialState;
+        Owner = owner;
+        _blackboard = new Dictionary<string, object>();
         _transToOtherStateDict = new Dictionary<T, List<FSMStaterItem<T>>>();
         _transToOneStateList = new List<FSMStaterItem<T>>();
         _transCommandQueue = new Queue<FSMTransCommandBase>();
-
-        TransCallBack = transCallBack;
+        _transCallBack = transCallBack;
     }
+
+    public object Owner { get; }
 
     public void AddLocalTransition(T currentState, FSMTransCommandBase command, T targetState, Func<T, FSMTransCommandBase, T, bool> callBack)
     {
@@ -38,6 +42,11 @@ public class FSMStater<T> where T : struct
     {
         FSMStaterItem<T> item = new FSMStaterItem<T>(command, targetState, callBack);
         _transToOneStateList.Add(item);
+    }
+
+    public void InvokeInitState(T initialState)
+    {
+        _currentState = initialState;
     }
 
     public void Invoke(FSMTransCommandBase command)
@@ -103,7 +112,7 @@ public class FSMStater<T> where T : struct
             {
                 T previousState = _currentState;
                 _currentState = item.TargetState;
-                TransCallBack?.Invoke(previousState, _currentState);
+                _transCallBack?.Invoke(previousState, _currentState);
             }
         }
         return result;
@@ -112,5 +121,26 @@ public class FSMStater<T> where T : struct
     public void ClearTransCommandList()
     {
         _transCommandQueue.Clear();
+    }
+
+    public void SetBlackboardValue(string key, object value)
+    {
+        if (_blackboard.ContainsKey(key))
+        {
+            _blackboard[key] = value;
+        }
+        else
+        {
+            _blackboard.Add(key, value);
+        }
+    }
+
+    public object GetBlackboardValue(string key)
+    {
+        if (_blackboard.TryGetValue(key, out object value))
+        {
+            return value;
+        }
+        return null;
     }
 }
