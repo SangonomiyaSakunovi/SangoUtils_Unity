@@ -13,12 +13,21 @@ public class UnitySingleton<T> : MonoBehaviour where T : MonoBehaviour
                 _instance = FindObjectOfType(typeof(T)) as T;
                 if (null == _instance)
                 {
-                    GameObject singleton = new GameObject(typeof(T).ToString());
-                    _instance = singleton.AddComponent<T>();
-                    DontDestroyOnLoad(singleton);
+                    GameObject gameObject = new GameObject(typeof(T).ToString());
+                    _instance = gameObject.AddComponent<T>();
+                    DontDestroyOnLoad(gameObject);
+                    gameObject.hideFlags = HideFlags.HideAndDontSave;
                 }
             }
             return _instance;
+        }
+    }
+
+    private void Awake()
+    {
+        if (null != _instance && _instance != this)
+        {
+            Destroy(gameObject);
         }
     }
 }

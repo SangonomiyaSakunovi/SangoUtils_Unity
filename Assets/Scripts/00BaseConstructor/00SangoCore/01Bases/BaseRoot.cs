@@ -21,24 +21,4 @@ public class BaseRoot<T> : UnitySingleton<T> where T : MonoBehaviour
     {
 
     }
-
-    protected void CheckRegistValidation()
-    {
-        SecurityCheckService.Instance.CheckRegistValidation();
-    }
-
-    public void UpdateRegistInfo(string registLimitTimestampNew, string signData)
-    {
-        SecurityCheckService.Instance.UpdateRegistInfo(registLimitTimestampNew, signData);
-    }
-
-    public void UpdateRegistInfo(string mixSignData)
-    {
-        SecurityCheckService.Instance.UpdateRegistInfo(mixSignData);
-    }
-
-    protected void InitSecurityCheckService(SecurityCheckServiceConfig config)
-    {
-        SecurityCheckService.Instance.OnInit(config);
-    }
 }

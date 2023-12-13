@@ -64,3 +64,16 @@ public class FSMStaterItem<T> where T : struct
         TransCallBack = callBack;
     }
 }
+
+public class FSMLinkedStaterItemBase
+{
+    protected FSMLinkedStater _fsmLinkedStater;
+
+    public virtual void OnInit(FSMLinkedStater fsmLinkedStater)
+    {
+        _fsmLinkedStater = fsmLinkedStater;
+    }
+    public virtual void OnEnter() { }
+    public virtual void OnUpdate() { }
+    public virtual void OnExit() { }
+}

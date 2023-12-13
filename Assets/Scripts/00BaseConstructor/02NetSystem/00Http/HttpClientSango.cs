@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
 using UnityEngine.Networking;
 
 public class HttpClientSango
@@ -136,7 +135,7 @@ public class HttpClientSango
                 string responseJson = pack.webRequest.downloadHandler.text;
                 if (responseCode != 200 && --pack.tryCount > 0)
                 {
-                    Debug.Log("Try reconnect Id: [" + pack.id + " ], try times: " + pack.tryCount);
+                    SangoLogger.Log("Try reconnect Id: [" + pack.id + " ], try times: " + pack.tryCount);
 
                     _sendHttpPacks.Add(pack);
                     continue;
@@ -170,14 +169,14 @@ public class HttpClientSango
         switch (codeType)
         {
             case 4:
-                Debug.LogWarning(string.Format("{0} : {1} : ClientError", responseCode, apiKey));
+                SangoLogger.Warning(string.Format("{0} : {1} : ClientError", responseCode, apiKey));
                 break;
             case 5:
             case 6:
-                Debug.LogWarning(string.Format("{0} : {1} : ServerError", responseCode, apiKey));
+                SangoLogger.Warning(string.Format("{0} : {1} : ServerError", responseCode, apiKey));
                 break;
             default:
-                Debug.LogWarning(string.Format("{0} : {1} : UnknownError", responseCode, apiKey));
+                SangoLogger.Warning(string.Format("{0} : {1} : UnknownError", responseCode, apiKey));
                 break;
         }
     }
@@ -220,7 +219,7 @@ public class HttpClientSango
                 {
                     _sendHttpResourcePacks.Add(pack);
                     continue;
-                }               
+                }
                 if (pack.webRequest.downloadHandler.isDone)
                 {
                     pack.OnResponsed();

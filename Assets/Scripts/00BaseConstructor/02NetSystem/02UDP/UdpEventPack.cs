@@ -2,7 +2,6 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using UnityEngine;
 
 public abstract class UdpEventPack
 {
@@ -26,7 +25,7 @@ public class UdpEventPack<T> : UdpEventPack where T : class
             UdpEventPack udpPack = asyncResult.AsyncState as UdpEventPack;
             byte[] dataReceivedBytes = udpPack.udpListenerClient.EndReceive(asyncResult, ref udpPack.udpListenerIpEndPoint);
             dataReceivedStr = Encoding.UTF8.GetString(dataReceivedBytes, 0, dataReceivedBytes.Length);
-            Debug.Log("UdpListenPortId:[" + listenProtId + "], ReceivedStr: " + dataReceivedStr);
+            SangoLogger.Log("UdpListenPortId:[" + listenProtId + "], ReceivedStr: " + dataReceivedStr);
             if (!string.IsNullOrEmpty(dataReceivedStr))
             {
                 T data;
@@ -48,10 +47,10 @@ public class UdpEventPack<T> : UdpEventPack where T : class
         }
         catch (Exception ex)
         {
-            Debug.LogError(ex.Message);
+            SangoLogger.Error(ex.Message);
             throw;
         }
-    }    
+    }
 }
 
 public abstract class UdpData

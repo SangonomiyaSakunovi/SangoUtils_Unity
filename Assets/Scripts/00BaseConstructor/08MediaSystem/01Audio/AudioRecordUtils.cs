@@ -20,6 +20,8 @@ public class AudioRecordUtils : MonoBehaviour
     private bool _isRecording = false;
     private Action _currentStopCallBack = null;
 
+    private CoroutineHandler _coroutine;
+
     private void Start()
     {
         float maxRecordTime = 10;
@@ -61,7 +63,7 @@ public class AudioRecordUtils : MonoBehaviour
         {
             _isRecording = true;
             _currentStopCallBack = stopCallBack;
-            StartCoroutine("KeepTime");
+            _coroutine = KeepTime().Start();
             _audioClip = Microphone.Start(null, false, (int)Math.Ceiling(_maxRecordTime), _recordFrequnce);
         }
     }
@@ -71,7 +73,7 @@ public class AudioRecordUtils : MonoBehaviour
         _currentRecordedAudioData = GetRealAudio(ref _audioClip);
         Microphone.End("Built-in Microphone");
         StopCoroutine("KeepTime");
-        Debug.Log("Over");
+        SangoLogger.Log("Over");
         _audioSource.clip = _audioClip;
         _audioSource.Play();
         SaveRecordedAudio();
@@ -108,7 +110,7 @@ public class AudioRecordUtils : MonoBehaviour
             string wavPath = Path.Combine(_outPutPath, wavFileName);
             string txtPath = Path.Combine(_outPutPath, txtFileName);
 
-            Debug.Log("保存文件路径" + _outPutPath);
+            SangoLogger.Log("保存文件路径" + _outPutPath);
 
             if (!Directory.Exists(_outPutPath))
             {
@@ -224,11 +226,11 @@ public class AudioRecordUtils : MonoBehaviour
             int log = Convert.ToInt32(fsForRead.Length);
             fsForRead.Read(bs, 0, log);
             _currentWavFileBase64Str = Convert.ToBase64String(bs);
-            Debug.Log("base64编码：" + _currentWavFileBase64Str);
+            SangoLogger.Log("base64编码：" + _currentWavFileBase64Str);
         }
         catch (Exception ex)
         {
-            Debug.Log(ex.Message);
+            SangoLogger.Log(ex.Message);
         }
         finally
         {

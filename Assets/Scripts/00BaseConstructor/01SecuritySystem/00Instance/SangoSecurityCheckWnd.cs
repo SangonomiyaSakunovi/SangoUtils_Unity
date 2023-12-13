@@ -7,20 +7,24 @@ public class SangoSecurityCheckWnd : BaseWindow
     private SangoSecurityCheckRoot _sangoSecurityCheckRoot = null;
     private TypeInConfig _currentTypeInfConfig = null;
 
-    public Transform _keyboardTrans;
-    public Transform _inputShowParentTrans;
-    public Button _registBtn;
-    public Button _skipBtn;
-    public TMP_Text _resultShow;
+    private Transform _keyboardTrans;
+    private Transform _inputShowParentTrans;
+    private Button _registBtn;
+    private Button _skipBtn;
+    private TMP_Text _resultShow;
 
     private int _maxInputStrLenth = 8;
     private string _inputStr = "";
 
     private TMP_Text[] _inputShowTexts = null;
 
-    public void SetRoot(SangoSecurityCheckRoot root, TypeInConfig config)
+    public override void SetRoot<T>(BaseRoot<T> baseRoot)
     {
-        _sangoSecurityCheckRoot = root;
+        _sangoSecurityCheckRoot = baseRoot as SangoSecurityCheckRoot;
+    }
+
+    public void SetInfo(TypeInConfig config)
+    {
         _currentTypeInfConfig = config;
     }
 
@@ -32,6 +36,12 @@ public class SangoSecurityCheckWnd : BaseWindow
     protected override void OnInit()
     {
         base.OnInit();
+
+        _keyboardTrans = transform.Find("KeyboradTrans");
+        _inputShowParentTrans = transform.Find("SignData/InputShowParent");
+        _registBtn = transform.Find("registBtn").GetComponent<Button>();
+        _skipBtn = transform.Find("skipBtn").GetComponent<Button>();
+        _resultShow = transform.Find("SignData/resultShow").GetComponent<TMP_Text>();
 
         SetButtonListener(_registBtn, OnRegistSoftwareBtnClicked);
         SetActive(_skipBtn, false);

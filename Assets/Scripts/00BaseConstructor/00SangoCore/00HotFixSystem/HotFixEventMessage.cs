@@ -1,3 +1,5 @@
+using UnityEngine.Events;
+
 public class HotFixEventMessage
 {
     /// <summary>
@@ -102,6 +104,69 @@ public class HotFixEventMessage
             var msg = new WebFileDownloadFailed();
             msg.FileName = fileName;
             msg.Error = error;
+            EventService.Instance.SendEventMessage(msg);
+        }
+    }
+}
+
+public class HotFixUserEventMessage
+{
+    /// <summary>
+	/// 用户尝试再次初始化资源包
+	/// </summary>
+	public class UserTryInitialize : IEventMessageBase
+    {
+        public static void SendEventMessage()
+        {
+            var msg = new UserTryInitialize();
+            EventService.Instance.SendEventMessage(msg);
+        }
+    }
+
+    /// <summary>
+    /// 用户开始下载网络文件
+    /// </summary>
+    public class UserBeginDownloadWebFiles : IEventMessageBase
+    {
+        public static void SendEventMessage()
+        {
+            var msg = new UserBeginDownloadWebFiles();
+            EventService.Instance.SendEventMessage(msg);
+        }
+    }
+
+    /// <summary>
+    /// 用户尝试再次更新静态版本
+    /// </summary>
+    public class UserTryUpdatePackageVersion : IEventMessageBase
+    {
+        public static void SendEventMessage()
+        {
+            var msg = new UserTryUpdatePackageVersion();
+            EventService.Instance.SendEventMessage(msg);
+        }
+    }
+
+    /// <summary>
+    /// 用户尝试再次更新补丁清单
+    /// </summary>
+    public class UserTryUpdatePatchManifest : IEventMessageBase
+    {
+        public static void SendEventMessage()
+        {
+            var msg = new UserTryUpdatePatchManifest();
+            EventService.Instance.SendEventMessage(msg);
+        }
+    }
+
+    /// <summary>
+    /// 用户尝试再次下载网络文件
+    /// </summary>
+    public class UserTryDownloadWebFiles : IEventMessageBase
+    {
+        public static void SendEventMessage()
+        {
+            var msg = new UserTryDownloadWebFiles();
             EventService.Instance.SendEventMessage(msg);
         }
     }

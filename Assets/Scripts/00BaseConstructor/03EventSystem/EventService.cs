@@ -27,6 +27,11 @@ public class EventService : BaseService<EventService>
     {
         Type eventType = typeof(T);
         int eventId = eventType.GetHashCode();
+        AddEventListener(eventId, eventMessage);
+    }
+
+    public void AddEventListener(int eventId, Action<IEventMessageBase> eventMessage)
+    {
         _eventProxy.AddEventMessageHandler(eventId, eventMessage);
     }
 
@@ -34,6 +39,11 @@ public class EventService : BaseService<EventService>
     {
         Type eventType = typeof(T);
         int eventId = eventType.GetHashCode();
+        RemoveEventListener(eventId);
+    }
+
+    public void RemoveEventListener(int eventId)
+    {
         _eventProxy.RemoveEventMessageHandlerByEventId(eventId);
     }
 

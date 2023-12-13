@@ -1,14 +1,16 @@
-using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
 {
-    public SangoSecurityCheckWnd _sangoSecurityCheckWnd;
+    private SangoSecurityCheckWnd _sangoSecurityCheckWnd;
 
     private TypeInConfig _currentTypeInConfig;
 
     private void Start()
     {
+        _sangoSecurityCheckWnd = transform.Find("SangoSecurityCheckWnd").GetOrAddComponent<SangoSecurityCheckWnd>();
+        
         SecurityCheckServiceConfig config1 = SangoSystemConfig.SecurityCheckServiceInfoConfig;
         config1.registInfoCode = RegistInfoCode.Timestamp;
         config1.signMethodCode = SignMethodCode.Md5;
@@ -24,9 +26,29 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
         CheckRegistValidation();
     }
 
+    private void CheckRegistValidation()
+    {
+        SecurityCheckService.Instance.CheckRegistValidation();
+    }
+
+    public void UpdateRegistInfo(string registLimitTimestampNew, string signData)
+    {
+        SecurityCheckService.Instance.UpdateRegistInfo(registLimitTimestampNew, signData);
+    }
+
+    public void UpdateRegistInfo(string mixSignData)
+    {
+        SecurityCheckService.Instance.UpdateRegistInfo(mixSignData);
+    }
+
+    private void InitSecurityCheckService(SecurityCheckServiceConfig config)
+    {
+        SecurityCheckService.Instance.OnInit(config);
+    }
+
     private void RegistInfoCheckResultActionCallBack(RegistInfoCheckResult result, string commands)
     {
-        Debug.Log("开始运行回调");
+        SangoLogger.Log("开始运行回调");
         switch (result)
         {
             case RegistInfoCheckResult.CheckOK_Valid:
@@ -36,18 +58,21 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
                 CheckRegistValidation();
                 break;
             case RegistInfoCheckResult.CheckWarnning_ValidationLessThan3Days:
-                _sangoSecurityCheckWnd.SetRoot(this, _currentTypeInConfig);
+                _sangoSecurityCheckWnd.SetRoot(this);
+                _sangoSecurityCheckWnd.SetInfo(_currentTypeInConfig);
                 _sangoSecurityCheckWnd.SetWindowState();
                 _sangoSecurityCheckWnd.UpdateResult("软件还有" + commands + "天到期，请及时联系开发者");
                 _sangoSecurityCheckWnd.UpdateBtnInfo("SkipBtn", "");
                 break;
             case RegistInfoCheckResult.CheckFailed_OutData:
-                _sangoSecurityCheckWnd.SetRoot(this, _currentTypeInConfig);
+                _sangoSecurityCheckWnd.SetRoot(this);
+                _sangoSecurityCheckWnd.SetInfo(_currentTypeInConfig);
                 _sangoSecurityCheckWnd.SetWindowState();
                 _sangoSecurityCheckWnd.UpdateResult("软件已过期，请输入注册码后点击激活");
                 break;
             case RegistInfoCheckResult.CheckError_SystemTimeChanged:
-                _sangoSecurityCheckWnd.SetRoot(this, _currentTypeInConfig);
+                _sangoSecurityCheckWnd.SetRoot(this);
+                _sangoSecurityCheckWnd.SetInfo(_currentTypeInConfig);
                 _sangoSecurityCheckWnd.SetWindowState();
                 _sangoSecurityCheckWnd.UpdateResult("注册信息检查失败，系统时间被修改");
                 break;
@@ -87,7 +112,7 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
         {
             PersistDataService.Instance.RemovePersistData("key1");
             PersistDataService.Instance.RemovePersistData("key2");
-            Debug.Log("已手动删除注册信息");
+            SangoLogger.Log("已手动删除注册信息");
         }
     }
 }

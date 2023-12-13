@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class FSMStater<T> where T : struct
+public class FSMStater<T> : FSMStaterBase where T : struct
 {
-    private Dictionary<string, object> _blackboard;
-
     private Action<T, T> _transCallBack;
     public T _currentState { get; private set; }
 
@@ -49,7 +47,7 @@ public class FSMStater<T> where T : struct
         _currentState = initialState;
     }
 
-    public void Invoke(FSMTransCommandBase command)
+    public void InvokeTransition(FSMTransCommandBase command)
     {
         if (_isProcessingTransition)
         {
@@ -90,7 +88,7 @@ public class FSMStater<T> where T : struct
         if (_transCommandQueue.Count > 0)
         {
             FSMTransCommandBase item = _transCommandQueue.Dequeue();
-            Invoke(item);
+            InvokeTransition(item);
         }
     }
 
@@ -121,26 +119,5 @@ public class FSMStater<T> where T : struct
     public void ClearTransCommandList()
     {
         _transCommandQueue.Clear();
-    }
-
-    public void SetBlackboardValue(string key, object value)
-    {
-        if (_blackboard.ContainsKey(key))
-        {
-            _blackboard[key] = value;
-        }
-        else
-        {
-            _blackboard.Add(key, value);
-        }
-    }
-
-    public object GetBlackboardValue(string key)
-    {
-        if (_blackboard.TryGetValue(key, out object value))
-        {
-            return value;
-        }
-        return null;
     }
 }

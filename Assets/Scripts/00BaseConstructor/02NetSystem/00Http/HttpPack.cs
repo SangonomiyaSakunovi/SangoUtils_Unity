@@ -27,7 +27,7 @@ public class HttpPack<T> : HttpPack where T : class
 {
     public override void OnDataReceived(string dataStr, int code, int messageId)
     {
-        Debug.Log("HttpMessageId:[" + messageId + "], ReceivedStr: " + dataStr);
+        SangoLogger.Log("HttpMessageId:[" + messageId + "], ReceivedStr: " + dataStr);
         JObject recvObj = JObject.Parse(dataStr);
         int resCode = recvObj["res"].Value<int>();
         if (resCode == 0)

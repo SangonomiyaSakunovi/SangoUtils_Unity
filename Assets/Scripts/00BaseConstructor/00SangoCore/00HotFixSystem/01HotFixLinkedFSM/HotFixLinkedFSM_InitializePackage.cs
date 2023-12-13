@@ -3,19 +3,20 @@ using System.IO;
 using UnityEngine;
 using YooAsset;
 
-public class HotFixSeqTask_InitializePackage : TaskLinkedSequencePackBase
+public class HotFixLinkedFSM_InitializePackage : FSMLinkedStaterItemBase
 {
+    private CoroutineHandler coroutine = null;
+
     public override void OnEnter()
     {
-        base.OnEnter();
-
+        coroutine = InitPackage().Start();
     }
 
     private IEnumerator InitPackage()
     {
-        EPlayMode playMode = (EPlayMode)_taskLinkedSequenceRunner.GetBlackboardValue("PlayMode");
-        string packageName = (string)_taskLinkedSequenceRunner.GetBlackboardValue("PackageName");
-        string buildPipeline = (string)_taskLinkedSequenceRunner.GetBlackboardValue("BuildPipeline");
+        EPlayMode playMode = (EPlayMode)_fsmLinkedStater.GetBlackboardValue("PlayMode");
+        string packageName = (string)_fsmLinkedStater.GetBlackboardValue("PackageName");
+        string buildPipeline = (string)_fsmLinkedStater.GetBlackboardValue("BuildPipeline");
 
         // 创建资源包裹类
         var package = YooAssets.TryGetPackage(packageName);
@@ -75,7 +76,7 @@ public class HotFixSeqTask_InitializePackage : TaskLinkedSequencePackBase
         {
             var version = package.GetPackageVersion();
             Debug.Log($"Init resource package version : {version}");
-            _taskLinkedSequenceRunner.RunTargetTask<HotFixSeqTask_UpdatePackageVersion>(); 
+            _fsmLinkedStater.InvokeTargetStaterItem<HotFixLinkedFSM_UpdatePackageVersion>(); 
         }
     }
 

@@ -1,27 +1,43 @@
+using System.Collections;
+using UnityEngine;
 using YooAsset;
 
 public class HotFixService : BaseService<HotFixService>
 {
-    private HotFixConfig _currentFixConfig;
+    private HotFixConfig _currentHotFixConfig;
+
+    private CoroutineHandler coroutine = null;
 
     public override void OnInit()
     {
         base.OnInit();
-        _currentFixConfig = SangoSystemConfig.HotFixConfig;
+        _currentHotFixConfig = SangoSystemConfig.HotFixConfig;
+        coroutine = StartOperation().Start();
     }
 
-    public override void OnDispose()
+    private IEnumerator StartOperation()
     {
-        base.OnDispose();
-    }
+        YooAssets.Initialize();
 
+        //var go = Resources.Load<GameObject>("PatchWindow");
+        //GameObject.Instantiate(go);
+
+        HotFixOperation hotFixOperation = new HotFixOperation(_currentHotFixConfig);
+        YooAssets.StartOperation(hotFixOperation);
+        yield return hotFixOperation;
+
+        ResourcePackage assetPackage = YooAssets.GetPackage("DefaultPackage");
+        YooAssets.SetDefaultPackage(assetPackage);
+        //TODO
+        SangoLogger.Log("运行至更新结束位置");
+    }
 }
 
 public class HotFixConfig
 {
     public string dDNServerAddress;
 
-    public string assetsPackageName;
-    public EPlayMode ePlayMode;
-    public EDefaultBuildPipeline eDefaultBuildPipeline;
+    public string packageName;
+    public EPlayMode playMode;
+    public EDefaultBuildPipeline buildPipeline;
 }

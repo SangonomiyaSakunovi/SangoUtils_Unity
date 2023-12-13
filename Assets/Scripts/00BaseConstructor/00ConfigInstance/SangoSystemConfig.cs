@@ -19,9 +19,9 @@ public static class SangoSystemConfig
 
     public static readonly HotFixConfig HotFixConfig = new HotFixConfig
     {
-        assetsPackageName = "DefaultPackage",
-        ePlayMode = EPlayMode.EditorSimulateMode,
-        eDefaultBuildPipeline = EDefaultBuildPipeline.BuiltinBuildPipeline,
+        packageName = "DefaultPackage",
+        playMode = EPlayMode.EditorSimulateMode,
+        buildPipeline = EDefaultBuildPipeline.BuiltinBuildPipeline,
         dDNServerAddress = ""
     };
 }
