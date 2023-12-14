@@ -1,0 +1,31 @@
+{
+    "FileVersion": "2.0.0",
+    "EnableAddressable": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 0,
+    "BuildPipeline": "BuiltinBuildPipeline",
+    "PackageName": "DefaultPackage",
+    "PackageVersion": "1.0",
+    "AssetList": [
+        {
+            "Address": "GetReadyかわいい",
+            "AssetPath": "Assets/Res/Remote/Audio/GetReadyかわいい.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "assets_res_remote_audio.bundle",
+            "UnityCRC": 2791607639,
+            "FileHash": "bda7cf6b7273b48b564a68a138c1ef8e",
+            "FileCRC": "7effcad6",
+            "FileSize": 57490572,
+            "Encrypted": false,
+            "Tags": [],
+            "DependIDs": []
+        }
+    ]
+}

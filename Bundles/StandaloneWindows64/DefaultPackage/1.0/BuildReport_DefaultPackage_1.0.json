@@ -1,0 +1,57 @@
+{
+    "Summary": {
+        "YooVersion": "2.0.3-preview",
+        "UnityVersion": "2022.3.7f1c1",
+        "BuildDate": "2023/12/14 14:22:29",
+        "BuildSeconds": 21,
+        "BuildTarget": 19,
+        "BuildMode": 0,
+        "BuildPipeline": "BuiltinBuildPipeline",
+        "BuildPackageName": "DefaultPackage",
+        "BuildPackageVersion": "1.0",
+        "UniqueBundleName": false,
+        "EnableAddressable": true,
+        "LocationToLower": false,
+        "IncludeAssetGUID": false,
+        "IgnoreDefaultType": true,
+        "AutoCollectShaders": true,
+        "EncryptionClassName": "null",
+        "FileNameStyle": 0,
+        "CompressOption": 2,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": true,
+        "AssetFileTotalCount": 1,
+        "MainAssetTotalCount": 1,
+        "AllBundleTotalCount": 1,
+        "AllBundleTotalSize": 57490572,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "GetReadyかわいい",
+            "AssetPath": "Assets/Res/Remote/Audio/GetReadyかわいい.mp3",
+            "AssetGUID": "5f95de51518f39744b9781b6e9977279",
+            "AssetTags": [],
+            "MainBundleName": "assets_res_remote_audio.bundle",
+            "MainBundleSize": 57490572,
+            "DependAssets": []
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "assets_res_remote_audio.bundle",
+            "FileName": "bda7cf6b7273b48b564a68a138c1ef8e.bundle",
+            "FileHash": "bda7cf6b7273b48b564a68a138c1ef8e",
+            "FileCRC": "7effcad6",
+            "FileSize": 57490572,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "AllBuiltinAssets": [
+                "Assets/Res/Remote/Audio/GetReadyかわいい.mp3"
+            ]
+        }
+    ],
+    "RedundancyInfos": []
+}

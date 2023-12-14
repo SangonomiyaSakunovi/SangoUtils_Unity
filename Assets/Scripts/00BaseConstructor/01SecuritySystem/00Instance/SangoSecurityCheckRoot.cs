@@ -7,10 +7,11 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
 
     private TypeInConfig _currentTypeInConfig;
 
-    private void Start()
+    public override void OnInit()
     {
+        base.OnInit();
         _sangoSecurityCheckWnd = transform.Find("SangoSecurityCheckWnd").GetOrAddComponent<SangoSecurityCheckWnd>();
-        
+
         SecurityCheckServiceConfig config1 = SangoSystemConfig.SecurityCheckServiceInfoConfig;
         config1.registInfoCode = RegistInfoCode.Timestamp;
         config1.signMethodCode = SignMethodCode.Md5;
@@ -18,9 +19,24 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
         config1.registMixSignDataProtocol = RegistMixSignDataProtocol.A_B_C_SIGN;
         config1.resultActionCallBack = RegistInfoCheckResultActionCallBack;
 
-        TypeInConfig config2 = SangoSystemConfig.SecurityCheckPanelTypeInConfig;
+        TypeInConfig config2 = new TypeInConfig();
+        SceneViewConfig sceneViewConfig = SangoSystemConfig.SceneViewConfig;
+        switch (sceneViewConfig.sceneViewResolution)
+        {
+            case SceneViewResolution._1KH_1920x1080:
+                config2.keyboardTypeCode = KeyboardTypeCode.UpperCharKeyboard;
+                config2.keyboradDirectionCode = KeyboradDirectionCode.Horizontal;
+                break;
+            case SceneViewResolution._4KH_3840x2160:
+                config2.keyboardTypeCode = KeyboardTypeCode.UpperCharKeyboard_4K;
+                config2.keyboradDirectionCode = KeyboradDirectionCode.Horizontal;
+                break;
+            case SceneViewResolution._4kV_2160x3840:
+                config2.keyboardTypeCode = KeyboardTypeCode.UpperCharKeyboard_Vertical_4K;
+                config2.keyboradDirectionCode = KeyboradDirectionCode.Vertical;
+                break;
+        }
         config2.typeInLanguage = TypeInLanguage.English;
-
         _currentTypeInConfig = config2;
         InitSecurityCheckService(config1);
         CheckRegistValidation();

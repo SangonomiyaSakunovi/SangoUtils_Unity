@@ -75,3 +75,41 @@ public class TypeInService : BaseService<TypeInService>
         _onTypeInWordCallBack?.Invoke(typeInCommand, words);
     }
 }
+
+public enum TypeInCommand
+{
+    TypeIn,
+    Delet,
+    Clear,
+    EnAlt,
+    Space,
+    Cancel,
+    Confirm
+}
+
+public enum TypeInLanguage
+{
+    English,
+}
+
+public enum KeyboardTypeCode
+{
+    FloatableKeyboard,
+    UpperCharKeyboard,
+    UpperCharKeyboard_4K,
+    UpperCharKeyboard_Vertical_4K
+}
+
+public enum KeyboradDirectionCode
+{
+    Horizontal,
+    Vertical
+}
+
+
+public class TypeInConfig
+{
+    public TypeInLanguage typeInLanguage;
+    public KeyboardTypeCode keyboardTypeCode;
+    public KeyboradDirectionCode keyboradDirectionCode;
+}

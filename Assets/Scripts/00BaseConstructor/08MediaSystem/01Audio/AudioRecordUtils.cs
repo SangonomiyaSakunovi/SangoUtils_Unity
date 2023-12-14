@@ -20,7 +20,7 @@ public class AudioRecordUtils : MonoBehaviour
     private bool _isRecording = false;
     private Action _currentStopCallBack = null;
 
-    private CoroutineHandler _coroutine;
+    private CoroutineHandler coroutine;
 
     private void Start()
     {
@@ -63,7 +63,7 @@ public class AudioRecordUtils : MonoBehaviour
         {
             _isRecording = true;
             _currentStopCallBack = stopCallBack;
-            _coroutine = KeepTime().Start();
+            coroutine = KeepTime().Start();
             _audioClip = Microphone.Start(null, false, (int)Math.Ceiling(_maxRecordTime), _recordFrequnce);
         }
     }

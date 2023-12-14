@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEngine;
 using UnityEngine.Events;
 
 public static class CoroutineExtensions
@@ -96,42 +95,5 @@ public class CoroutineHandler
             }
         }
         Complete();
-    }
-
-    internal class CoroutineDriver : MonoBehaviour
-    {
-        internal static CoroutineDriver _driver;
-
-        internal static CoroutineDriver Driver
-        {
-            get
-            {
-                if (null == _driver)
-                {
-                    _driver = FindObjectOfType(typeof(CoroutineDriver)) as CoroutineDriver;
-                    if (null == _driver)
-                    {
-                        GameObject gameObject = new GameObject("[CoroutineDriver]");
-                        _driver = gameObject.AddComponent<CoroutineDriver>();
-                        DontDestroyOnLoad(gameObject);
-                        gameObject.hideFlags = HideFlags.HideAndDontSave;
-                    }
-                }
-                return _driver;
-            }
-        }
-
-        private void Awake()
-        {
-            if (null != _driver && _driver != this)
-            {
-                Destroy(gameObject);
-            }
-        }
-
-        public static Coroutine Run(IEnumerator target)
-        {
-            return Driver.StartCoroutine(target);
-        }
     }
 }
