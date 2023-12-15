@@ -8,7 +8,7 @@ public class PatchLinkedFSM_UpdatePackageVersion : FSMLinkedStaterItemBase
 
     public override void OnEnter()
     {
-        PatchSystemEventMessage.PatchStatesChange.SendEventMessage("获取最新的资源版本 !");
+        PatchSystemEventMessage.PatchStatesChange_PatchSystemEventMessage.SendEventMessage("获取最新的资源版本 !");
         coroutine = UpdatePackageVersion().Start();
     }
 
@@ -24,7 +24,7 @@ public class PatchLinkedFSM_UpdatePackageVersion : FSMLinkedStaterItemBase
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning(operation.Error);
-            PatchSystemEventMessage.PackageVersionUpdateFailed.SendEventMessage();
+            PatchSystemEventMessage.PackageVersionUpdateFailed_PatchSystemEventMessage.SendEventMessage();
         }
         else
         {

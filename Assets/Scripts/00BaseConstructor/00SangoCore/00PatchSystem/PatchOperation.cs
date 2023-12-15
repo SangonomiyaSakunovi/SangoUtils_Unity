@@ -45,11 +45,11 @@ public class PatchOperation : GameAsyncOperation
 
     private void AddEventListener()
     {
-        _eventCache.AddEventListener<PatchUserEventMessage.UserTryInitialize>(OnHandleEventMessage);
-        _eventCache.AddEventListener<PatchUserEventMessage.UserBeginDownloadWebFiles>(OnHandleEventMessage);
-        _eventCache.AddEventListener<PatchUserEventMessage.UserTryUpdatePackageVersion>(OnHandleEventMessage);
-        _eventCache.AddEventListener<PatchUserEventMessage.UserTryUpdatePatchManifest>(OnHandleEventMessage);
-        _eventCache.AddEventListener<PatchUserEventMessage.UserTryDownloadWebFiles>(OnHandleEventMessage);
+        _eventCache.AddEventListener<PatchUserEventMessage.UserTryInitialize_PatchUserEventMessage>(OnHandleEventMessage);
+        _eventCache.AddEventListener<PatchUserEventMessage.UserBeginDownloadWebFiles_PatchUserEventMessage>(OnHandleEventMessage);
+        _eventCache.AddEventListener<PatchUserEventMessage.UserTryUpdatePackageVersion_PatchUserEventMessage>(OnHandleEventMessage);
+        _eventCache.AddEventListener<PatchUserEventMessage.UserTryUpdatePatchManifest_PatchUserEventMessage>(OnHandleEventMessage);
+        _eventCache.AddEventListener<PatchUserEventMessage.UserTryDownloadWebFiles_PatchUserEventMessage>(OnHandleEventMessage);
     }
 
     private void AddFSMStater()
@@ -74,23 +74,23 @@ public class PatchOperation : GameAsyncOperation
 
     private void OnHandleEventMessage(IEventMessageBase message)
     {
-        if (message is PatchUserEventMessage.UserTryInitialize)
+        if (message is PatchUserEventMessage.UserTryInitialize_PatchUserEventMessage)
         {
             _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_InitializePackage>();
         }
-        else if (message is PatchUserEventMessage.UserBeginDownloadWebFiles)
+        else if (message is PatchUserEventMessage.UserBeginDownloadWebFiles_PatchUserEventMessage)
         {
             _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_DownloadPackageFiles>();
         }
-        else if (message is PatchUserEventMessage.UserTryUpdatePackageVersion)
+        else if (message is PatchUserEventMessage.UserTryUpdatePackageVersion_PatchUserEventMessage)
         {
             _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_UpdatePackageVersion>();
         }
-        else if (message is PatchUserEventMessage.UserTryUpdatePatchManifest)
+        else if (message is PatchUserEventMessage.UserTryUpdatePatchManifest_PatchUserEventMessage)
         {
             _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_UpdatePackageManifest>();
         }
-        else if (message is PatchUserEventMessage.UserTryDownloadWebFiles)
+        else if (message is PatchUserEventMessage.UserTryDownloadWebFiles_PatchUserEventMessage)
         {
             _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_CreatePackageDownloader>();
         }

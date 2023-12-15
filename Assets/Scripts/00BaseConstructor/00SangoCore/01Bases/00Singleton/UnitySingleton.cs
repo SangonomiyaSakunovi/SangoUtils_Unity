@@ -29,24 +29,4 @@ public class UnitySingleton<T> : MonoBehaviour where T : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    protected GameObject InstantiateGameObject(Transform parentTrans, string path, bool isAssetBundle = false, bool isCache = false)
-    {
-        GameObject prefab = null;
-        if (isAssetBundle)
-        {
-
-        }
-        else
-        {
-            prefab = ResourceService.Instance.LoadPrefab(path, isCache);
-        }
-        GameObject instantiatedPrefab = Instantiate(prefab, parentTrans);
-        return instantiatedPrefab;
-    }
-
-    protected GameObject InstantiateGameObject(GameObject parentObject, string path, bool isAssetBundle = false, bool isCache = false)
-    {
-        return InstantiateGameObject(parentObject.transform, path, isAssetBundle, isCache);
-    }
 }

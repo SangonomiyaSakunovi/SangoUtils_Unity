@@ -6,31 +6,39 @@ using UnityEngine.UI;
 
 public class ResourceService : BaseService<ResourceService>
 {
-    private ResourceRawImageLoader _resourceRawImageLoader = new ResourceRawImageLoader();
+    private ResourceRawImageLoader _resourceRawImageLoader;
 
-    private Dictionary<string, AudioClip> _audioClipDict = new Dictionary<string, AudioClip>();
-    private Dictionary<string, Sprite> _spriteDict = new Dictionary<string, Sprite>();
-    private Dictionary<string, GameObject> _prefabDict = new Dictionary<string, GameObject>();
-    private Dictionary<string, TMP_FontAsset> _fontDict = new Dictionary<string, TMP_FontAsset>();
+    private Dictionary<string, AudioClip> _audioClipDict;
+    private Dictionary<string, Sprite> _spriteDict;
+    private Dictionary<string, GameObject> _prefabDict;
+    private Dictionary<string, TMP_FontAsset> _fontDict;
 
-    private Dictionary<string, Texture> _rawImageTextureDict = new Dictionary<string, Texture>();
+    private Dictionary<string, Texture> _rawImageTextureDict;
 
     public override void OnInit()
     {
         base.OnInit();
+        _resourceRawImageLoader = new ResourceRawImageLoader();
+
+        _audioClipDict = new Dictionary<string, AudioClip>();
+        _spriteDict = new Dictionary<string, Sprite>();
+        _prefabDict = new Dictionary<string, GameObject>();
+        _fontDict = new Dictionary<string, TMP_FontAsset>();
+
+        _rawImageTextureDict = new Dictionary<string, Texture>();
     }
 
-    public AudioClip LoadAudioClip(string audioPath, bool isCache)
+    public AudioClip LoadAudioClip(string audioClipPath, bool isCache)
     {
-        _audioClipDict.TryGetValue(audioPath, out AudioClip audioClip);
+        _audioClipDict.TryGetValue(audioClipPath, out AudioClip audioClip);
         if (audioClip == null)
         {
-            audioClip = Resources.Load<AudioClip>(audioPath);
+            audioClip = Resources.Load<AudioClip>(audioClipPath);
             if (isCache)
             {
-                if (!_audioClipDict.ContainsKey(audioPath))
+                if (!_audioClipDict.ContainsKey(audioClipPath))
                 {
-                    _audioClipDict.Add(audioPath, audioClip);
+                    _audioClipDict.Add(audioClipPath, audioClip);
                 }
             }
         }
@@ -71,6 +79,13 @@ public class ResourceService : BaseService<ResourceService>
         return prefab;
     }
 
+    public GameObject InstantiatePrefab(Transform parentTrans, string prefabPath, bool isCache = false)
+    {
+        GameObject prefab = LoadPrefab(prefabPath, isCache);        
+        GameObject instantiatedPrefab = Instantiate(prefab, parentTrans);
+        return instantiatedPrefab;
+    }
+
     public TMP_FontAsset LoadFont(string fontPath, bool isCache)
     {
         _fontDict.TryGetValue(fontPath, out TMP_FontAsset font);
@@ -95,7 +110,7 @@ public class ResourceService : BaseService<ResourceService>
         {
             if (texture == null)
             {
-                packId = _resourceRawImageLoader.AddPack(targetRawImage, urlPath, isCahce, AddRawImageTextureCacheCB, completeCallBack, canceledCallBack, erroredCallBack);                
+                packId = _resourceRawImageLoader.AddPack(targetRawImage, urlPath, isCahce, AddRawImageTextureCacheCB, completeCallBack, canceledCallBack, erroredCallBack);
             }
             else
             {

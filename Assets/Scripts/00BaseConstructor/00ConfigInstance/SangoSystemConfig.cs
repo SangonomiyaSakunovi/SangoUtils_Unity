@@ -19,12 +19,12 @@ public static class SangoSystemConfig
     public static readonly PatchConfig PatchConfig = new PatchConfig
     {
         packageName = "DefaultPackage",
-        playMode = EPlayMode.EditorSimulateMode,
+        playMode = EPlayMode.HostPlayMode,
         buildPipeline = EDefaultBuildPipeline.BuiltinBuildPipeline,
 
         //Protocol: hostServerIP/CDN/Editor/Unity/appId/Patch/PC/appVersion
         //Protocol: hostServerIP/CDN/Online/Unity/appId/Patch/PC/appVersion
-        hostServerIP = "http://oss-cn-beijing.aliyuncs.com/sangonomiyasakunovi",
+        hostServerIP = "http://hvr.isunupcg.com/sangonomiyasakunovi",
         appId = "0000TestSangoApp",
         appVersion = "1.0"
     };

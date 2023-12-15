@@ -34,113 +34,80 @@ public class BaseUIElements : MonoBehaviour
     protected virtual void OnDispose() { }
 
     #region SetResources
-    protected void SetSprite(Image image, string path, bool isAssetBundle = false, bool isCache = false)
+    protected void SetSprite(Image image, string path, bool isCache = false)
     {
-        Sprite sprite = null;
-        if (isAssetBundle)
-        {
-
-        }
-        else
-        {
-            sprite = ResourceService.Instance.LoadSprite(path, isCache);
-        }
+        Sprite sprite = ResourceService.Instance.LoadSprite(path, isCache);
         image.sprite = sprite;
     }
 
-    protected void SetSprite(GameObject gameObject, string path, bool isAssetBundle = false, bool isCache = false)
+    protected void SetSprite(GameObject gameObject, string path, bool isCache = false)
     {
         Image image = gameObject.GetComponent<Image>();
         if (image != null)
         {
-            SetSprite(image, path, isAssetBundle, isCache);
+            SetSprite(image, path, isCache);
         }
     }
 
-    protected void SetSprite(Transform transform, string path, bool isAssetBundle = false, bool isCache = false)
+    protected void SetSprite(Transform transform, string path, bool isCache = false)
     {
-        SetSprite(transform.gameObject, path, isAssetBundle, isCache);
+        SetSprite(transform.gameObject, path, isCache);
     }
 
-    protected void SetSprite(Button button, string path, bool isAssetBundle = false, bool isCache = false)
+    protected void SetSprite(Button button, string path, bool isCache = false)
     {
-        SetSprite(button.gameObject, path, isAssetBundle, isCache);
+        SetSprite(button.gameObject, path, isCache);
     }
 
-    protected void SetAudio(AudioSource audioSource, string path, bool isAssetBundle = false, bool isCache = false)
+    protected void SetAudio(AudioSource audioSource, string path, bool isCache = false)
     {
-        AudioClip clip = null;
-        if (isAssetBundle)
-        {
-
-        }
-        else
-        {
-            clip = ResourceService.Instance.LoadAudioClip(path, isCache);
-        }
+        AudioClip clip = ResourceService.Instance.LoadAudioClip(path, isCache);
         audioSource.clip = clip;
     }
 
-    protected void SetAudio(GameObject gameObject, string path, bool isAssetBundle = false, bool isCache = false)
+    protected void SetAudio(GameObject gameObject, string path, bool isCache = false)
     {
         AudioSource audioSource = gameObject.GetComponent<AudioSource>();
         if (audioSource != null)
         {
-            SetAudio(audioSource, path, isAssetBundle, isCache);
+            SetAudio(audioSource, path, isCache);
         }
     }
 
-    protected void SetAudio(Transform transform, string path, bool isAssetBundle = false, bool isCache = false)
+    protected void SetAudio(Transform transform, string path, bool isCache = false)
     {
-        SetAudio(transform.gameObject, path, isAssetBundle, isCache);
+        SetAudio(transform.gameObject, path, isCache);
     }
 
-    protected void SetFont(TMP_Text text, string path, bool isAssetBundle = false, bool isChache = true)
+    protected void SetFont(TMP_Text text, string path, bool isChache = true)
     {
-        TMP_FontAsset font = null;
-        if (isAssetBundle)
-        {
-
-        }
-        else
-        {
-            font = ResourceService.Instance.LoadFont(path, isChache);
-        }
+        TMP_FontAsset font = ResourceService.Instance.LoadFont(path, isChache);
         text.font = font;
     }
 
-    protected void SetFont(GameObject gameObject, string path, bool isAssetBundle = false, bool isChache = true)
+    protected void SetFont(GameObject gameObject, string path, bool isChache = true)
     {
         TMP_Text text = gameObject.GetComponent<TMP_Text>();
         if (text != null)
         {
-            SetFont(text, path, isAssetBundle, isChache);
+            SetFont(text, path, isChache);
         }
     }
 
-    protected void SetFont(Transform transform, string path, bool isAssetBundle = false, bool isChache = true)
+    protected void SetFont(Transform transform, string path, bool isChache = true)
     {
-        SetFont(transform.gameObject, path, isAssetBundle, isChache);
+        SetFont(transform.gameObject, path, isChache);
     }
 
-    protected GameObject InstantiateGameObject(Transform parentTrans, string path, bool isAssetBundle = false, bool isCache = false)
+    protected GameObject InstantiateGameObject(Transform parentTrans, string path, bool isCache = false)
     {
-        GameObject prefab = null;
-        if (isAssetBundle)
-        {
-
-        }
-        else
-        {
-            prefab = ResourceService.Instance.LoadPrefab(path, isCache);
-        }
-        GameObject instantiatedPrefab = Instantiate(prefab, parentTrans);
+        GameObject instantiatedPrefab = ResourceService.Instance.InstantiatePrefab(parentTrans, path, isCache);
         return instantiatedPrefab;
     }
 
-    protected GameObject InstantiateGameObject(GameObject parentObject, string path, bool isAssetBundle = false, bool isCache = false)
+    protected GameObject InstantiateGameObject(GameObject parentObject, string path, bool isCache = false)
     {
-        return InstantiateGameObject(parentObject.transform, path, isAssetBundle, isCache);
+        return InstantiateGameObject(parentObject.transform, path, isCache);
     }
     #endregion
 

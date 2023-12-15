@@ -4,7 +4,7 @@ public class PatchLinkedFSM_ClearPackageCache : FSMLinkedStaterItemBase
 {
     public override void OnEnter()
     {
-        PatchSystemEventMessage.PatchStatesChange.SendEventMessage("清理未使用的缓存文件！");
+        PatchSystemEventMessage.PatchStatesChange_PatchSystemEventMessage.SendEventMessage("清理未使用的缓存文件！");
         var packageName = (string)_fsmLinkedStater.GetBlackboardValue("PackageName");
         var package = YooAssets.GetPackage(packageName);
         var operation = package.ClearUnusedCacheFilesAsync();

@@ -8,7 +8,7 @@ public class PatchLinkedFSM_UpdatePackageManifest : FSMLinkedStaterItemBase
 
     public override void OnEnter()
     {
-        PatchSystemEventMessage.PatchStatesChange.SendEventMessage("更新资源清单！");
+        PatchSystemEventMessage.PatchStatesChange_PatchSystemEventMessage.SendEventMessage("更新资源清单！");
         coroutine = UpdateManifest().Start();
     }
 
@@ -26,7 +26,7 @@ public class PatchLinkedFSM_UpdatePackageManifest : FSMLinkedStaterItemBase
         if (operation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning(operation.Error);
-            PatchSystemEventMessage.PatchManifestUpdateFailed.SendEventMessage();
+            PatchSystemEventMessage.PatchManifestUpdateFailed_PatchSystemEventMessage.SendEventMessage();
             yield break;
         }
         else

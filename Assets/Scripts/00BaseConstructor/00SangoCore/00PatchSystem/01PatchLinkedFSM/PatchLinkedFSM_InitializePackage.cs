@@ -18,12 +18,10 @@ public class PatchLinkedFSM_InitializePackage : FSMLinkedStaterItemBase
         string packageName = (string)_fsmLinkedStater.GetBlackboardValue("PackageName");
         string buildPipeline = (string)_fsmLinkedStater.GetBlackboardValue("BuildPipeline");
 
-        // 创建资源包裹类
         var package = YooAssets.TryGetPackage(packageName);
         if (package == null)
             package = YooAssets.CreatePackage(packageName);
 
-        // 编辑器下的模拟模式
         InitializationOperation initializationOperation = null;
         if (playMode == EPlayMode.EditorSimulateMode)
         {
@@ -32,7 +30,6 @@ public class PatchLinkedFSM_InitializePackage : FSMLinkedStaterItemBase
             initializationOperation = package.InitializeAsync(createParameters);
         }
 
-        // 单机运行模式
         if (playMode == EPlayMode.OfflinePlayMode)
         {
             var createParameters = new OfflinePlayModeParameters();
@@ -40,7 +37,6 @@ public class PatchLinkedFSM_InitializePackage : FSMLinkedStaterItemBase
             initializationOperation = package.InitializeAsync(createParameters);
         }
 
-        // 联机运行模式
         if (playMode == EPlayMode.HostPlayMode)
         {
             string defaultHostServer = GetHostServerURL();
@@ -52,7 +48,6 @@ public class PatchLinkedFSM_InitializePackage : FSMLinkedStaterItemBase
             initializationOperation = package.InitializeAsync(createParameters);
         }
 
-        // WebGL运行模式
         if (playMode == EPlayMode.WebPlayMode)
         {
             string defaultHostServer = GetHostServerURL();
@@ -66,11 +61,10 @@ public class PatchLinkedFSM_InitializePackage : FSMLinkedStaterItemBase
 
         yield return initializationOperation;
 
-        // 如果初始化失败弹出提示界面
         if (initializationOperation.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning($"{initializationOperation.Error}");
-            PatchSystemEventMessage.InitializeFailed.SendEventMessage();
+            PatchSystemEventMessage.InitializeFailed_PatchSystemEventMessage.SendEventMessage();
         }
         else
         {

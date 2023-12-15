@@ -1,10 +1,8 @@
-using UnityEngine;
-
 public class SceneService : BaseService<SceneService>
 {
     private EventCache _eventCache;
     private SceneViewConfig _currentSceneViewConfig;
-    
+
     public override void OnInit()
     {
         base.OnInit();
@@ -25,8 +23,8 @@ public class SceneService : BaseService<SceneService>
     }
 }
 
-public enum SceneViewResolution 
-{ 
+public enum SceneViewResolution
+{
     _1KH_1920x1080,
     _1KV_1080x1920,
     _4KH_3840x2160,

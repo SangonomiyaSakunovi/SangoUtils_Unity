@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -38,7 +36,7 @@ public class SceneMainInstance : BaseScene<SceneMainInstance>
             switch (_currentSceneViewConfig.sceneViewResolution)
             {
                 case SceneViewResolution._1KH_1920x1080:
-                    securityCheckRootObj = InstantiateGameObject(_canvasTrans, SecuritySystemConstant.SangoSecurityCheckRootPrefab_1KH_Path);
+                    securityCheckRootObj = ResourceService.Instance.InstantiatePrefab(_canvasTrans, SecuritySystemConstant.SangoSecurityCheckRootPrefab_1KH_Path);
                     break;
             }
             _securityCheckRoot = securityCheckRootObj.GetOrAddComponent<SangoSecurityCheckRoot>();

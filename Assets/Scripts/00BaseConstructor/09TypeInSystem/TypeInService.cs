@@ -43,16 +43,16 @@ public class TypeInService : BaseService<TypeInService>
             switch (_currentKeyboardType)
             {
                 case KeyboardTypeCode.FloatableKeyboard:
-                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_FloatableKeyboard_PrefabPath);                 
+                    _currentKeyboardObject = ResourceService.Instance.InstantiatePrefab(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_FloatableKeyboard_PrefabPath);                 
                     break;
                 case KeyboardTypeCode.UpperCharKeyboard:
-                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_PrefabPath);
+                    _currentKeyboardObject = ResourceService.Instance.InstantiatePrefab(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_PrefabPath);
                     break;
                 case KeyboardTypeCode.UpperCharKeyboard_4K:
-                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_4K_PrefabPath);
+                    _currentKeyboardObject = ResourceService.Instance.InstantiatePrefab(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_4K_PrefabPath);
                     break;
                 case KeyboardTypeCode.UpperCharKeyboard_Vertical_4K:
-                    _currentKeyboardObject = InstantiateGameObject(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_Vertical_4K_PrefabPath);
+                    _currentKeyboardObject = ResourceService.Instance.InstantiatePrefab(_keyboardDefaultTransform, TypeInConstant.TypeInPanel_UpperCharKeyboard_Vertical_4K_PrefabPath);
                     break;
             }
             _currentKeyboardSystem = _currentKeyboardObject.GetComponent<UpperCharKeyboardSystem>();

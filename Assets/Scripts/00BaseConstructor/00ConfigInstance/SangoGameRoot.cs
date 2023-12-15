@@ -16,6 +16,8 @@ public class SangoGameRoot : BaseRoot<SangoGameRoot>
     public override void OnInit()
     {
         base.OnInit();
+        ResourceService.Instance.OnInit();
+        AssetService.Instance.OnInit();
         EventService.Instance.OnInit();
 
         SceneService.Instance.OnInit();

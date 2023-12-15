@@ -64,7 +64,6 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
 
     private void RegistInfoCheckResultActionCallBack(RegistInfoCheckResult result, string commands)
     {
-        SangoLogger.Log("开始运行回调");
         switch (result)
         {
             case RegistInfoCheckResult.CheckOK_Valid:

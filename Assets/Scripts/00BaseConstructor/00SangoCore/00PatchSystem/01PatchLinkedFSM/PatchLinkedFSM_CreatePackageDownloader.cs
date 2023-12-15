@@ -8,7 +8,7 @@ public class PatchLinkedFSM_CreatePackageDownloader : FSMLinkedStaterItemBase
 
     public override void OnEnter()
     {
-        PatchSystemEventMessage.PatchStatesChange.SendEventMessage("创建补丁下载器！");
+        PatchSystemEventMessage.PatchStatesChange_PatchSystemEventMessage.SendEventMessage("创建补丁下载器！");
         coroutine = CreateDownloader().Start();
     }
 
@@ -34,7 +34,7 @@ public class PatchLinkedFSM_CreatePackageDownloader : FSMLinkedStaterItemBase
             // 注意：开发者需要在下载前检测磁盘空间不足
             int totalDownloadCount = downloader.TotalDownloadCount;
             long totalDownloadBytes = downloader.TotalDownloadBytes;
-            PatchSystemEventMessage.FoundUpdateFiles.SendEventMessage(totalDownloadCount, totalDownloadBytes);
+            PatchSystemEventMessage.FoundUpdateFiles_PatchSystemEventMessage.SendEventMessage(totalDownloadCount, totalDownloadBytes);
         }
     }
 }

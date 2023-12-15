@@ -25,9 +25,7 @@ public class PatchService : BaseService<PatchService>
         ResourcePackage assetPackage = YooAssets.GetPackage(_currentPatchConfig.packageName);
         YooAssets.SetDefaultPackage(assetPackage);
 
-        SangoLogger.Log("运行至更新结束位置");
-
-        PatchSystemEventMessage.ClosePatchWindow.SendEventMessage();
+        PatchSystemEventMessage.ClosePatchWindow_PatchSystemEventMessage.SendEventMessage();
         SceneSystemEventMessage.ChangeToHomeScene.SendEventMessage();
     }
 }
