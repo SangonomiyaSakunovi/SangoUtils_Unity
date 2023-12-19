@@ -1,188 +1,307 @@
-using UnityEngine.Video;
-using UnityEngine;
-using UnityEngine.UI;
+using System;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class VideoPlayerController : BaseController
 {
-    [Header("VideoPlayer组件：")]
-    public VideoPlayer videoPlayer;
-    [Header("视频拖动条：")]
-    public Slider video_Slider;
-    [Header("VideoBG_TRF组件：")]
-    public RectTransform VideoBG_TRF;
-    [Header("视频播放提示：")]
-    public Image pause_Img;
-    [Header("视频关闭按钮：")]
-    public Button close_Btn;
-    //鼠标抬起或按下
-    bool mouseUp = true;
-    bool isPause = false;
+    private VideoPlayer _videoPlayer;
+    private AudioSource _audioSource;
+    private RawImage _videoRawImage;
+    private RectTransform _videoRawImageRectTrans;
+    private RenderTexture _videoRenderTexture;
 
-    [Header("全屏按钮：")]
-    public Button fullScreen_Btn;
-    [Header("全屏按钮精灵：")]
-    public Sprite fullScreen_Sprite;
-    [Header("非全屏按钮精灵：")]
-    public Sprite notFullScreen_Sprite;
-    [Header("全屏按钮提示文本：")]
-    public TMP_Text fullScreen_Txt;
-    bool isFullScreen = false;
+    private string _videoPath = string.Empty;
+    private VideoClip _videoClip = null;
 
-    [Header("静音按钮：")]
-    public Button mute_Btn;
-    [Header("静音按钮精灵:")]
-    public Sprite mute_Sprite;
-    [Header("非静音按钮精灵：")]
-    public Sprite notMute_Sprite;
-    [Header("静音按钮提示文本：")]
-    public TMP_Text mute_Txt;
-    bool isMute = false;
+    private Button _playOrPauseBtn;
+    private Button _fullScreenBtn;
+    private Button _muteBtn;
 
-    [Header("视频时长：")]
-    public TMP_Text videoTime_Txt;
-    //视频时长
-    int clipHour, clipMinute, clipSecond, currentHour, currentMinute, currentSecond;
+    private Slider _videoProgressSlider;
+    private Slider _audioVolumeSlider;
+    private TMP_Text _videoFullTimeTMPText;
+    private TMP_Text _videoCurrentTimeTMPText;
 
-    void Start()
+    private float _defaultAudioVolume;
+    private Vector2 _normalScreenRectTransValue;
+    private Vector2 _fullScreenRectTransValue;
+
+    private bool _isGetVideoInfo = false;
+    private bool _isFullScreen = false;
+    private bool _isMouseUp = true;
+
+    private bool _isUpdatingProgress = false;
+    private bool _isForcePlaying = false;
+
+    private Action<bool> OnPlayOrPauseCallBack;
+    private Action<bool> OnFullOrNormalScreenCallBack;
+    private Action<bool> OnMuteOrUnMuteCallBack;
+
+    private EventTrigger _videoProgressSliderEventTrigger;
+
+    private int _tempHour, _tempMin;
+    private float _time;
+    private float _timeCount;
+    private float _timeCurrent;
+
+    public void InitController(VideoPlayerConfig config)
     {
-        close_Btn.onClick.AddListener(OnClickCloseBtn);
+        _videoRawImage = config.videoRawImage;
+        _videoRenderTexture = config.videoRenderTexture;
 
-        video_Slider.onValueChanged.AddListener(SliderValueChangeEvent);
+        _playOrPauseBtn = config.playOrPauseBtn;
+        _fullScreenBtn = config.fullScreenBtn;
+        _muteBtn = config.muteBtn;
 
-        fullScreen_Btn.onClick.AddListener(OnClickFullScreenBtn);
-        mute_Btn.onClick.AddListener(OnClickMuteBtn);
-        videoPlayer.targetTexture.Release();
+        _videoProgressSlider = config.videoProgressSlider;
+        _audioVolumeSlider = config.audioVolumeSlider;
 
-        isFullScreen = false;
-        isMute = false;
+        _videoFullTimeTMPText = config.videoFullTimeTMPText;
+        _videoCurrentTimeTMPText = config.videoCurrentTimeTMPText;
 
-        clipMinute = (int)(videoPlayer.clip.length) / 60;
-        clipSecond = (int)(videoPlayer.clip.length - clipMinute * 60);
+        _defaultAudioVolume = config.defaultAudioVolume;
+        _normalScreenRectTransValue = config.normalScreenRectTransValue;
+        _fullScreenRectTransValue = config.fullScreenRectTransValue;
+
+        OnPlayOrPauseCallBack = config.OnPlayOrPauseCallBack;
+        OnFullOrNormalScreenCallBack = config.OnFullOrNormalScreenCallBack;
+        OnMuteOrUnMuteCallBack = config.OnMuteOrUnMuteCallBack;
+
+        _videoRawImageRectTrans = _videoRawImage.GetComponent<RectTransform>();
+
+        _audioSource = transform.AddComponent<AudioSource>();
+        _videoPlayer = transform.AddComponent<VideoPlayer>();
+        _videoPlayer.targetTexture = _videoRenderTexture;
+
+        _videoPlayer.playOnAwake = false;
+        _videoPlayer.isLooping = true;
+        _audioSource.playOnAwake = false;
+        _audioSource.volume = _defaultAudioVolume;
+
+        AddEvent();
+        ResetController();
     }
 
-    void OnEnable()
+    private void ResetController()
     {
-        pause_Img.gameObject.SetActive(false);
+        _videoRenderTexture.Release();
+        _isGetVideoInfo = false;
+        _isFullScreen = false;
+        _isMouseUp = true;
     }
 
-    void Update()
+    private void AddEvent()
     {
-        SetVideoTime();
-    }
-
-    void FixedUpdate()
-    {
-        if (mouseUp)
-            video_Slider.value = videoPlayer.frame / (videoPlayer.frameCount * 1.0f);
-
-    }
-    //设置视频时间 
-    void SetVideoTime()
-    {
-        currentMinute = (int)(videoPlayer.time) / 60;
-        currentSecond = (int)(videoPlayer.time - currentMinute * 60);
-        videoTime_Txt.text = string.Format("{0:D2}:{1:D2} / {2:D2}:{3:D2}", currentMinute, currentSecond, clipMinute, clipSecond);
-    }
-
-    //关闭视频面板
-    void OnClickCloseBtn()
-    {
-        gameObject.SetActive(false);
-
-        fullScreen_Txt.text = "全 屏";
-        fullScreen_Btn.GetComponent<Image>().sprite = fullScreen_Sprite;
-        VideoBG_TRF.sizeDelta = new Vector2(1511, 950);
-        isFullScreen = false;
-
-        videoPlayer.SetDirectAudioMute(0, false);
-        mute_Btn.GetComponent<Image>().sprite = notMute_Sprite;
-        mute_Txt.text = "静 音";
-        isMute = false;
-    }
-
-    //全屏
-    void OnClickFullScreenBtn()
-    {
-        if (isFullScreen)
+        _playOrPauseBtn?.onClick.AddListener(OnPlayOrPauseBtnClicked);
+        _fullScreenBtn?.onClick.AddListener(OnFullScreenBtnClicked);
+        _muteBtn?.onClick.AddListener(OnMuteBtnClicked);
+        _audioVolumeSlider?.onValueChanged.AddListener(OnAudioVolumeSliderValueChanged);
+        if (_videoProgressSlider != null)
         {
-            VideoBG_TRF.sizeDelta = new Vector2(1511, 950);
-            fullScreen_Btn.GetComponent<Image>().sprite = fullScreen_Sprite;
-            fullScreen_Txt.text = "全 屏";
+            _videoProgressSlider.onValueChanged.AddListener(OnVideoProgressSliderValueChanged);
+            SetGameObjectDragBeginListener(_videoProgressSlider, OnSliderDragBegin);
+            SetGameObjectDragEndListener(_videoProgressSlider, OnSliderDragEnd);
+        }
+    }
+
+    protected override void OnUpdate()
+    {
+        if (_isUpdatingProgress)
+        {
+            if (!_isGetVideoInfo && _videoPlayer.clip != null)
+            {
+                _time = (float)_videoPlayer.clip.length;
+                _tempHour = (int)_time / 60;
+                _tempMin = (int)_time % 60;
+                if (_videoFullTimeTMPText != null)
+                {
+                    _videoFullTimeTMPText.text = string.Format("{0:D2}:{1:D2}", _tempHour.ToString(), _tempMin.ToString());
+                }
+                _isGetVideoInfo = true;
+            }
+
+            if (_videoProgressSlider != null)
+            {
+                _time = (float)_videoPlayer.time;
+                _tempHour = (int)_time / 60;
+                _tempMin = (int)_time % 60;
+                if (_videoCurrentTimeTMPText != null)
+                {
+                    _videoCurrentTimeTMPText.text = string.Format("{0:D2}:{1:D2}", _tempHour.ToString(), _tempMin.ToString());
+                }
+                if (_videoPlayer.isPlaying && _isMouseUp)
+                {
+                    _videoProgressSlider.value = (_videoPlayer.frame * 1.0f / (long)_videoPlayer.frameCount);
+                }
+            }
+        }
+    }
+
+    public bool LoadVideo(string videoPath)
+    {
+        bool res = false;
+        if (!string.IsNullOrEmpty(videoPath))
+        {
+            _videoPlayer.source = VideoSource.Url;
+            _videoPlayer.url = "file:///" + videoPath;
+            _videoPath = videoPath;
+            if (_audioVolumeSlider != null)
+            {
+                _audioVolumeSlider.value = _defaultAudioVolume;
+            }
+            _isUpdatingProgress = true;
+            res = true;
+        }
+        return res;
+    }
+
+    public bool LoadVideo(VideoClip videoClip)
+    {
+        bool res = false;
+        if (videoClip != null)
+        {
+            _videoClip = videoClip;
+            _videoPlayer.clip = _videoClip;
+            if (_audioVolumeSlider != null)
+            {
+                _audioVolumeSlider.value = _defaultAudioVolume;
+            }
+            _isUpdatingProgress = true;
+            res = true;
+        }
+        return res;
+    }
+
+    public bool PlayVideo()
+    {
+        bool res = false;
+        if (!string.IsNullOrEmpty(_videoPath) || _videoClip != null)
+        {
+
+            _videoPlayer.Play();
+            res = true;
+        }
+        return res;
+    }
+
+    public bool PauseVideo()
+    {
+        bool res = false;
+        if (!string.IsNullOrWhiteSpace(_videoPath) || _videoClip != null)
+        {
+            _videoPlayer.Pause();
+            res = true;
+        }
+        return res;
+    }
+
+    public bool StopVideo()
+    {
+        bool res = false;
+        if (!string.IsNullOrWhiteSpace(_videoPath))
+        {
+            _videoPlayer.Stop();
+            _isUpdatingProgress = false;
+            res = true;
+        }
+        return res;
+    }
+
+    private void OnMouseEnter()
+    {
+        ShowVideoExternInfo(true);
+    }
+
+    private void OnMouseExit()
+    {
+        ShowVideoExternInfo(false);
+    }
+
+    private void ShowVideoExternInfo(bool isShow = false)
+    {
+        if (_audioVolumeSlider != null && _videoProgressSlider != null && _videoFullTimeTMPText != null && _videoCurrentTimeTMPText != null)
+        {
+            _audioVolumeSlider.gameObject.SetActive(isShow);
+            _videoProgressSlider.gameObject.SetActive(isShow);
+            _videoFullTimeTMPText.gameObject.SetActive(isShow);
+            _videoCurrentTimeTMPText.gameObject.SetActive(isShow);
+        }
+    }
+
+    private void OnPlayOrPauseBtnClicked()
+    {
+        if (_videoPlayer.isPlaying)
+        {
+            PauseVideo();
+            _isForcePlaying = false;
         }
         else
         {
-            VideoBG_TRF.sizeDelta = new Vector2(Screen.width, Screen.height);
-            fullScreen_Btn.GetComponent<Image>().sprite = notFullScreen_Sprite;
-            fullScreen_Txt.text = "取消全屏";
+            PlayVideo();
+            _isForcePlaying = true;
         }
-        isFullScreen = !isFullScreen;
+        OnPlayOrPauseCallBack?.Invoke(_videoPlayer.isPlaying);
     }
 
-    //静音
-    void OnClickMuteBtn()
+    private void OnProgressSliderDragBeginOrEnd()
     {
-        if (isMute)
+        if (!_isForcePlaying) return;
+        if (_videoPlayer.isPlaying)
         {
-            videoPlayer.SetDirectAudioMute(0, false);
-            mute_Btn.GetComponent<Image>().sprite = notMute_Sprite;
-            mute_Txt.text = "静 音";
+            PauseVideo();
         }
         else
         {
-            videoPlayer.SetDirectAudioMute(0, true);
-            mute_Btn.GetComponent<Image>().sprite = mute_Sprite;
-            mute_Txt.text = "取消静音";
+            PlayVideo();
         }
-        isMute = !isMute;
     }
 
-    #region EventTrigger相关事件
-    //鼠标按下
-    public void PointDown()
+    private void OnFullScreenBtnClicked()
     {
-        videoPlayer.Pause();
-        videoPlayer.frame = long.Parse((video_Slider.value * videoPlayer.frameCount).ToString("0."));
-        mouseUp = false;
-        isPause = false;
-    }
-
-    //鼠标抬起
-    public void PointUp()
-    {
-        videoPlayer.Play();
-        mouseUp = true;
-        pause_Img.gameObject.SetActive(false);
-    }
-
-    //拖动开始
-    public void PointDragBegin()
-    {
-        mouseUp = false;
-    }
-    //拖动结束
-    public void PointDragEnd()
-    {
-        mouseUp = true;
-    }
-
-    //设置视频暂停
-    public void SetPauseImg()
-    {
-        isPause = !isPause;
-        pause_Img.gameObject.SetActive(isPause);
-        if (!isPause)
-            videoPlayer.Play();
-        else
-            videoPlayer.Pause();
-    }
-    #endregion
-
-    void SliderValueChangeEvent(float value)
-    {
-        if (!mouseUp)
+        if (_isFullScreen)
         {
-            videoPlayer.frame = long.Parse((value * videoPlayer.frameCount).ToString("0."));
+            _videoRawImageRectTrans.sizeDelta = _normalScreenRectTransValue;
         }
+        else
+        {
+            _videoRawImageRectTrans.sizeDelta = _fullScreenRectTransValue;
+        }
+        _isFullScreen = !_isFullScreen;
+        OnFullOrNormalScreenCallBack?.Invoke(_isFullScreen);
+    }
+
+    private void OnMuteBtnClicked()
+    {
+        _audioSource.mute = !_audioSource.mute;
+        OnMuteOrUnMuteCallBack?.Invoke(_audioSource.mute);
+    }
+
+    private void OnAudioVolumeSliderValueChanged(float value)
+    {
+        _audioSource.volume = value;
+    }
+
+    private void OnVideoProgressSliderValueChanged(float value)
+    {
+        if (!_isMouseUp)
+        {
+            _videoPlayer.frame = (long)(value * _videoPlayer.frameCount);
+        }
+    }
+
+    private void OnSliderDragBegin(BaseEventData eventData)
+    {
+        _isMouseUp = false;
+        OnProgressSliderDragBeginOrEnd();
+    }
+
+    private void OnSliderDragEnd(BaseEventData eventData)
+    {
+        _isMouseUp = true;
+        OnProgressSliderDragBeginOrEnd();
     }
 }

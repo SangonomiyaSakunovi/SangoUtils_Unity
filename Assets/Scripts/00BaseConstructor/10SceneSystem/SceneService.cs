@@ -31,7 +31,7 @@ public enum SceneViewResolution
     _4kV_2160x3840
 }
 
-public class SceneViewConfig
+public class SceneViewConfig : BaseConfig
 {
     public SceneViewResolution sceneViewResolution;
 }

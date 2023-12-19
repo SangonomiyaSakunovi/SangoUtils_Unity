@@ -30,7 +30,7 @@ public class PatchService : BaseService<PatchService>
     }
 }
 
-public class PatchConfig
+public class PatchConfig : BaseConfig
 {
     public string hostServerIP;
     public string appId;

@@ -1,23 +1,13 @@
 using UnityEngine;
 
-public class BaseController : MonoBehaviour
+public class BaseController : BaseUIElements
 {
     private void Update()
     {
         OnUpdate();
     }
 
-    public virtual void OnInit()
-    {
-
-    }
-
     protected virtual void OnUpdate()
-    {
-
-    }
-
-    public virtual void OnDispose()
     {
 
     }

@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 
 public class _02System : BaseSystem
@@ -10,7 +8,7 @@ public class _02System : BaseSystem
     public static _02System Instance = null;
     private Dictionary<int, AudioClip> _audioClips = null;
     private _02Window _02Window = null;
-    
+
     private string _microphoneDevice = string.Empty;
     private int frequency = 44100;
     private int duration = 5;
@@ -18,8 +16,6 @@ public class _02System : BaseSystem
     private AudioSource _audioSource;
     private AudioClip _currentRecordClip;
 
-    private bool _isRecording = false;
-    
     private void Start()
     {
         InitSystem();
@@ -48,7 +44,6 @@ public class _02System : BaseSystem
 
     public void StartRecording()
     {
-        _isRecording = true;
         _audioSource.clip = Microphone.Start(null, false, duration, frequency);
         Invoke("StopRecording", duration);
     }
@@ -61,12 +56,10 @@ public class _02System : BaseSystem
         var samples = new float[_currentRecordClip.samples];
 
         _currentRecordClip.GetData(samples, 0);
-        byte[] buffer = new byte[samples.Length*2];
+        byte[] buffer = new byte[samples.Length * 2];
 
         Buffer.BlockCopy(samples, 0, buffer, 0, buffer.Length);
         File.WriteAllBytes(Application.streamingAssetsPath + "/TestSound.wav", buffer);
-
-        _isRecording= false;
 
         _audioSource.Play();
     }

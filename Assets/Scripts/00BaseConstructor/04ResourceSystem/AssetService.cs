@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 using YooAsset;
 
 public class AssetService : BaseService<AssetService>
@@ -8,6 +9,7 @@ public class AssetService : BaseService<AssetService>
     private List<AssetHandle> _cacheAssetHandles;
 
     private Dictionary<string, AssetHandle> _audioClipHandleDict;
+    private Dictionary<string, AssetHandle> _videoClipHandleDict;
     private Dictionary<string, AssetHandle> _spriteHandleDict;
     private Dictionary<string, AssetHandle> _prefabHandleDict;
 
@@ -17,6 +19,7 @@ public class AssetService : BaseService<AssetService>
         _cacheAssetHandles = new List<AssetHandle>();
 
         _audioClipHandleDict = new Dictionary<string, AssetHandle>();
+        _videoClipHandleDict = new Dictionary<string, AssetHandle>();
         _spriteHandleDict = new Dictionary<string, AssetHandle>();
         _prefabHandleDict = new Dictionary<string, AssetHandle>();
     }
@@ -76,6 +79,64 @@ public class AssetService : BaseService<AssetService>
         {
             audioClip = handle.AssetObject as AudioClip;
             assetLoadedCallBack?.Invoke(audioClip);
+        }
+    }
+
+    public VideoClip LoadVideoClip(string videoClipPath, bool isCache)
+    {
+        VideoClip videoClip = null;
+        _videoClipHandleDict.TryGetValue(videoClipPath, out AssetHandle handle);
+        if (handle == null)
+        {
+            handle = YooAssets.LoadAssetSync<VideoClip>(videoClipPath);
+            videoClip = handle.AssetObject as VideoClip;
+            if (isCache)
+            {
+                if (!_videoClipHandleDict.ContainsKey(videoClipPath))
+                {
+                    _videoClipHandleDict.Add(videoClipPath, handle);
+                }
+            }
+            else
+            {
+                GCAssetHandleTODO(handle);
+            }
+        }
+        else
+        {
+            videoClip = handle.AssetObject as VideoClip;
+        }
+        return videoClip;
+    }
+
+    public void LoadVideoClipASync(string videoClipPath, Action<VideoClip> assetLoadedCallBack, bool isCache)
+    {
+        VideoClip videoClip = null;
+        _videoClipHandleDict.TryGetValue(videoClipPath, out AssetHandle handle);
+        if (handle == null)
+        {
+            handle = YooAssets.LoadAssetAsync<VideoClip>(videoClipPath);
+            handle.Completed += (AssetHandle handle) =>
+            {
+                videoClip = handle.AssetObject as VideoClip;
+                assetLoadedCallBack?.Invoke(videoClip);
+                if (isCache)
+                {
+                    if (!_videoClipHandleDict.ContainsKey(videoClipPath))
+                    {
+                        _videoClipHandleDict.Add(videoClipPath, handle);
+                    }
+                }
+                else
+                {
+                    GCAssetHandleTODO(handle);
+                }
+            };
+        }
+        else
+        {
+            videoClip = handle.AssetObject as VideoClip;
+            assetLoadedCallBack?.Invoke(videoClip);
         }
     }
 

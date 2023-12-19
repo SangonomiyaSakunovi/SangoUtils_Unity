@@ -143,9 +143,9 @@ public class HttpClientSango
                 CheckResponseCode(pack.id, responseCode, responseJson);
                 pack.OnDataReceived(responseJson, responseCode, pack.id);
             }
-            else if (pack.webRequest.isHttpError || pack.webRequest.isNetworkError)
+            else if (pack.webRequest.result == UnityWebRequest.Result.ProtocolError || pack.webRequest.result == UnityWebRequest.Result.ConnectionError)
             {
-
+                
             }
             else
             {
@@ -230,7 +230,7 @@ public class HttpClientSango
                 }
             }
 
-            else if (pack.webRequest.isHttpError || pack.webRequest.isNetworkError)
+            else if (pack.webRequest.result == UnityWebRequest.Result.ProtocolError || pack.webRequest.result == UnityWebRequest.Result.ConnectionError)
             {
                 pack.OnErrored();
             }

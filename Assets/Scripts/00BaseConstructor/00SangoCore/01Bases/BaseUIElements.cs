@@ -1,8 +1,6 @@
-using RenderHeads.Media.AVProVideo;
 using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -823,58 +821,24 @@ public class BaseUIElements : MonoBehaviour
     {
         SetPointerSlideListener(transform.gameObject, onPointerSlideCallBack, onPointerClickDoneCallBack, commands);
     }
-    #endregion
-
-    #region MediaPlayController
-    private Dictionary<string, MediaPlayController> _mediaPlayControllerDict = null;
-
-    protected void AddMediaPlayController(string videoControllerId, MediaPlayer.FileLocation fileLocation, GameObject mediaPosWithOnlyCanvasRender, Texture2D mediaPosDefaultTexture, Slider mediaPlayProgressSlider = null, Button mediaPlayOrPauseButton = null, Action<bool> hasMediaTrunToPlayCallBack = null)
-    {
-        MediaPlayController controller = transform.GetOrAddComponent<MediaPlayController>();
-        controller.InitComponent(fileLocation, mediaPosWithOnlyCanvasRender, mediaPosDefaultTexture, mediaPlayProgressSlider, mediaPlayOrPauseButton, hasMediaTrunToPlayCallBack);
-        if (_mediaPlayControllerDict == null)
-        {
-            _mediaPlayControllerDict = new Dictionary<string, MediaPlayController>();
-        }
-        _mediaPlayControllerDict.Add(videoControllerId, controller);
-    }
-
-    protected void SetMediaPlayControllerContentFromFile(string videoControllerId, MediaPlayer.FileLocation fileLocation, string path, Action faildToOpenVideoCallBack = null)
-    {
-        _mediaPlayControllerDict.TryGetValue(videoControllerId, out MediaPlayController controller);
-        if (controller != null)
-        {
-            controller.OpenMediaFromFile(fileLocation, path, faildToOpenVideoCallBack);
-        }
-    }
-
-    protected void ResetMediaPlayController(string videoControllerId)
-    {
-        _mediaPlayControllerDict.TryGetValue(videoControllerId, out MediaPlayController controller);
-        if (controller != null)
-        {
-            controller.ResetMedia();
-        }
-    }
-    #endregion
+    #endregion   
 
     #region EventTrigger
     protected void SetGameObjectClickListener(GameObject gameObject, UnityAction<BaseEventData> actionCallBack)
     {
-        var eventTrigger = GetOrAddComponent<EventTrigger>(gameObject);
-        foreach (var existedEntry in eventTrigger.triggers)
+        EventTrigger eventTrigger = GetOrAddComponent<EventTrigger>(gameObject);
+        for (int i = 0; i < eventTrigger.triggers.Count; i++)
         {
-            if (existedEntry.eventID == EventTriggerType.PointerClick)
+            if (eventTrigger.triggers[i].eventID == EventTriggerType.PointerClick)
             {
                 return;
             }
         }
-        UnityAction<BaseEventData> selectEvent = actionCallBack;
         Entry onClick = new Entry()
         {
             eventID = EventTriggerType.PointerClick
         };
-        onClick.callback.AddListener(selectEvent);
+        onClick.callback.AddListener(actionCallBack);
         eventTrigger.triggers.Add(onClick);
     }
 
@@ -891,6 +855,52 @@ public class BaseUIElements : MonoBehaviour
     protected void SetGameObjectClickListener(Image image, UnityAction<BaseEventData> actionCallBack)
     {
         SetGameObjectClickListener(image.gameObject, actionCallBack);
+    }
+
+    protected void SetGameObjectDragBeginListener(GameObject gameObject, UnityAction<BaseEventData> actionCallBack)
+    {
+        EventTrigger eventTrigger = GetOrAddComponent<EventTrigger>(gameObject);
+        for (int i = 0; i < eventTrigger.triggers.Count; i++)
+        {
+            if (eventTrigger.triggers[i].eventID == EventTriggerType.BeginDrag)
+            {
+                return;
+            }
+        }
+        Entry onDragBegin = new Entry()
+        {
+            eventID = EventTriggerType.BeginDrag
+        };
+        onDragBegin.callback.AddListener(actionCallBack);
+        eventTrigger.triggers.Add(onDragBegin);
+    }
+
+    protected void SetGameObjectDragBeginListener(Slider slider, UnityAction<BaseEventData> actionCallBack)
+    {
+        SetGameObjectDragBeginListener(slider.gameObject, actionCallBack);
+    }
+
+    protected void SetGameObjectDragEndListener(GameObject gameObject, UnityAction<BaseEventData> actionCallBack)
+    {
+        EventTrigger eventTrigger = GetOrAddComponent<EventTrigger>(gameObject);
+        for (int i = 0; i < eventTrigger.triggers.Count; i++)
+        {
+            if (eventTrigger.triggers[i].eventID == EventTriggerType.EndDrag)
+            {
+                return;
+            }
+        }
+        Entry onDragEnd = new Entry()
+        {
+            eventID = EventTriggerType.EndDrag
+        };
+        onDragEnd.callback.AddListener(actionCallBack);
+        eventTrigger.triggers.Add(onDragEnd);
+    }
+
+    protected void SetGameObjectDragEndListener(Slider slider, UnityAction<BaseEventData> actionCallBack)
+    {
+        SetGameObjectDragEndListener(slider.gameObject, actionCallBack);
     }
     #endregion
 }

@@ -216,7 +216,7 @@ public enum RegistInfoCheckResult
     UpdateError_LenghthError
 }
 
-public class SecurityCheckServiceConfig
+public class SecurityCheckServiceConfig : BaseConfig
 {
     public string apiKey;
     public string apiSecret;

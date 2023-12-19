@@ -1,4 +1,3 @@
-using RenderHeads.Media.AVProVideo;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +9,7 @@ public class _06Window : BaseWindow
 
     private void Awake()
     {
-        AddMediaPlayController("SangoTest", MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, _mediaPos, null, _slider, _button);
+
     }
 
     private void Update()
@@ -18,11 +17,11 @@ public class _06Window : BaseWindow
         if (Input.GetKeyUp(KeyCode.Backspace))
         {
             //SetMediaPlayControllerContentFromFile("SangoTest", RenderHeads.Media.AVProVideo.MediaPlayer.FileLocation.AbsolutePathOrURL,"http://");
-            SetMediaPlayControllerContentFromFile("SangoTest", MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "AVProVideoSamples/∑…ÃÏ_1080P_.mp4");
+
         }
         if (Input.GetKeyUp(KeyCode.A))
         {
-            ResetMediaPlayController("SangoTest");
+
         }
     }
 }

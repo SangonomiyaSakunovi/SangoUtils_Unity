@@ -3,15 +3,13 @@ using UnityEngine;
 public class _10PatchYooAssetTestWnd : MonoBehaviour
 {
     public AudioSource _audioSource;
-    private AudioClip _bgm;
 
-    private string audioString = "Assets/Res/Remote/Audio/GetReadyかわいい";
+    private string audioString = "Assets/Res/Remote/Audio/GetReadyかわいい.mp3";
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            _bgm = null;
             _audioSource.clip = null;
             AssetService.Instance.LoadAudioClipASync(audioString, OnBgmLoaded, false);
         }
@@ -20,7 +18,6 @@ public class _10PatchYooAssetTestWnd : MonoBehaviour
         {
             _audioSource.Stop();
             _audioSource.clip = null;
-            _bgm = null;
         }
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 public class TypeInService : BaseService<TypeInService>
 {
     private KeyboardTypeCode _currentKeyboardType = KeyboardTypeCode.FloatableKeyboard;
-    private TypeInLanguage _currentTypeInLanguage = TypeInLanguage.English;
+    //private TypeInLanguage _currentTypeInLanguage = TypeInLanguage.English;
     private KeyboradDirectionCode _currentKeyboradDirection = KeyboradDirectionCode.Horizontal;
 
     private GameObject _currentKeyboardObject = null;
