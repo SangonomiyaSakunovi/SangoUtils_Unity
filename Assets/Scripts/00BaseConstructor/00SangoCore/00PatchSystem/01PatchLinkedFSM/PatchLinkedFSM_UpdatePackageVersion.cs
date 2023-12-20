@@ -23,7 +23,7 @@ public class PatchLinkedFSM_UpdatePackageVersion : FSMLinkedStaterItemBase
 
         if (operation.Status != EOperationStatus.Succeed)
         {
-            Debug.LogWarning(operation.Error);
+            SangoLogger.Warning(operation.Error);
             PatchSystemEventMessage.PackageVersionUpdateFailed_PatchSystemEventMessage.SendEventMessage();
         }
         else

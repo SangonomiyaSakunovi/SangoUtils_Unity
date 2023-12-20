@@ -127,7 +127,7 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
         {
             PersistDataService.Instance.RemovePersistData("key1");
             PersistDataService.Instance.RemovePersistData("key2");
-            SangoLogger.Log("已手动删除注册信息");
+            SangoLogger.Done("已手动删除注册信息");
         }
     }
 }

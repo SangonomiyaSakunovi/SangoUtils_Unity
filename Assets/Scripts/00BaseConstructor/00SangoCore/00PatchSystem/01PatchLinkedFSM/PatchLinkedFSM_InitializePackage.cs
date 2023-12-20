@@ -63,13 +63,13 @@ public class PatchLinkedFSM_InitializePackage : FSMLinkedStaterItemBase
 
         if (initializationOperation.Status != EOperationStatus.Succeed)
         {
-            Debug.LogWarning($"{initializationOperation.Error}");
+            SangoLogger.Warning($"{initializationOperation.Error}");
             PatchSystemEventMessage.InitializeFailed_PatchSystemEventMessage.SendEventMessage();
         }
         else
         {
             var version = package.GetPackageVersion();
-            Debug.Log($"Init resource package version : {version}");
+            SangoLogger.Done($"Init resource package version : {version}");        
             _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_UpdatePackageVersion>();
         }
     }

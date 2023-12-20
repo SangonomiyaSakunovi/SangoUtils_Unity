@@ -96,7 +96,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         }
         else
         {
-            SangoLogger.Log("RegistFaild, the NewRegistLimitTimestamp should newer than NowTimestamp.");
+            SangoLogger.Warning("RegistFaild, the NewRegistLimitTimestamp should newer than NowTimestamp.");
             _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_OutData, "");
         }
     }
@@ -108,7 +108,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
 
         string registLimitTimestampData = PersistDataService.Instance.GetPersistData(_limitTimestampKey);
         string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(_lastRunTimestampKey);
-        SangoLogger.Log("Now is time to Find the RegistInfo, please wait....................................");
+        SangoLogger.Processing("Now is time to Find the RegistInfo, please wait....................................");
         SangoLogger.Log("The RegistLimitTimestampInfo Found: [ " + registLimitTimestampData + " ]");
         SangoLogger.Log("The LastRunTimestampInfo Found: [ " + registLastRunTimestampData + " ]");
 
@@ -117,7 +117,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             bool res = false;
             registLimitTimestampData = TimeCryptoUtils.EncryptTimestamp(defaultRegistLimitTimestamp);
             registLastRunTimestampData = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
-            SangoLogger.Log("That`s the First Time open this software, we give the default registLimitTimestamp is: [ " + defaultRegistLimitTimestamp + " ]");
+            SangoLogger.Warning("That`s the First Time open this software, we give the default registLimitTimestamp is: [ " + defaultRegistLimitTimestamp + " ]");
             bool res1 = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampData);
             bool res2 = PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampData);
             if (res1 && res2)
@@ -129,19 +129,19 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             {
                 _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.UpdateFailed_WriteInfoError, "");
             }
-            SangoLogger.Log("Is first regist OK? [ " + res + " ]");
+            SangoLogger.Done("Is first regist OK? [ " + res + " ]");
         }
         else
         {
             long registLimitTimestamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLimitTimestampData));
             long registLastRunTimestamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLastRunTimestampData));
-            SangoLogger.Log("We DeCrypt the RegistInfo, please wait....................................");
+            SangoLogger.Processing("We DeCrypt the RegistInfo, please wait....................................");
             SangoLogger.Log("The RegistLimitTimestamp is: [ " + registLimitTimestamp + " ]");
             SangoLogger.Log("The LastRunTimestamp is: [ " + registLastRunTimestamp + " ]");
             SangoLogger.Log("The NowTimestamp is: [ " + nowTimestamp + " ]");
             if (nowTimestamp < registLastRunTimestamp)
             {
-                Debug.LogError("Error: SystemTime has in Changed");
+                SangoLogger.Error("Error: SystemTime has in Changed");
                 _securityCheckServiceConfig.resultActionCallBack?.Invoke(RegistInfoCheckResult.CheckError_SystemTimeChanged, "");
             }
             else

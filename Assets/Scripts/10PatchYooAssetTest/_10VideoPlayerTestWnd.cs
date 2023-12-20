@@ -15,6 +15,11 @@ public class _10VideoPlayerTestWnd : BaseWindow
     public TMP_Text videoFullTimeTMPText;
     public TMP_Text videoCurrentTimeTMPText;
 
+    [Header("TestButtons")]
+    public Button btn1;
+    public Button btn2;
+    public Button btn3;
+
     public float defaultAudioVolume;
     public Vector2 normalScreenRectTransValue;
     public Vector2 fullScreenRectTransValue;
@@ -49,26 +54,14 @@ public class _10VideoPlayerTestWnd : BaseWindow
 
         VideoPlayerService.Instance.OnInit();
         VideoPlayerService.Instance.AddVideoPlayer(_videoId, videoPlayerConfig);
+
+        btn1.onClick.AddListener(OnButton1Clicked);
+        btn2.onClick.AddListener(OnButton2Clicked);
+        btn3.onClick.AddListener(OnButton3Clicked);
     }
 
     private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            _videoClip = null;
-            AssetService.Instance.LoadVideoClipASync(_videoString1, OnVideoClipLoaded, false);
-        }
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            _videoClip = null;
-            AssetService.Instance.LoadVideoClipASync(_videoString2, OnVideoClipLoaded, false);
-        }
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            _videoClip = null;
-            AssetService.Instance.LoadVideoClipASync(_videoString3, OnVideoClipLoaded, false);
-        }
-
+    {        
         if (Input.GetKeyDown(KeyCode.S))
         {
             VideoPlayerService.Instance.PlayVideo(_videoId);
@@ -79,11 +72,27 @@ public class _10VideoPlayerTestWnd : BaseWindow
         }
     }
 
+    private void OnButton1Clicked()
+    {
+        _videoClip = null;
+        AssetService.Instance.LoadVideoClipASync(_videoString1, OnVideoClipLoaded, false);
+    }
+    private void OnButton2Clicked()
+    {
+        _videoClip = null;
+        AssetService.Instance.LoadVideoClipASync(_videoString2, OnVideoClipLoaded, false);
+    }
+    private void OnButton3Clicked()
+    {
+        _videoClip = null;
+        AssetService.Instance.LoadVideoClipASync(_videoString3, OnVideoClipLoaded, false);
+    }
+
     private void OnVideoClipLoaded(VideoClip videoClip)
     {
         _videoClip = videoClip;
         VideoPlayerService.Instance.LoadVideo(_videoId, videoClip);
-        SangoLogger.Log("新视频文件已加载");
+        SangoLogger.Done("新视频文件已加载");
     }
 
     private void OnPlayOrPauseBtnClickedCallBack(bool isPlay)

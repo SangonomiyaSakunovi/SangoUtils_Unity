@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class SangoGameRoot : BaseRoot<SangoGameRoot>
 {
     public SceneMainInstance SceneMainInstance;
@@ -16,6 +12,7 @@ public class SangoGameRoot : BaseRoot<SangoGameRoot>
     public override void OnInit()
     {
         base.OnInit();
+        SangoLogger.InitLogger(SangoSystemConfig.LoggerConfig_Sango);
         ResourceService.Instance.OnInit();
         AssetService.Instance.OnInit();
         EventService.Instance.OnInit();

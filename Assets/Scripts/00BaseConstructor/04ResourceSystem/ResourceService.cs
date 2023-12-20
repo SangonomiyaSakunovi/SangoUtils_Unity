@@ -135,10 +135,5 @@ public class ResourceService : BaseService<ResourceService>
         {
             _rawImageTextureDict.Add(urlPath, texture);
         }
-    }
-
-    public void LoadAndSetGLTFModelOnlineAsync(GameObject parentObject, string urlPath)
-    {
-        ResourcePerticularService.Instance?.LoadAndSetGLTFModelOnlineAsync(parentObject, urlPath);
-    }
+    }    
 }

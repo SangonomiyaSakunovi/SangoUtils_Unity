@@ -134,16 +134,6 @@ public class BaseUIElements : MonoBehaviour
     {
         return ResourceService.Instance.RemoveRawImageOnlineAsyncPack(packId);
     }
-
-    protected void SetGLTFModelOnlineAsync(GameObject parentObject, string urlPath)
-    {
-        ResourceService.Instance.LoadAndSetGLTFModelOnlineAsync(parentObject, urlPath);
-    }
-
-    public void SetGLTFModelOnlineAsync(Transform parentTrans, string urlPath)
-    {
-        ResourceService.Instance.LoadAndSetGLTFModelOnlineAsync(parentTrans.gameObject, urlPath);
-    }
     #endregion
 
     #region SetToggleListener

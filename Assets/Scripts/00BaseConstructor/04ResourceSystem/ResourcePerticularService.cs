@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-using UnityGLTF;
 
 public class ResourcePerticularService : BaseService<ResourcePerticularService>
 {
@@ -19,9 +17,4 @@ public class ResourcePerticularService : BaseService<ResourcePerticularService>
         return t;
     }
 
-    public void LoadAndSetGLTFModelOnlineAsync(GameObject parentObject, string urlPath)
-    {
-        GLTFComponent component = GetOrAddComponent<GLTFComponent>(parentObject);
-        component.GLTFUri = urlPath;
-    }
 }
