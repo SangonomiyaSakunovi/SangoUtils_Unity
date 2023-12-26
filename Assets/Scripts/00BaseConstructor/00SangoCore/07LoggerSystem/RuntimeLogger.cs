@@ -11,7 +11,7 @@ public class RuntimeLogger : MonoBehaviour
     /// <summary>输出的字体大小</summary>
     private const int fontSize = 25;
     /// <summary>字体颜色</summary>
-    private readonly Color fontColor = Color.red;
+    private readonly Color fontColor = Color.blue;
 
     private string _logStr = "";
     private readonly List<string> _lines = new List<string>();

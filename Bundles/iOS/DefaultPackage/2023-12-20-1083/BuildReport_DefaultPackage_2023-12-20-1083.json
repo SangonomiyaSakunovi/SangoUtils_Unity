@@ -1,0 +1,99 @@
+{
+    "Summary": {
+        "YooVersion": "2.0.3-preview",
+        "UnityVersion": "2022.3.7f1c1",
+        "BuildDate": "2023/12/20 18:09:07",
+        "BuildSeconds": 272,
+        "BuildTarget": 9,
+        "BuildMode": 1,
+        "BuildPipeline": "BuiltinBuildPipeline",
+        "BuildPackageName": "DefaultPackage",
+        "BuildPackageVersion": "2023-12-20-1083",
+        "UniqueBundleName": false,
+        "EnableAddressable": true,
+        "LocationToLower": false,
+        "IncludeAssetGUID": false,
+        "IgnoreDefaultType": true,
+        "AutoCollectShaders": true,
+        "EncryptionClassName": "null",
+        "FileNameStyle": 0,
+        "CompressOption": 2,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": true,
+        "AssetFileTotalCount": 4,
+        "MainAssetTotalCount": 4,
+        "AllBundleTotalCount": 2,
+        "AllBundleTotalSize": 4703358738,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "GetReadyかわいい",
+            "AssetPath": "Assets/Res/Remote/Audio/GetReadyかわいい.mp3",
+            "AssetGUID": "5f95de51518f39744b9781b6e9977279",
+            "AssetTags": [],
+            "MainBundleName": "assets_res_remote_audio.bundle",
+            "MainBundleSize": 57490572,
+            "DependAssets": []
+        },
+        {
+            "Address": "深港无标8-11B",
+            "AssetPath": "Assets/Res/Remote/Video/深港无标8-11B.mp4",
+            "AssetGUID": "4905abb2876e13d4293c646d6e16e3c6",
+            "AssetTags": [],
+            "MainBundleName": "assets_res_remote_video.bundle",
+            "MainBundleSize": 4645868166,
+            "DependAssets": []
+        },
+        {
+            "Address": "深港科创区域片沙盘0811无标",
+            "AssetPath": "Assets/Res/Remote/Video/深港科创区域片沙盘0811无标.mp4",
+            "AssetGUID": "e6e21d5292e96344a9629fb29e21c3d8",
+            "AssetTags": [],
+            "MainBundleName": "assets_res_remote_video.bundle",
+            "MainBundleSize": 4645868166,
+            "DependAssets": []
+        },
+        {
+            "Address": "骄阳视觉宣传视频001",
+            "AssetPath": "Assets/Res/Remote/Video/骄阳视觉宣传视频001.MP4",
+            "AssetGUID": "1d012ab0c6bd83648b889b711ffb2437",
+            "AssetTags": [],
+            "MainBundleName": "assets_res_remote_video.bundle",
+            "MainBundleSize": 4645868166,
+            "DependAssets": []
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "assets_res_remote_audio.bundle",
+            "FileName": "400b379259555b1754117c778ee275ab.bundle",
+            "FileHash": "400b379259555b1754117c778ee275ab",
+            "FileCRC": "3f7824c1",
+            "FileSize": 57490572,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "AllBuiltinAssets": [
+                "Assets/Res/Remote/Audio/GetReadyかわいい.mp3"
+            ]
+        },
+        {
+            "BundleName": "assets_res_remote_video.bundle",
+            "FileName": "f5fd7d689496dc649888b48595fd5377.bundle",
+            "FileHash": "f5fd7d689496dc649888b48595fd5377",
+            "FileCRC": "923234ef",
+            "FileSize": 4645868166,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "AllBuiltinAssets": [
+                "Assets/Res/Remote/Video/深港无标8-11B.mp4",
+                "Assets/Res/Remote/Video/深港科创区域片沙盘0811无标.mp4",
+                "Assets/Res/Remote/Video/骄阳视觉宣传视频001.MP4"
+            ]
+        }
+    ],
+    "RedundancyInfos": []
+}

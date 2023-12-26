@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+CRC: 2840660230
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: assets_res_remote_audio.bundle
+      Dependencies: {}
+    Info_1:
+      Name: assets_res_remote_video.bundle
+      Dependencies: {}

@@ -1,4 +1,4 @@
-public class TypeInBaseSystem : BaseSystem
+public class TypeInBaseSystem : BaseSystem<TypeInBaseSystem>
 {
     public virtual void ShowKeyboard() { }
 

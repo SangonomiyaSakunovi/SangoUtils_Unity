@@ -16,7 +16,28 @@ public class SangoGameRoot : BaseRoot<SangoGameRoot>
         ResourceService.Instance.OnInit();
         AssetService.Instance.OnInit();
         EventService.Instance.OnInit();
-
         SceneService.Instance.OnInit();
+
+        InitNet();
+    }
+
+    private void InitNet()
+    {
+        switch (SangoSystemConfig.NetEnvironmentConfig.netEnvMode)
+        {
+            case NetEnvMode.Online_IOCP:
+                NetService.Instance.OnInit();
+                break;
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        switch (SangoSystemConfig.NetEnvironmentConfig.netEnvMode)
+        {
+            case NetEnvMode.Online_IOCP:
+                NetService.Instance.CloseClientInstance();
+                break;
+        }
     }
 }

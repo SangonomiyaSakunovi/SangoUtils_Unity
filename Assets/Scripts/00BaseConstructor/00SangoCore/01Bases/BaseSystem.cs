@@ -1,13 +1,28 @@
 using UnityEngine;
 
-public class BaseSystem : MonoBehaviour
+public class BaseSystem<T> : MonoSingleton<T> where T : MonoBehaviour
 {
-    public virtual void InitSystem()
+    private void Update()
+    {
+        OnUpdate();
+    }
+
+    public virtual void SetSystem()
     {
 
     }
 
-    public virtual void SetSystem()
+    public virtual void OnInit()
+    {
+
+    }
+
+    protected virtual void OnUpdate()
+    {
+
+    }
+
+    public virtual void OnDispose()
     {
 
     }

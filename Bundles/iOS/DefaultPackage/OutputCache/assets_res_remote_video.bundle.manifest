@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 4200991024
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2496ad955ff1bdbae49869552bbb2083
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c12678a98877549a3fe7bb52917258ad
+HashAppended: 0
+ClassTypes:
+- Class: 329
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- "Assets/Res/Remote/Video/\u6DF1\u6E2F\u65E0\u68078-11B.mp4"
+- "Assets/Res/Remote/Video/\u6DF1\u6E2F\u79D1\u521B\u533A\u57DF\u7247\u6C99\u76D80811\u65E0\u6807.mp4"
+- "Assets/Res/Remote/Video/\u9A84\u9633\u89C6\u89C9\u5BA3\u4F20\u89C6\u9891001.MP4"
+Dependencies: []

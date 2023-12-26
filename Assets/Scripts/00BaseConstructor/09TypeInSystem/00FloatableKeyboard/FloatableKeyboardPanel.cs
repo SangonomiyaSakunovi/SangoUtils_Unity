@@ -43,11 +43,11 @@ public class FloatableKeyboardPanel : BasePanel
         base.OnDispose();
     }
 
-    public void SetSystem(FloatableKeyboardSystem system)
+    public override void SetSystem<T>(BaseSystem<T> baseSystem)
     {
         if (_floatableKeyboardSystem == null)
         {
-            _floatableKeyboardSystem = system;
+            _floatableKeyboardSystem = baseSystem as FloatableKeyboardSystem;
             _keyboardLine1 = transform.GetChild(0);
             _keyboardLine2 = transform.GetChild(1);
             _keyboardLine3 = transform.GetChild(2);

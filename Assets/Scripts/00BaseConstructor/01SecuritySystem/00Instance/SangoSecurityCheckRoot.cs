@@ -119,6 +119,7 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
     public void OnSecurityCheckResultValid()
     {
         _sangoSecurityCheckWnd.SetWindowState(false);
+        SceneMainInstance.Instance.GameEntrance();
     }
 
     private void Update()

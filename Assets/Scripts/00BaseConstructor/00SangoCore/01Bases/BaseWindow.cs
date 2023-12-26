@@ -7,7 +7,7 @@ public class BaseWindow : BaseUIElements
 
     }
 
-    public virtual void SetSystem(BaseSystem baseSystem)
+    public virtual void SetSystem<T>(BaseSystem<T> baseSystem) where T : MonoBehaviour
     {
 
     }

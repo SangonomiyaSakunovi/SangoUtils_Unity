@@ -2,14 +2,13 @@ public class FloatableKeyboardSystem : TypeInBaseSystem
 {
     public FloatableKeyboardPanel _floatableKeyboardPanel;
 
-    public override void InitSystem()
+    public override void OnInit()
     {
-        base.InitSystem();
+        base.OnInit();
     }
 
     public override void SetSystem()
     {
-        base.SetSystem();
         _floatableKeyboardPanel.SetSystem(this);
     }
 

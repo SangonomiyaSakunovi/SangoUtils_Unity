@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Threading;
 using UnityEngine;
 
 public class LoggerUtils_Sango : MonoBehaviour
@@ -247,12 +246,12 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     private static string GetThreadID()
     {
-        return string.Format("ThreadID:{0}", Thread.CurrentThread.ManagedThreadId);
+        return string.Format("ThreadID:{0}", Environment.CurrentManagedThreadId);
     }
 
     private static string GetTraceInfo()
     {
-        StackTrace st = new StackTrace(3, true);    //The method called DecorateLog has 3 calls should be ignore
+        StackTrace st = new(3, true);    //The method called DecorateLog has 3 calls should be ignore
         string traceInfo = "";
         for (int i = 0; i < st.FrameCount; i++)
         {

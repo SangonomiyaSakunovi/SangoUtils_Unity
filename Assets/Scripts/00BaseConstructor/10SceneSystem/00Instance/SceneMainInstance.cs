@@ -3,16 +3,21 @@ using UnityEngine;
 
 public class SceneMainInstance : BaseScene<SceneMainInstance>
 {
+    public LoginSystem _loginSystem;
+    
     private Transform _canvasTrans;
     private SangoPatchRoot _patchRoot;
     private SangoSecurityCheckRoot _securityCheckRoot;
     private SceneViewConfig _currentSceneViewConfig;
 
+    private NetEnvironmentConfig _currentNetEnvironmentConfig;
+
     public override void OnInit()
     {
         base.OnInit();
-        SetInstance(this);
+        _instance = this;
         _currentSceneViewConfig = SangoSystemConfig.SceneViewConfig;
+        _currentNetEnvironmentConfig = SangoSystemConfig.NetEnvironmentConfig;
         GetTrans();
         GameStart();
     }
@@ -46,5 +51,18 @@ public class SceneMainInstance : BaseScene<SceneMainInstance>
         {
 
         }
+    }
+
+    public void GameEntrance()
+    {
+        switch (_currentNetEnvironmentConfig.netEnvMode)
+        {
+            case NetEnvMode.Offline:
+                //TODO
+                break;
+            case NetEnvMode.Online_IOCP:
+                _loginSystem.OnInit();
+                break;
+        }        
     }
 }

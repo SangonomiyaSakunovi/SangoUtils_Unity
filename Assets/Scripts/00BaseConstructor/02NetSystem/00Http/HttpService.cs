@@ -131,7 +131,14 @@ public class HttpService : BaseService<HttpService>
 
     public void AddRequest(BaseHttpRequest req)
     {
-        _requestDict.Add(req.HttpId, req);
+        if (!_requestDict.ContainsKey(req.HttpId))
+        {
+            _requestDict.Add(req.HttpId, req);
+        }
+        else
+        {
+            SangoLogger.Error("Already has this request.");
+        }
     }
 
     public T GetRequest<T>(int httpId) where T : BaseHttpRequest, new()
@@ -150,7 +157,15 @@ public class HttpService : BaseService<HttpService>
 
     public void RemoveRequest(BaseHttpRequest req)
     {
-        _requestDict.Remove(req.HttpId);
+        if (_requestDict.ContainsKey(req.HttpId))
+        {
+            _requestDict.Remove(req.HttpId);
+        }
+        else
+        {
+            SangoLogger.Error("Already remove this request.");
+        }
+        
     }
 
     public void HttpResource(HttpBaseResourcePack httpBaseResourcePack)

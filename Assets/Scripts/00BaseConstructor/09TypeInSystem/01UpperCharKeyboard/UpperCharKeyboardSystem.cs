@@ -2,14 +2,13 @@ public class UpperCharKeyboardSystem : TypeInBaseSystem
 {
     public UpperCharKeyboardPanel _upperCharKeyboardPanel;
 
-    public override void InitSystem()
+    public override void OnInit() 
     {
-        base.InitSystem();
+        base.OnInit();
     }
 
     public override void SetSystem()
     {
-        base.SetSystem();
         _upperCharKeyboardPanel.SetSystem(this);
     }
 

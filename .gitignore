@@ -9,6 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+/yoo/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -74,3 +75,4 @@ Assets/Res/Remote/Video/深港无标8-11B.mp4
 Assets/Res/Remote/Video/深港无标8-11B.mp4.meta
 Assets/Res/Remote/Video/深港科创区域片沙盘0811无标.mp4
 Assets/Res/Remote/Video/深港科创区域片沙盘0811无标.mp4.meta
+*.bundle

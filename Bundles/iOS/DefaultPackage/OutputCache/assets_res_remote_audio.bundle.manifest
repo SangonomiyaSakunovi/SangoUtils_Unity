@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 487044710
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 200f20911bc39f3c9b3f172e484d6ec0
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- "Assets/Res/Remote/Audio/GetReady\u304B\u308F\u3044\u3044.mp3"
+Dependencies: []

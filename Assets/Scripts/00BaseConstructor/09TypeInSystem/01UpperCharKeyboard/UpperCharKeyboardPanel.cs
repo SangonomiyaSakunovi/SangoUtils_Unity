@@ -35,11 +35,11 @@ public class UpperCharKeyboardPanel : BasePanel
         base.OnDispose();
     }
 
-    public void SetSystem(UpperCharKeyboardSystem system)
+    public override void SetSystem<T>(BaseSystem<T> baseSystem)
     {
         if (_upperCharKeyboardSystem == null)
         {
-            _upperCharKeyboardSystem = system;
+            _upperCharKeyboardSystem = baseSystem as UpperCharKeyboardSystem;
             switch (_keyboradDirection)
             {
                 case KeyboradDirectionCode.Horizontal:

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class BaseHttpRequest
+public abstract class BaseHttpRequest
 {
     public int HttpId { get; private set; }
     protected Dictionary<string, string> _contentDict;
