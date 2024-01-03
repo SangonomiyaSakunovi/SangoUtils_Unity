@@ -26,7 +26,7 @@ public class PatchService : BaseService<PatchService>
         YooAssets.StartOperation(hotFixOperation);
         yield return hotFixOperation;
 
-        ResourcePackage assetPackage = YooAssets.GetPackage(_currentPatchConfig.packageName);
+        ResourcePackage assetPackage = YooAssets.GetPackage(_currentPatchConfig.PackageName);
         YooAssets.SetDefaultPackage(assetPackage);
 
         PatchSystemEventMessage.ClosePatchWindow_PatchSystemEventMessage.SendEventMessage();
@@ -36,11 +36,11 @@ public class PatchService : BaseService<PatchService>
 
 public class PatchConfig : BaseConfig
 {
-    public string hostServerIP;
-    public string appId;
-    public string appVersion;
+    public string HostServerIP { get; set; }
+    public string AppId { get; set; }
+    public string AppVersion { get; set; }
 
-    public string packageName;
-    public EPlayMode playMode;
-    public EDefaultBuildPipeline buildPipeline;
+    public string PackageName { get; set; }
+    public EPlayMode PlayMode { get; set; }
+    public EDefaultBuildPipeline BuildPipeline { get; set; }
 }

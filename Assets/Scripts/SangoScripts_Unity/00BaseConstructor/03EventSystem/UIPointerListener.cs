@@ -4,21 +4,21 @@ using UnityEngine.EventSystems;
 
 public class UIPointerListener : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    public GameObject listenerObject;
-    public object[] commands = null;
+    public GameObject listenerObject { get; set; }
+    public object[] commands { get; set; } = null;
 
-    public Vector2 clickDownPosition;
-    public Vector2 clickUpPosition;
+    public Vector2 clickDownPosition { get; set; }
+    public Vector2 clickUpPosition { get; set; }
 
-    public Action<GameObject, object[]> onPointerClickCallBack0;
-    public Action<GameObject, object[]> onPointerDownCallBack0;
-    public Action<GameObject, object[]> onPointerUpCallBack0;
-    public Action<GameObject, object[]> onPointerDragCallBack0;
+    public Action<GameObject, object[]> onPointerClickCallBack0 { get; set; }
+    public Action<GameObject, object[]> onPointerDownCallBack0 { get; set; }
+    public Action<GameObject, object[]> onPointerUpCallBack0 { get; set; }
+    public Action<GameObject, object[]> onPointerDragCallBack0 { get; set; }
 
-    public Action<PointerEventData, GameObject, object[]> onPointerClickCallBack1;
-    public Action<PointerEventData, GameObject, object[]> onPointerDownCallBack1;
-    public Action<PointerEventData, GameObject, object[]> onPointerUpCallBack1;
-    public Action<PointerEventData, GameObject, object[]> onPointerDragCallBack1;
+    public Action<PointerEventData, GameObject, object[]> onPointerClickCallBack1 { get; set; }
+    public Action<PointerEventData, GameObject, object[]> onPointerDownCallBack1 { get; set; }
+    public Action<PointerEventData, GameObject, object[]> onPointerUpCallBack1 { get; set; }
+    public Action<PointerEventData, GameObject, object[]> onPointerDragCallBack1 { get; set; }
 
     public void OnPointerClick(PointerEventData eventData)
     {

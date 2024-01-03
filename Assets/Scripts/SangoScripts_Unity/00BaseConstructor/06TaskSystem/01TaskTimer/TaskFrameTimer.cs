@@ -4,15 +4,13 @@ using System.Collections.Generic;
 public class TaskFrameTimer : TaskBaseTimer
 {
     private ulong _currentFrame;
-    private readonly Dictionary<uint, FrameTimerTask> _taskDict;
+    private readonly Dictionary<uint, FrameTimerTask> _taskDict = new();
     private const string _taskIdLock = "TaskFrameTimer_Lock";
-    private List<uint> _taskIdLts;
+    private List<uint> _taskIdLts = new();
 
     public TaskFrameTimer(ulong frameId = 0)
     {
         _currentFrame = frameId;
-        _taskDict = new Dictionary<uint, FrameTimerTask>();
-        _taskIdLts = new List<uint>();
     }
 
     public override uint AddTask(uint delayedInvokeTaskTime, Action<uint> completeTaskCallBack, Action<uint> cancelTaskCallBack, int repeatTaskCount = 1)

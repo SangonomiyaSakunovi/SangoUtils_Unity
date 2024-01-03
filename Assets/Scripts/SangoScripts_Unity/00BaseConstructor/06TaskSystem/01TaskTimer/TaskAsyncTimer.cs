@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 public class TaskAsyncTimer : TaskBaseTimer
 {
     private bool _isSetHandled;
-    private readonly ConcurrentDictionary<uint, AsyncTimerTask> _taskDict;
+    private readonly ConcurrentDictionary<uint, AsyncTimerTask> _taskDict = new();
     private ConcurrentQueue<AsyncTimerTaskPack> _taskPackQueue;
     private const string _taskIdLock = "TaskAsyncTimer_Lock";
 
     public TaskAsyncTimer(bool isSetHandled)
     {
-        _taskDict = new ConcurrentDictionary<uint, AsyncTimerTask>();
         _isSetHandled = isSetHandled;
         if (isSetHandled)
         {

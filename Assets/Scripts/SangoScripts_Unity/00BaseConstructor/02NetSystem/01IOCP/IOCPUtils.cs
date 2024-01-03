@@ -1,3 +1,5 @@
+using SangoNetProtol;
+using SangoUtils_Common.Utils;
 using System;
 using System.Collections.Generic;
 
@@ -28,5 +30,26 @@ public static class IOCPUtils
         head.CopyTo(package, 0);
         body.CopyTo(package, 4);
         return package;
+    }
+
+    public static byte[] ConvertNetEventDataPackMessageBytes(NetOperationCode operationCode, string messageStr)
+    {
+        NetMessageHead messageHead = new()
+        {
+            NetOperationCode = operationCode,
+            NetMessageCommandCode = NetMessageCommandCode.NetEventData
+        };
+        NetMessageBody messageBody = new()
+        {
+            NetMessageStr = messageStr
+        };
+        SangoNetMessage netMessage = new()
+        {
+            NetMessageHead = messageHead,
+            NetMessageBody = messageBody,
+            NetMessageTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now).ToString()
+        };
+        byte[] byteMessage = ProtoUtils.SetProtoBytes(netMessage);
+        return IOCPUtils.PackMessageLengthInfo(byteMessage);
     }
 }

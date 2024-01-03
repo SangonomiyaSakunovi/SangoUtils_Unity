@@ -2,12 +2,11 @@ using System;
 
 public class UIAnimationService : BaseService<UIAnimationService>
 {
-    private SangoUIAnimator _sangoUIAnimator;
+    private SangoUIAnimator _sangoUIAnimator = new();
 
     public override void OnInit()
     {
         base.OnInit();
-        _sangoUIAnimator = new SangoUIAnimator();
         _sangoUIAnimator.Init();
     }
 

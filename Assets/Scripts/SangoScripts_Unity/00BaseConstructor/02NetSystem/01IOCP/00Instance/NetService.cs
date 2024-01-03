@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class NetService : BaseService<NetService>
 {
-    public IOCPPeer<ClientPeer> ClientPeerInstance;
+    private IOCPPeer<ClientPeer> _clientPeerInstance;
 
     private Dictionary<NetOperationCode, BaseNetRequest> _netRequestDict = new();
     private Dictionary<NetOperationCode, BaseNetEvent> _netEventDict = new();
@@ -16,8 +16,8 @@ public class NetService : BaseService<NetService>
     {
         base.OnInit();
 
-        string ipAddress = _currentNetEnvironmentConfig.serverAddress;
-        int port = _currentNetEnvironmentConfig.serverPort;
+        string ipAddress = _currentNetEnvironmentConfig.ServerAddress;
+        int port = _currentNetEnvironmentConfig.ServerPort;
         InitClientInstance(ipAddress, port);
 
         DefaultNetRequest defaultNetRequest = GetNetRequest<DefaultNetRequest>(NetOperationCode.Default);
@@ -36,6 +36,11 @@ public class NetService : BaseService<NetService>
             SangoNetMessage sangoNetMessage = _netMessageProxyQueue.Dequeue();
             OnRecievedMessageInMainThread(sangoNetMessage);
         }
+    }
+
+    public void SendOperationRequest(NetOperationCode operationCode, string messageStr)
+    {
+        _clientPeerInstance.ClientPeer.SendOperationRequest(operationCode, messageStr);
     }
 
     public void AddNetMessageProxy(SangoNetMessage sangoNetMessage)
@@ -127,7 +132,7 @@ public class NetService : BaseService<NetService>
         }
         else
         {
-            _netRequestDict.TryGetValue(NetOperationCode.Default, out BaseNetRequest? defaultNetRequest);
+            _netRequestDict.TryGetValue(NetOperationCode.Default, out BaseNetRequest defaultNetRequest);
             defaultNetRequest?.OnOperationResponse(sangoNetMessage.NetMessageBody.NetMessageStr);
         }
     }
@@ -140,7 +145,7 @@ public class NetService : BaseService<NetService>
         }
         else
         {
-            _netEventDict.TryGetValue(NetOperationCode.Default, out BaseNetEvent? defaultNetEvent);
+            _netEventDict.TryGetValue(NetOperationCode.Default, out BaseNetEvent defaultNetEvent);
             defaultNetEvent?.OnOperationEvent(sangoNetMessage.NetMessageBody.NetMessageStr);
         }
     }
@@ -164,12 +169,26 @@ public class NetService : BaseService<NetService>
 
     private void InitClientInstance(string ipAddress, int port)
     {
-        ClientPeerInstance = new IOCPPeer<ClientPeer>();
-        ClientPeerInstance.InitAsClient(ipAddress, port);
+        _clientPeerInstance = new IOCPPeer<ClientPeer>();
+        _clientPeerInstance.InitAsClient(ipAddress, port);
     }
 
     public void CloseClientInstance()
     {
-        ClientPeerInstance.CloseClient();
+        _clientPeerInstance.CloseClient();
     }
+}
+
+public class NetEnvironmentConfig : BaseConfig
+{
+    public NetEnvMode NetEnvMode { get; set; } = NetEnvMode.Offline;
+    public string ServerAddress { get; set; } = "127.0.0.1";
+    public int ServerPort { get; set; } = 52037;
+}
+
+public enum NetEnvMode
+{
+    Offline,
+    Online_IOCP,
+    Online_Http
 }

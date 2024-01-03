@@ -64,12 +64,12 @@ public class PatchOperation : GameAsyncOperation
         _fsmLinkedStater.AddStaterItem<PatchLinkedFSM_ClearPackageCache>();
         _fsmLinkedStater.AddStaterItem<PatchLinkedFSM_UpdaterDone>();
 
-        _fsmLinkedStater.SetBlackboardValue("PackageName", _currentPatchConfig.packageName);
-        _fsmLinkedStater.SetBlackboardValue("PlayMode", _currentPatchConfig.playMode);
-        _fsmLinkedStater.SetBlackboardValue("BuildPipeline", _currentPatchConfig.buildPipeline.ToString());
-        _fsmLinkedStater.SetBlackboardValue("HostServerIP", _currentPatchConfig.hostServerIP);
-        _fsmLinkedStater.SetBlackboardValue("AppId", _currentPatchConfig.appId);
-        _fsmLinkedStater.SetBlackboardValue("AppVersion", _currentPatchConfig.appVersion);
+        _fsmLinkedStater.SetBlackboardValue("PackageName", _currentPatchConfig.PackageName);
+        _fsmLinkedStater.SetBlackboardValue("PlayMode", _currentPatchConfig.PlayMode);
+        _fsmLinkedStater.SetBlackboardValue("BuildPipeline", _currentPatchConfig.BuildPipeline.ToString());
+        _fsmLinkedStater.SetBlackboardValue("HostServerIP", _currentPatchConfig.HostServerIP);
+        _fsmLinkedStater.SetBlackboardValue("AppId", _currentPatchConfig.AppId);
+        _fsmLinkedStater.SetBlackboardValue("AppVersion", _currentPatchConfig.AppVersion);
     }
 
     private void OnHandleEventMessage(IEventMessageBase message)

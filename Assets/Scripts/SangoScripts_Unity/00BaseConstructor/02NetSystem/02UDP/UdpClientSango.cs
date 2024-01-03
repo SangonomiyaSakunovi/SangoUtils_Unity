@@ -5,7 +5,7 @@ using System.Threading;
 
 public abstract class UdpClientSango
 {
-    public int _udpListenerPortId;
+    public int UDPListenerPortId { get; set; }
     protected Type _dataType;
     protected Thread _receiveUdpMessageThread;
 
@@ -16,7 +16,7 @@ public class UdpClientSango<T> : UdpClientSango where T : class
 {
     public UdpClientSango(int udpListenerPort)
     {
-        _udpListenerPortId = udpListenerPort;
+        UDPListenerPortId = udpListenerPort;
         _dataType = typeof(T);
         ThreadReceive<T>();
     }
@@ -25,10 +25,10 @@ public class UdpClientSango<T> : UdpClientSango where T : class
     {
         _receiveUdpMessageThread = new Thread(() =>
         {
-            IPEndPoint udpListenerIpEndPoint = new IPEndPoint(IPAddress.Any, _udpListenerPortId);
+            IPEndPoint udpListenerIpEndPoint = new IPEndPoint(IPAddress.Any, UDPListenerPortId);
             UdpClient udpListenerClient = new UdpClient(udpListenerIpEndPoint);
             UdpEventPack<K> udpPack = new UdpEventPack<K>();
-            udpPack.listenProtId = _udpListenerPortId;
+            udpPack.listenProtId = UDPListenerPortId;
             udpPack.udpListenerIpEndPoint = udpListenerIpEndPoint;
             udpPack.udpListenerClient = udpListenerClient;
             udpPack.dataType = _dataType;

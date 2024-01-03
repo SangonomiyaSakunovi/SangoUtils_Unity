@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class LoggerUtils_Sango : MonoBehaviour
 {
-    public static LoggerConfig_Sango config;
+    private static LoggerConfig_Sango _config;
     private static ILogger_Sango logger;
     private static StreamWriter logFileWriter = null;
 
@@ -16,20 +16,20 @@ public class LoggerUtils_Sango : MonoBehaviour
         {
             cfg = new LoggerConfig_Sango();
         }
-        config = cfg;
-        switch (config.loggerType)
+        _config = cfg;
+        switch (_config.LoggerType)
         {
             case LoggerType.OnEditorConsole:
                 logger = new UnityLogger();
                 break;
         }
-        if (config.enableSaveLog == false) { return; }
-        if (config.enableCoverLog)
+        if (_config.EnableSaveLog == false) { return; }
+        if (_config.EnableCoverLog)
         {
-            string path = config.saveLogPath + config.saveLogName;
+            string path = _config.SaveLogPath + _config.SaveLogName;
             try
             {
-                if (Directory.Exists(config.saveLogPath))
+                if (Directory.Exists(_config.SaveLogPath))
                 {
                     if (File.Exists(path))
                     {
@@ -38,7 +38,7 @@ public class LoggerUtils_Sango : MonoBehaviour
                 }
                 else
                 {
-                    Directory.CreateDirectory(config.saveLogPath);
+                    Directory.CreateDirectory(_config.SaveLogPath);
                 }
                 logFileWriter = File.AppendText(path);
                 logFileWriter.AutoFlush = true;
@@ -51,12 +51,12 @@ public class LoggerUtils_Sango : MonoBehaviour
         else
         {
             string prefix = DateTime.Now.ToString("yyyyMMdd@HH-mm-ss");
-            string path = config.saveLogPath + prefix + config.saveLogName;
+            string path = _config.SaveLogPath + prefix + _config.SaveLogName;
             try
             {
-                if (Directory.Exists(config.saveLogPath) == false)
+                if (Directory.Exists(_config.SaveLogPath) == false)
                 {
-                    Directory.CreateDirectory(config.saveLogPath);
+                    Directory.CreateDirectory(_config.SaveLogPath);
                 }
                 logFileWriter = File.AppendText(path);
                 logFileWriter.AutoFlush = true;
@@ -71,10 +71,13 @@ public class LoggerUtils_Sango : MonoBehaviour
     #region Log
     public static void LogInfo(string log, params object[] args)
     {
-        if (config.enableSangoLog == false) { return; }
-        log = DecorateLog(string.Format(log, args));
+        if (_config.EnableSangoLog == false) { return; }
+        if (args != null && args.Length > 0)
+        {
+            log = DecorateLog(string.Format(log, args));
+        }
         logger.Log(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogInfo]{0}", log));
         }
@@ -82,10 +85,10 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogInfo(object logObj)
     {
-        if (config.enableSangoLog == false) { return; }
+        if (_config.EnableSangoLog == false) { return; }
         string log = DecorateLog(logObj.ToString());
         logger.Log(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogInfo]{0}", log));
         }
@@ -93,10 +96,13 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void ColorLog(LoggerColor color, string log, params object[] args)
     {
-        if (config.enableSangoLog == false) { return; }
-        log = DecorateLog(string.Format(log, args));
+        if (_config.EnableSangoLog == false) { return; }
+        if (args != null && args.Length > 0)
+        {
+            log = DecorateLog(string.Format(log, args));
+        }
         logger.Log(log, color);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogInfo]{0}", log));
         }
@@ -104,10 +110,10 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void ColorLog(LoggerColor color, object logObj)
     {
-        if (config.enableSangoLog == false) { return; }
+        if (_config.EnableSangoLog == false) { return; }
         string log = DecorateLog(logObj.ToString());
         logger.Log(log, color);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogInfo]{0}", log));
         }
@@ -115,10 +121,13 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogTraceInfo(string log, params object[] args)
     {
-        if (config.enableSangoLog == false) { return; }
-        log = DecorateLog(string.Format(log, args), true);
+        if (_config.EnableSangoLog == false) { return; }
+        if (args != null && args.Length > 0)
+        {
+            log = DecorateLog(string.Format(log, args));
+        }
         logger.Log(log, LoggerColor.Magenta);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogTraceInfo]{0}", log));
         }
@@ -126,10 +135,10 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogTraceInfo(object logObj)
     {
-        if (config.enableSangoLog == false) { return; }
+        if (_config.EnableSangoLog == false) { return; }
         string log = DecorateLog(logObj.ToString(), true);
         logger.Log(log, LoggerColor.Magenta);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogTraceInfo]{0}", log));
         }
@@ -137,10 +146,13 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogWarn(string log, params object[] args)
     {
-        if (config.enableSangoLog == false) { return; }
-        log = DecorateLog(string.Format(log, args));
+        if (_config.EnableSangoLog == false) { return; }
+        if (args != null && args.Length > 0)
+        {
+            log = DecorateLog(string.Format(log, args));
+        }
         logger.Warn(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogWarn]{0}", log));
         }
@@ -148,10 +160,10 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogWarn(object logObj)
     {
-        if (config.enableSangoLog == false) { return; }
+        if (_config.EnableSangoLog == false) { return; }
         string log = DecorateLog(logObj.ToString());
         logger.Warn(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogWarn]{0}", log));
         }
@@ -159,10 +171,13 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogError(string log, params object[] args)
     {
-        if (config.enableSangoLog == false) { return; }
-        log = DecorateLog(string.Format(log, args));
+        if (_config.EnableSangoLog == false) { return; }
+        if (args != null && args.Length > 0)
+        {
+            log = DecorateLog(string.Format(log, args));
+        }
         logger.Error(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogError]{0}", log));
         }
@@ -170,10 +185,10 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogError(object logObj)
     {
-        if (config.enableSangoLog == false) { return; }
+        if (_config.EnableSangoLog == false) { return; }
         string log = DecorateLog(logObj.ToString());
         logger.Error(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogError]{0}", log));
         }
@@ -181,10 +196,13 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogProcessing(string log, params object[] args)
     {
-        if (config.enableSangoLog == false) { return; }
-        log = DecorateLog(string.Format(log, args));
+        if (_config.EnableSangoLog == false) { return; }
+        if (args != null && args.Length > 0)
+        {
+            log = DecorateLog(string.Format(log, args));
+        }
         logger.Processing(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogProcessing]{0}", log));
         }
@@ -192,10 +210,10 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogProcessing(object logObj)
     {
-        if (config.enableSangoLog == false) { return; }
+        if (_config.EnableSangoLog == false) { return; }
         string log = DecorateLog(logObj.ToString());
         logger.Processing(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogProcessing]{0}", log));
         }
@@ -203,10 +221,13 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogDone(string log, params object[] args)
     {
-        if (config.enableSangoLog == false) { return; }
-        log = DecorateLog(string.Format(log, args));
+        if (_config.EnableSangoLog == false) { return; }
+        if (args != null && args.Length > 0)
+        {
+            log = DecorateLog(string.Format(log, args));
+        }
         logger.Done(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogDone]{0}", log));
         }
@@ -214,10 +235,10 @@ public class LoggerUtils_Sango : MonoBehaviour
 
     public static void LogDone(object logObj)
     {
-        if (config.enableSangoLog == false) { return; }
+        if (_config.EnableSangoLog == false) { return; }
         string log = DecorateLog(logObj.ToString());
         logger.Done(log);
-        if (config.enableSaveLog)
+        if (_config.EnableSaveLog)
         {
             WriteToFile(string.Format("[LogDone]{0}", log));
         }
@@ -227,16 +248,16 @@ public class LoggerUtils_Sango : MonoBehaviour
     #region Decorate
     private static string DecorateLog(string log, bool isTraceInfo = false)
     {
-        StringBuilder sb = new StringBuilder(config.logPrefix, 100);
-        if (config.enableTimestamp)
+        StringBuilder sb = new StringBuilder(_config.LogPrefix, 100);
+        if (_config.EnableTimestamp)
         {
             sb.AppendFormat(" {0}", DateTime.Now.ToString("hh:mm:ss--fff"));
         }
-        if (config.enableThreadID)
+        if (_config.EnableThreadID)
         {
             sb.AppendFormat(" {0}", GetThreadID());
         }
-        sb.AppendFormat(" {0} {1}", config.logSeparate, log);
+        sb.AppendFormat(" {0} {1}", _config.LogSeparate, log);
         if (isTraceInfo)
         {
             sb.AppendFormat(" \nStackTrace: {0}", GetTraceInfo());

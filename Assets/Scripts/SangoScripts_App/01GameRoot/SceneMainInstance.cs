@@ -39,7 +39,7 @@ public class SceneMainInstance : BaseScene<SceneMainInstance>
         if (message is SceneSystemEventMessage.ChangeToHomeScene)
         {
             GameObject securityCheckRootObj = null;
-            switch (_currentSceneViewConfig.sceneViewResolution)
+            switch (_currentSceneViewConfig.SceneViewResolution)
             {
                 case SceneViewResolution._1KH_1920x1080:
                     securityCheckRootObj = ResourceService.Instance.InstantiatePrefab(_canvasTrans, SecuritySystemConstant.SangoSecurityCheckRootPrefab_1KH_Path);
@@ -56,7 +56,7 @@ public class SceneMainInstance : BaseScene<SceneMainInstance>
 
     public void GameEntrance()
     {
-        switch (_currentNetEnvironmentConfig.netEnvMode)
+        switch (_currentNetEnvironmentConfig.NetEnvMode)
         {
             case NetEnvMode.Offline:
                 //TODO

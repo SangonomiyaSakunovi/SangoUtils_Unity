@@ -4,26 +4,25 @@ using System.Net.Sockets;
 
 public abstract class IClientPeer_IOCP
 {
-    public int _peerId;
-    private SocketAsyncEventArgs _receiveAsyncEventArgs;
-    private SocketAsyncEventArgs _sendAsyncEventArgs;
+    public int PeerId { get; set; }
+    private SocketAsyncEventArgs _receiveAsyncEventArgs = new();
+    private SocketAsyncEventArgs _sendAsyncEventArgs = new();
 
     private Socket _socket;
-    private List<byte> _readList = new List<byte>();
-    private Queue<byte[]> _cacheQueue = new Queue<byte[]>();
+    private List<byte> _readList = new();
+    private Queue<byte[]> _cacheQueue = new();
     private bool _isWrite = false;
 
-    public Action<int> OnClientPeerCloseCallBack;
+    public Action<int> OnClientPeerCloseCallBack { get; set; }
     protected ConnectionStateCode _connectionState = ConnectionStateCode.None;
 
     public IClientPeer_IOCP()
     {
-        _receiveAsyncEventArgs = new SocketAsyncEventArgs();
-        _sendAsyncEventArgs = new SocketAsyncEventArgs();
         _receiveAsyncEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnIO_Completed);
         _sendAsyncEventArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnIO_Completed);
         _receiveAsyncEventArgs.SetBuffer(new byte[IOCPConfig.ServerBufferCount], 0, IOCPConfig.ServerBufferCount);
     }
+
     protected abstract void OnConnected();
 
     protected abstract void OnDisconnected();
@@ -66,7 +65,7 @@ public abstract class IClientPeer_IOCP
         }
         else
         {
-            IOCPLogger.Warning("IClientPeer:{0}  Close:{1}", _peerId, _receiveAsyncEventArgs.SocketError.ToString());
+            IOCPLogger.Warning("IClientPeer:{0}  Close:{1}", PeerId, _receiveAsyncEventArgs.SocketError.ToString());
             OnClientClose();
         }
     }
@@ -145,7 +144,7 @@ public abstract class IClientPeer_IOCP
             OnDisconnected();
             if (OnClientPeerCloseCallBack != null)
             {
-                OnClientPeerCloseCallBack(_peerId);
+                OnClientPeerCloseCallBack(PeerId);
             }
             _readList.Clear();
             _cacheQueue.Clear();

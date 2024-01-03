@@ -6,26 +6,18 @@ using UnityEngine.UI;
 
 public class ResourceService : BaseService<ResourceService>
 {
-    private ResourceRawImageLoader _resourceRawImageLoader;
+    private ResourceRawImageLoader _resourceRawImageLoader = new();
 
-    private Dictionary<string, AudioClip> _audioClipDict;
-    private Dictionary<string, Sprite> _spriteDict;
-    private Dictionary<string, GameObject> _prefabDict;
-    private Dictionary<string, TMP_FontAsset> _fontDict;
+    private Dictionary<string, AudioClip> _audioClipDict = new();
+    private Dictionary<string, Sprite> _spriteDict = new();
+    private Dictionary<string, GameObject> _prefabDict = new();
+    private Dictionary<string, TMP_FontAsset> _fontDict = new();
 
-    private Dictionary<string, Texture> _rawImageTextureDict;
+    private Dictionary<string, Texture> _rawImageTextureDict = new();
 
     public override void OnInit()
     {
         base.OnInit();
-        _resourceRawImageLoader = new ResourceRawImageLoader();
-
-        _audioClipDict = new Dictionary<string, AudioClip>();
-        _spriteDict = new Dictionary<string, Sprite>();
-        _prefabDict = new Dictionary<string, GameObject>();
-        _fontDict = new Dictionary<string, TMP_FontAsset>();
-
-        _rawImageTextureDict = new Dictionary<string, Texture>();
     }
 
     public AudioClip LoadAudioClip(string audioClipPath, bool isCache)

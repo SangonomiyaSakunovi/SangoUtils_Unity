@@ -4,14 +4,12 @@ using System.Text;
 
 public class HttpService : BaseService<HttpService>
 {
-    private HttpClientSango _httpClient;
-    private Dictionary<int, BaseHttpRequest> _requestDict = null;
+    private HttpClientSango _httpClient = new();
+    private Dictionary<int, BaseHttpRequest> _requestDict = new();
 
     public override void OnInit()
     {
         base.OnInit();
-        _requestDict = new Dictionary<int, BaseHttpRequest>();
-        _httpClient = new HttpClientSango();
         _httpClient.Init();
     }
 

@@ -7,7 +7,7 @@ public class SangoUIAnimationAssets_ResSangoUISlideBroadCastImageAnimation : San
     private float _defalutDuration;
     private int _midPos = 0;
     private Transform _parentTrans;
-    private List<RectTransform> _imageRects;
+    private List<RectTransform> _imageRects = new();
 
     public SangoUIAnimationAssets_ResSangoUISlideBroadCastImageAnimation(Transform parentTrans, float aniDurationTime)
     {
@@ -17,13 +17,11 @@ public class SangoUIAnimationAssets_ResSangoUISlideBroadCastImageAnimation : San
 
     public override void InitAnimation(params string[] commands)
     {
-        _imageRects = new List<RectTransform>();
-
         for (int i = 0; i < _parentTrans.childCount; i++)
         {
             _imageRects.Add(_parentTrans.GetChild(i).GetComponent<RectTransform>());
         }
-        durationTime = _defalutDuration;
+        DurationTime = _defalutDuration;
         _midPos = _imageRects.Count / 2;
         ChangeSibling();
     }
@@ -49,7 +47,7 @@ public class SangoUIAnimationAssets_ResSangoUISlideBroadCastImageAnimation : San
 
     public override void ResetAnimation()
     {
-        durationTime = _defalutDuration;
+        DurationTime = _defalutDuration;
     }
 
     private void LeftSlideAnimation()
@@ -58,13 +56,13 @@ public class SangoUIAnimationAssets_ResSangoUISlideBroadCastImageAnimation : San
         {
             if (i == 0)
             {
-                _imageRects[i].DOAnchorPos(_imageRects[i + _imageRects.Count - 1].anchoredPosition, durationTime);              
-                _imageRects[i].DOScale(_imageRects[i + _imageRects.Count - 1].localScale, durationTime);
+                _imageRects[i].DOAnchorPos(_imageRects[i + _imageRects.Count - 1].anchoredPosition, DurationTime);              
+                _imageRects[i].DOScale(_imageRects[i + _imageRects.Count - 1].localScale, DurationTime);
             }
             else
             {
-                _imageRects[i].DOAnchorPos(_imageRects[i - 1].anchoredPosition, durationTime);                
-                _imageRects[i].DOScale(_imageRects[i - 1].localScale, durationTime);
+                _imageRects[i].DOAnchorPos(_imageRects[i - 1].anchoredPosition, DurationTime);                
+                _imageRects[i].DOScale(_imageRects[i - 1].localScale, DurationTime);
             }
         }
         if (_midPos < _imageRects.Count - 1)
@@ -84,13 +82,13 @@ public class SangoUIAnimationAssets_ResSangoUISlideBroadCastImageAnimation : San
         {
             if (i == _imageRects.Count - 1)
             {
-                _imageRects[i].DOAnchorPos(_imageRects[i - _imageRects.Count + 1].anchoredPosition, durationTime);
-                _imageRects[i].DOScale(_imageRects[i - _imageRects.Count + 1].localScale, durationTime);
+                _imageRects[i].DOAnchorPos(_imageRects[i - _imageRects.Count + 1].anchoredPosition, DurationTime);
+                _imageRects[i].DOScale(_imageRects[i - _imageRects.Count + 1].localScale, DurationTime);
             }
             else
             {
-                _imageRects[i].DOAnchorPos(_imageRects[i + 1].anchoredPosition, durationTime);
-                _imageRects[i].DOScale(_imageRects[i + 1].localScale, durationTime);
+                _imageRects[i].DOAnchorPos(_imageRects[i + 1].anchoredPosition, DurationTime);
+                _imageRects[i].DOScale(_imageRects[i + 1].localScale, DurationTime);
             }
         }
         if (_midPos > 0)

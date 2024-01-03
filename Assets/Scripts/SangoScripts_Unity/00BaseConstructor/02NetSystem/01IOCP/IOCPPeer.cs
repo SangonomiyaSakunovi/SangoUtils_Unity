@@ -88,7 +88,7 @@ public class IOCPPeer<T> where T : IClientPeer_IOCP, new()
         {
             T peer = new T
             {
-                _peerId = i,
+                PeerId = i,
             };
             _peerPool.Push(peer);
         }
@@ -134,7 +134,7 @@ public class IOCPPeer<T> where T : IClientPeer_IOCP, new()
                 }
                 peer.InitClientPeer(peerSocket);
                 peer.OnClientPeerCloseCallBack = RecycleClientPeerPool;
-                IOCPLogger.Done("Client Online, allocate ClientId:{0}", peer._peerId);
+                IOCPLogger.Done("Client Online, allocate ClientId:{0}", peer.PeerId);
             }
             OnAccept();
         }
@@ -169,7 +169,7 @@ public class IOCPPeer<T> where T : IClientPeer_IOCP, new()
             int index = -1;
             for (int i = 0; i < _peerList.Count; i++)
             {
-                if (_peerList[i]._peerId == peerId)
+                if (_peerList[i].PeerId == peerId)
                 {
                     index = i;
                     break;

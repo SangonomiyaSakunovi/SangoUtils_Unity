@@ -6,7 +6,7 @@ using UnityEngine;
 public class HttpExample : MonoBehaviour
 {
     private SangoHttpExampleRequest _sangoHttpExampleRequest = null;
-    private List<SangoHttpExampleInfo> _sangoHttpExampleInfos = null;
+    private List<SangoHttpExampleInfo> _sangoHttpExampleInfos = new();
 
     public static HttpExample Instance;
 
@@ -19,7 +19,6 @@ public class HttpExample : MonoBehaviour
     private void InitRequest()
     {
         _sangoHttpExampleRequest = HttpService.Instance.GetRequest<SangoHttpExampleRequest>(HttpId.loginId);
-        _sangoHttpExampleInfos = new List<SangoHttpExampleInfo>();
     }
 
     private void SendRequestAsync()

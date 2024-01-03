@@ -23,7 +23,7 @@ public class CoroutineHandler
 
     public class FinishedHandler : UnityEvent<bool> { }
 
-    public FinishedHandler OnCompleted = new FinishedHandler();
+    private FinishedHandler OnCompleted = new FinishedHandler();
 
     public CoroutineHandler(IEnumerator coroutine)
     {

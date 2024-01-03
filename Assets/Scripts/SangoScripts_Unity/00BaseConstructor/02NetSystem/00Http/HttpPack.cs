@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using UnityEngine;
 using UnityEngine.Networking;
 
 public enum HttpType
@@ -12,13 +11,13 @@ public enum HttpType
 
 public abstract class HttpPack
 {
-    public int id;
-    public string url;
-    public HttpType httpType;
-    public Type dataType;
-    public string parame;
-    public int tryCount;
-    public UnityWebRequest webRequest;
+    public int Id { get; set; }
+    public string Url { get; set; }
+    public HttpType HttpType { get; set; }
+    public Type DataType { get; set; }
+    public string Parame { get; set; }
+    public int TryCount { get; set; }
+    public UnityWebRequest WebRequest { get; set; }
 
     public abstract void OnDataReceived(string dataStr, int code, int messageId);
 }

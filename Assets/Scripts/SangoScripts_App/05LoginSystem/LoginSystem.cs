@@ -1,9 +1,12 @@
 using SangoNetProtol;
+using SangoUtils_Common.Messages;
 
 public class LoginSystem : BaseSystem<LoginSystem>
 {
     private LoginNetRequest _loginNetRequest;
     private LoginWnd _loginWnd;
+
+    private string _entityId = "SangoTestCapsule001";
 
     public override void OnInit()
     {
@@ -17,6 +20,11 @@ public class LoginSystem : BaseSystem<LoginSystem>
 
     public void LoginAsGuest()
     {
-        //TODO
+        _loginNetRequest.SetLoginReqMessage(LoginMode.Guest, _entityId, "");
+    }
+
+    public void OnLoginSucceed()
+    {
+        //Invoke SceneSystem
     }
 }

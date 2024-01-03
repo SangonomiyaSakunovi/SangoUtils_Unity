@@ -5,31 +5,26 @@ using UnityEngine.UI;
 
 public class ResourceRawImageLoader : BaseASyncPackManager
 {
-    private readonly Dictionary<uint, HttpRawImageResourcePack> _packDict;
+    private readonly Dictionary<uint, HttpRawImageResourcePack> _packDict = new();
     private const string _packIdLock = "ResourceRawImageLoader_Lock";
-
-    public ResourceRawImageLoader()
-    {
-        _packDict = new Dictionary<uint, HttpRawImageResourcePack>();
-    }
 
     public uint AddPack(RawImage targetRawImage, string urlPath, bool isCahce, Action<string, Texture> onLoadCallBack, Action<object[]> completeCallBack, Action<object[]> canceledCallBack, Action<object[]> erroredCallBack)
     {
         uint tempPackId = GeneratePackId();
         HttpRawImageResourcePack pack = new HttpRawImageResourcePack()
         {
-            packId = tempPackId,
-            url = urlPath,
-            targetRawImage = targetRawImage,
-            resourceType = HttpResourceType.RawImage,
-            onCompleteCallBack = completeCallBack,
-            onCanceledCallBack = canceledCallBack,
-            onErroredCallBack = erroredCallBack,
-            onCompleteInvokePackRemoveCallBack = RemovePackCallBack
+            PackId = tempPackId,
+            Url = urlPath,
+            TargetRawImage = targetRawImage,
+            ResourceType = HttpResourceType.RawImage,
+            OnCompleteCallBack = completeCallBack,
+            OnCanceledCallBack = canceledCallBack,
+            OnErroredCallBack = erroredCallBack,
+            OnCompleteInvokePackRemoveCallBack = RemovePackCallBack
         };
         if (isCahce)
         {
-            pack.onLoadCallBack = onLoadCallBack;
+            pack.OnLoadCallBack = onLoadCallBack;
         }
         _packDict.Add(tempPackId, pack);
         HttpService.Instance?.HttpResource(pack);

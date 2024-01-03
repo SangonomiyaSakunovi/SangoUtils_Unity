@@ -1,6 +1,6 @@
 public class DefaultNetRequest : BaseNetRequest
 {
-    public override void DefaultOperationRequest()
+    protected override void DefaultOperationRequest()
     {
 
     }

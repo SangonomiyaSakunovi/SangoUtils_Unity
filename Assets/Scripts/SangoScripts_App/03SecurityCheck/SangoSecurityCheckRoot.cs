@@ -13,15 +13,15 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
         _sangoSecurityCheckWnd = transform.Find("SangoSecurityCheckWnd").GetOrAddComponent<SangoSecurityCheckWnd>();
 
         SecurityCheckServiceConfig config1 = SangoSystemConfig.SecurityCheckServiceInfoConfig;
-        config1.registInfoCode = RegistInfoCode.Timestamp;
-        config1.signMethodCode = SignMethodCode.Md5;
-        config1.checkLength = 5;
-        config1.registMixSignDataProtocol = RegistMixSignDataProtocol.A_B_C_SIGN;
-        config1.resultActionCallBack = RegistInfoCheckResultActionCallBack;
+        config1.RegistInfoCode = RegistInfoCode.Timestamp;
+        config1.SignMethodCode = SignMethodCode.Md5;
+        config1.CheckLength = 5;
+        config1.RegistMixSignDataProtocol = RegistMixSignDataProtocol.A_B_C_SIGN;
+        config1.OnCheckedResult = RegistInfoCheckResultActionCallBack;
 
         TypeInConfig config2 = new TypeInConfig();
         SceneViewConfig sceneViewConfig = SangoSystemConfig.SceneViewConfig;
-        switch (sceneViewConfig.sceneViewResolution)
+        switch (sceneViewConfig.SceneViewResolution)
         {
             case SceneViewResolution._1KH_1920x1080:
                 config2.keyboardTypeCode = KeyboardTypeCode.UpperCharKeyboard;

@@ -18,7 +18,7 @@ public class SangoUIAnimator : MonoBehaviour
 
     public void AddAnimation(SangoUIAnimationPack sangoUIAnimationPack)
     {
-        _sangoUIAnimationDict.Add(sangoUIAnimationPack.id, sangoUIAnimationPack);
+        _sangoUIAnimationDict.Add(sangoUIAnimationPack.Id, sangoUIAnimationPack);
     }
 
     public void PlayAnimation(string id, params string[] commands)
@@ -26,7 +26,7 @@ public class SangoUIAnimator : MonoBehaviour
         _sangoUIAnimationDict.TryGetValue(id, out SangoUIAnimationPack value);
         if (value != null)
         {
-            value.commands = commands;
+            value.Commands = commands;
             _sangoUIAnimationToDos.Add(value);
         }
     }
@@ -34,10 +34,10 @@ public class SangoUIAnimator : MonoBehaviour
     public void PlayAnimationImmediately(string id, params string[] commands)
     {
         _sangoUIAnimationDict.TryGetValue(id, out SangoUIAnimationPack value);
-        if (value != null && !value.isPlaying)
+        if (value != null && !value.IsPlaying)
         {
-            value.isPlaying = true;
-            value.sangoUIAnimation.PlayAnimation(commands);
+            value.IsPlaying = true;
+            value.SangoUIAnimation.PlayAnimation(commands);
             _sangoUIAnimationPlayings.Add(value);
         }
     }
@@ -49,19 +49,19 @@ public class SangoUIAnimator : MonoBehaviour
         for (int i = 0; i < _sangoUIAnimationPlayings.Count; i++)
         {
             SangoUIAnimationPack pack = _sangoUIAnimationPlayings[i];
-            switch (pack.sangoUIAnimation.animationType)
+            switch (pack.SangoUIAnimation.AnimationType)
             {
                 case SangoUIAnimationType.Timer:
-                    if (pack.sangoUIAnimation.durationTime > -0.1)
+                    if (pack.SangoUIAnimation.DurationTime > -0.1)
                     {
-                        pack.sangoUIAnimation.durationTime -= Time.deltaTime;
+                        pack.SangoUIAnimation.DurationTime -= Time.deltaTime;
                     }
                     else
                     {
-                        pack.completeAnimatorCallBack?.Invoke();
+                        pack.OnAnimationPlayedCompleted?.Invoke();
                         _sangoUIAnimationPlayings.Remove(pack);
-                        pack.sangoUIAnimation.ResetAnimation();
-                        pack.isPlaying = false;
+                        pack.SangoUIAnimation.ResetAnimation();
+                        pack.IsPlaying = false;
                     }
                     break;
             }
@@ -75,10 +75,10 @@ public class SangoUIAnimator : MonoBehaviour
         for (int i = 0; i < _sangoUIAnimationToDos.Count; i++)
         {
             SangoUIAnimationPack pack = _sangoUIAnimationToDos[i];
-            if (!pack.isPlaying)
+            if (!pack.IsPlaying)
             {
-                pack.isPlaying = true;
-                pack.sangoUIAnimation.PlayAnimation(pack.commands);
+                pack.IsPlaying = true;
+                pack.SangoUIAnimation.PlayAnimation(pack.Commands);
                 _sangoUIAnimationPlayings.Add(pack);
                 _sangoUIAnimationToDos.Remove(pack);
             }

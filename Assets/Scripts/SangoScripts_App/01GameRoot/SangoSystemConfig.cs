@@ -5,49 +5,49 @@ public static class SangoSystemConfig
 {
     public static readonly SceneViewConfig SceneViewConfig = new()
     {
-        sceneViewResolution = SceneViewResolution._1KH_1920x1080
+        SceneViewResolution = SceneViewResolution._1KH_1920x1080
     };
 
     public static readonly SecurityCheckServiceConfig SecurityCheckServiceInfoConfig = new()
     {
-        apiKey = "s",
-        apiSecret = "s",
-        secretTimestamp = "0",
-        defaultRegistLimitDateTime = new DateTime(2022, 2, 22, 0, 0, 0)
+        ApiKey = "s",
+        ApiSecret = "s",
+        SecretTimestamp = "0",
+        DefaultRegistLimitDateTime = new DateTime(2022, 2, 22, 0, 0, 0)
     };
 
     public static readonly PatchConfig PatchConfig = new()
     {
-        packageName = "DefaultPackage",
-        playMode = EPlayMode.HostPlayMode,
-        buildPipeline = EDefaultBuildPipeline.BuiltinBuildPipeline,
+        PackageName = "DefaultPackage",
+        PlayMode = EPlayMode.HostPlayMode,
+        BuildPipeline = EDefaultBuildPipeline.BuiltinBuildPipeline,
 
         //Protocol: hostServerIP/CDN/Editor/Unity/appId/Patch/PC/appVersion
         //Protocol: hostServerIP/CDN/Online/Unity/appId/Patch/PC/appVersion
-        hostServerIP = "https://hvr.isunupcg.com/sangonomiyasakunovi",
-        appId = "0000TestSangoApp",
-        appVersion = "1.0"
+        HostServerIP = "https://hvr.isunupcg.com/sangonomiyasakunovi",
+        AppId = "0000TestSangoApp",
+        AppVersion = "1.0"
     };
 
     public static readonly LoggerConfig_Sango LoggerConfig_Sango = new()
     {
-        enableSangoLog = true,
-        logPrefix = "#",
-        enableTimestamp = true,
-        logSeparate = ">>",
-        enableThreadID = true,
-        enableTraceInfo = true,
-        enableSaveLog = true,
-        enableCoverLog = true,
-        saveLogPath = string.Format("{0}Logs\\", AppDomain.CurrentDomain.BaseDirectory),
-        saveLogName = "SangoLog.txt",
-        loggerType = LoggerType.OnEditorConsole
+        EnableSangoLog = true,
+        LogPrefix = "#",
+        EnableTimestamp = true,
+        LogSeparate = ">>",
+        EnableThreadID = true,
+        EnableTraceInfo = true,
+        EnableSaveLog = true,
+        EnableCoverLog = true,
+        SaveLogPath = string.Format("{0}Logs\\", AppDomain.CurrentDomain.BaseDirectory),
+        SaveLogName = "SangoLog.txt",
+        LoggerType = LoggerType.OnEditorConsole
     };
 
     public static NetEnvironmentConfig NetEnvironmentConfig = new()
     {
-        netEnvMode = NetEnvMode.Online_IOCP,
-        serverAddress = "127.0.0.1",
-        serverPort = 52037
+        NetEnvMode = NetEnvMode.Online_IOCP,
+        ServerAddress = "127.0.0.1",
+        ServerPort = 52037
     };
 }

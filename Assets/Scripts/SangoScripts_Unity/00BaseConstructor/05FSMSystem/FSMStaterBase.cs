@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 public class FSMStaterBase
 {
-    protected Dictionary<string, object> _blackboard;
+    protected Dictionary<string, object> _blackboard = new();
 
     public void SetBlackboardValue(string key, object value)
     {

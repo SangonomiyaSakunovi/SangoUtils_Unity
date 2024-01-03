@@ -46,5 +46,5 @@ public enum SceneViewResolution
 
 public class SceneViewConfig : BaseConfig
 {
-    public SceneViewResolution sceneViewResolution;
+    public SceneViewResolution SceneViewResolution { get; set; }
 }

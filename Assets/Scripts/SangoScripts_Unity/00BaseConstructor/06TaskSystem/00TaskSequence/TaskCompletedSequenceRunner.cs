@@ -5,16 +5,10 @@ using System.Threading;
 
 public class TaskCompletedSequenceRunner : TaskBaseSequenceRunner
 {
-    private readonly ConcurrentDictionary<uint, CompletedSequenceTask> _taskDict;
+    private readonly ConcurrentDictionary<uint, CompletedSequenceTask> _taskDict = new();
 
     private uint _taskId = 1;
     private const string _taskIdLock = "TaskCompleteSequence_Lock";
-
-
-    public TaskCompletedSequenceRunner()
-    {
-        _taskDict = new ConcurrentDictionary<uint, CompletedSequenceTask>();
-    }
 
     public uint AddTask(List<uint> prerequisitedTasks, Action<uint> doneTaskCallBack, Action<uint> cancelTaskCallBack, int repeatTaskCount = 1)
     {

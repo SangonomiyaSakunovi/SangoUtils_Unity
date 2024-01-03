@@ -3,14 +3,12 @@ using System.Collections.Generic;
 
 public class FSMLinkedStater : FSMStaterBase
 {
-    private LinkedList<FSMLinkedStaterItemBase> _staterItemLinkedList;
+    private LinkedList<FSMLinkedStaterItemBase> _staterItemLinkedList = new();
     private LinkedListNode<FSMLinkedStaterItemBase> _currentNode;
 
     public FSMLinkedStater(object owner)
     {
         Owner = owner;
-        _blackboard = new Dictionary<string, object>();
-        _staterItemLinkedList = new LinkedList<FSMLinkedStaterItemBase>();
         _currentNode = _staterItemLinkedList.First;
     }
 

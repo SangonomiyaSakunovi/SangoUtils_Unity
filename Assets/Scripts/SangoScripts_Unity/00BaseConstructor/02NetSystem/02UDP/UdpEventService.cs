@@ -29,7 +29,7 @@ public class UdpEventService : BaseService<UdpEventService>
     private void InitUdpListenerClients()
     {
         UdpClientSango typeInClient = new UdpClientSango<string>(UdpEventListenPortId.typeInPort);
-        _udpListenerClients.Add(typeInClient._udpListenerPortId, typeInClient);
+        _udpListenerClients.Add(typeInClient.UDPListenerPortId, typeInClient);
     }
 
     private void HandleEventReceivedData()

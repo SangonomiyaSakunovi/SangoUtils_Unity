@@ -6,22 +6,16 @@ using YooAsset;
 
 public class AssetService : BaseService<AssetService>
 {
-    private List<AssetHandle> _cacheAssetHandles;
+    private List<AssetHandle> _cacheAssetHandles = new();
 
-    private Dictionary<string, AssetHandle> _audioClipHandleDict;
-    private Dictionary<string, AssetHandle> _videoClipHandleDict;
-    private Dictionary<string, AssetHandle> _spriteHandleDict;
-    private Dictionary<string, AssetHandle> _prefabHandleDict;
+    private Dictionary<string, AssetHandle> _audioClipHandleDict = new();
+    private Dictionary<string, AssetHandle> _videoClipHandleDict = new();
+    private Dictionary<string, AssetHandle> _spriteHandleDict = new();
+    private Dictionary<string, AssetHandle> _prefabHandleDict = new();
 
     public override void OnInit()
     {
         base.OnInit();
-        _cacheAssetHandles = new List<AssetHandle>();
-
-        _audioClipHandleDict = new Dictionary<string, AssetHandle>();
-        _videoClipHandleDict = new Dictionary<string, AssetHandle>();
-        _spriteHandleDict = new Dictionary<string, AssetHandle>();
-        _prefabHandleDict = new Dictionary<string, AssetHandle>();
     }
 
     public AudioClip LoadAudioClip(string audioClipPath, bool isCache)

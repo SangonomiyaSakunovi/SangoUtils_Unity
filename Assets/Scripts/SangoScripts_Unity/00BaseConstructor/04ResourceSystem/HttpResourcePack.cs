@@ -11,18 +11,18 @@ public enum HttpResourceType
 
 public abstract class HttpBaseResourcePack
 {
-    public uint packId;
+    public uint PackId { get; set; }
 
-    public string url;
-    public int tryCount;
-    public HttpResourceType resourceType;
-    public UnityWebRequest webRequest;
+    public string Url { get; set; }
+    public int TryCount { get; set; }
+    public HttpResourceType ResourceType { get; set; }
+    public UnityWebRequest WebRequest { get; set; }
 
-    public Action<object[]> onCompleteCallBack;
-    public Action<object[]> onCanceledCallBack;
-    public Action<object[]> onErroredCallBack;
+    public Action<object[]> OnCompleteCallBack { get; set; }
+    public Action<object[]> OnCanceledCallBack { get; set; }
+    public Action<object[]> OnErroredCallBack { get; set; }
 
-    public Func<uint, bool> onCompleteInvokePackRemoveCallBack;
+    public Func<uint, bool> OnCompleteInvokePackRemoveCallBack { get; set; }
 
     public abstract void OnRequest();
     public abstract void OnResponsed();
@@ -33,52 +33,52 @@ public abstract class HttpBaseResourcePack
 
 public class HttpRawImageResourcePack : HttpBaseResourcePack
 {
-    public DownloadHandlerTexture downloadHandlerTexture;
-    public RawImage targetRawImage;
-    public Action<string, Texture> onLoadCallBack;
+    public DownloadHandlerTexture DownloadHandlerTexture { get; set; }
+    public RawImage TargetRawImage { get; set; }
+    public Action<string, Texture> OnLoadCallBack { get; set; }
 
     public override void OnCanceled()
     {
         OnDisposed();
-        onCanceledCallBack?.Invoke(null);
+        OnCanceledCallBack?.Invoke(null);
     }
 
     protected override void OnDisposed()
     {
-        if (webRequest == null) return;
-        webRequest.Abort();
-        webRequest.Dispose();
-        webRequest = null;
+        if (WebRequest == null) return;
+        WebRequest.Abort();
+        WebRequest.Dispose();
+        WebRequest = null;
     }
 
     public override void OnErrored()
     {
         OnDisposed();
-        onErroredCallBack?.Invoke(null);
-        onCompleteInvokePackRemoveCallBack?.Invoke(packId);
+        OnErroredCallBack?.Invoke(null);
+        OnCompleteInvokePackRemoveCallBack?.Invoke(PackId);
     }
 
     public override void OnRequest()
     {
-        webRequest = UnityWebRequest.Get(url);
-        downloadHandlerTexture = new DownloadHandlerTexture();
-        webRequest.downloadHandler = downloadHandlerTexture;
-        webRequest.SendWebRequest();
+        WebRequest = UnityWebRequest.Get(Url);
+        DownloadHandlerTexture = new DownloadHandlerTexture();
+        WebRequest.downloadHandler = DownloadHandlerTexture;
+        WebRequest.SendWebRequest();
     }
 
     public override void OnResponsed()
     {
-        Texture downloadedTexture = downloadHandlerTexture.texture;
-        if (targetRawImage != null)
+        Texture downloadedTexture = DownloadHandlerTexture.texture;
+        if (TargetRawImage != null)
         {
-            targetRawImage.texture = downloadedTexture;
+            TargetRawImage.texture = downloadedTexture;
         }
-        if (onLoadCallBack != null)
+        if (OnLoadCallBack != null)
         {
-            onLoadCallBack(url, downloadedTexture);
+            OnLoadCallBack(Url, downloadedTexture);
         }
         OnDisposed();
-        onCompleteCallBack?.Invoke(null);
-        onCompleteInvokePackRemoveCallBack?.Invoke(packId);
+        OnCompleteCallBack?.Invoke(null);
+        OnCompleteInvokePackRemoveCallBack?.Invoke(PackId);
     }
 }

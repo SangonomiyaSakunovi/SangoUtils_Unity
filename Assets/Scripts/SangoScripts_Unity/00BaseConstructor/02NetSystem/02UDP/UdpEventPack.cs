@@ -5,7 +5,7 @@ using System.Text;
 
 public abstract class UdpEventPack
 {
-    public int listenProtId;
+    public int listenProtId { get; set; }
     public UdpClient udpListenerClient;
     public IPEndPoint udpListenerIpEndPoint;
 

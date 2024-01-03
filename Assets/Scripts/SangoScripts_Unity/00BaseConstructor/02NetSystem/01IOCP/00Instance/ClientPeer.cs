@@ -31,4 +31,30 @@ public class ClientPeer : IClientPeer_IOCP
             NetService.Instance.AddNetMessageProxy(sangoNetMessage);
         }
     }
+
+    public void SendOperationRequest(NetOperationCode operationCode, string messageStr)
+    {
+        NetMessageHead messageHead = new()
+        {
+            NetOperationCode = operationCode,
+            NetMessageCommandCode = NetMessageCommandCode.NetOperationRequest
+        };
+        NetMessageBody messageBody = new()
+        {
+            NetMessageStr = messageStr
+        };
+        SangoNetMessage message = new()
+        {
+            NetMessageHead = messageHead,
+            NetMessageBody = messageBody,
+            NetMessageTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now).ToString()
+        };
+        SendData(message);
+    }
+
+    private void SendData(SangoNetMessage message)
+    {
+        byte[] bytes = ProtoUtils.SetProtoBytes(message);
+        SendMessage(bytes);
+    }
 }

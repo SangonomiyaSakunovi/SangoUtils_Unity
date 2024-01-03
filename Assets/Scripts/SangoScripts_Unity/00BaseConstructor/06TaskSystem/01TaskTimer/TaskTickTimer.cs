@@ -5,7 +5,7 @@ using System.Threading;
 public class TaskTickTimer : TaskBaseTimer
 {
     private readonly DateTime _utcInitialDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-    private readonly ConcurrentDictionary<uint, TickTimerTask> _taskDict;
+    private readonly ConcurrentDictionary<uint, TickTimerTask> _taskDict = new();
     private readonly bool _isSetHandled;
     private readonly ConcurrentQueue<TickTimerTaskPack> _taskPackQueue;
     private const string _taskIdLock = "TaskTickTimer_Lock";
@@ -13,7 +13,6 @@ public class TaskTickTimer : TaskBaseTimer
 
     public TaskTickTimer(int intervalTime = 0, bool isSetHandled = true)
     {
-        _taskDict = new ConcurrentDictionary<uint, TickTimerTask>();
         _isSetHandled = isSetHandled;
         if (isSetHandled)
         {

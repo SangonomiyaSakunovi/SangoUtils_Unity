@@ -5,7 +5,7 @@ public abstract class BaseNetRequest
 {
     public NetOperationCode NetOperationCode { get; private set; }
 
-    public abstract void DefaultOperationRequest();
+    protected abstract void DefaultOperationRequest();
 
     public abstract void OnOperationResponse(string message);
 

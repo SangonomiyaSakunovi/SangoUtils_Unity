@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class IOCPLogger : MonoBehaviour
 {
-    public static Action<string> LogInfoCallBack;
-    public static Action<string> LogErrorCallBack;
-    public static Action<string> LogWarningCallBack;
+    public static Action<string> LogInfoCallBack { get; set; }
+    public static Action<string> LogErrorCallBack { get; set; }
+    public static Action<string> LogWarningCallBack { get; set; }
 
     public static void Info(string message, params object[] arguments)
     {

@@ -8,12 +8,11 @@ using UnityEngine.Video;
 
 public class VideoPlayerService : BaseService<VideoPlayerService>
 {
-    Dictionary<string, VideoPlayerController> _videoPlayerDict;
+    Dictionary<string, VideoPlayerController> _videoPlayerDict = new();
 
     public override void OnInit()
     {
         base.OnInit();
-        _videoPlayerDict = new Dictionary<string, VideoPlayerController>();
     }
 
     public override void OnDispose()
