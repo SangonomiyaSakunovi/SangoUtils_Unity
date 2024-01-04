@@ -22,7 +22,7 @@ public class _10GenerateMap : MonoBehaviour
                 {
                     gameObject = ResourceService.Instance.InstantiatePrefab(_parentTrans, _path2, true);
                 }
-                gameObject.transform.position = new Vector3(i * 10, 0, j * 10);
+                gameObject.transform.position = new Vector3(i * 10 +5 , 0, j * 10 + 5);
             }
         }
     }

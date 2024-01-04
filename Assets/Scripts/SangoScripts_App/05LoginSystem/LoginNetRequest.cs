@@ -4,7 +4,7 @@ public class LoginNetRequest : BaseNetRequest
 {
     private LoginReqMessage _message;
 
-    public void SetLoginReqMessage(LoginMode loginMode, string uID, string password)
+    public void SetAndSendLoginReqMessage(LoginMode loginMode, string uID, string password)
     {
         _message = new(loginMode, uID, password);
         DefaultOperationRequest();
@@ -18,6 +18,11 @@ public class LoginNetRequest : BaseNetRequest
 
     public override void OnOperationResponse(string message)
     {
-        
+        SangoLogger.Done("The loginResult from server: " + message);
+        LoginRspMessage loginReqMessage = DeJsonString<LoginRspMessage>(message);
+        if (loginReqMessage != null )
+        {
+            LoginSystem.Instance.OnLoginSucceed(loginReqMessage.EntityID);
+        }
     }
 }

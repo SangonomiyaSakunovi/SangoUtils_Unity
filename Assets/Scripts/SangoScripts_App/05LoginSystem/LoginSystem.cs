@@ -4,7 +4,8 @@ using SangoUtils_Common.Messages;
 public class LoginSystem : BaseSystem<LoginSystem>
 {
     private LoginNetRequest _loginNetRequest;
-    private LoginWnd _loginWnd;
+    public LoginWnd _loginWnd;
+    public GameObjectCharacterController _characterController;
 
     private string _entityId = "SangoTestCapsule001";
 
@@ -13,18 +14,17 @@ public class LoginSystem : BaseSystem<LoginSystem>
         base.OnInit();
         _instance = this;
         _loginNetRequest = NetService.Instance.GetNetRequest<LoginNetRequest>(NetOperationCode.Login);
-        _loginWnd = GetComponent<LoginWnd>();
-        _loginWnd.SetSystem(this);
+        _loginWnd.SetSystem(this); 
         _loginWnd.SetWindowState();
     }
 
     public void LoginAsGuest()
     {
-        _loginNetRequest.SetLoginReqMessage(LoginMode.Guest, _entityId, "");
+        _loginNetRequest.SetAndSendLoginReqMessage(LoginMode.Guest, _entityId, "");
     }
 
-    public void OnLoginSucceed()
+    public void OnLoginSucceed(string entityID)
     {
-        //Invoke SceneSystem
+        _characterController.EntityID = entityID; 
     }
 }

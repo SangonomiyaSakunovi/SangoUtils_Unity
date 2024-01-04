@@ -4,7 +4,7 @@ public class GameObjectCharacterController : MonoBehaviour
 {
     private CharacterController _characterController;
 
-    private string _entityId = "SangoTestCapsule001";
+    public string EntityID { get; set; } = "";
 
     private float _movespeed = 2f;
 
@@ -33,15 +33,18 @@ public class GameObjectCharacterController : MonoBehaviour
 
     private void Update()
     {
-        if (_timeCounter > 0)
+        if (!string.IsNullOrEmpty(EntityID))
         {
-            _timeCounter -= Time.deltaTime;
-        }
-        else
-        {
-            AOISystem.Instance.AddAOIActiveMoveEntity(_entityId, transform);
-            AOISystem.Instance.SendAOIReqMessage();
-            _timeCounter = 0.2f;
+            if (_timeCounter > 0)
+            {
+                _timeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                AOISystem.Instance.AddAOIActiveMoveEntity(EntityID, transform);
+                AOISystem.Instance.SendAOIReqMessage();
+                _timeCounter = 0.2f;
+            }
         }
     }
 }
