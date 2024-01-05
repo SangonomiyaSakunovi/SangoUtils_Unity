@@ -10,7 +10,12 @@ public class SangoGameRoot : BaseRoot<SangoGameRoot>
 
     private void Awake()
     {
+        Physics.autoSyncTransforms = true;
+
         OnInit();
+
+
+
         SceneMainInstance.OnInit();
 
         DontDestroyOnLoad(this);

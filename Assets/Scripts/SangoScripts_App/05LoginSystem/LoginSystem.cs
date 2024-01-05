@@ -14,7 +14,7 @@ public class LoginSystem : BaseSystem<LoginSystem>
         base.OnInit();
         _instance = this;
         _loginNetRequest = NetService.Instance.GetNetRequest<LoginNetRequest>(NetOperationCode.Login);
-        _loginWnd.SetSystem(this); 
+        _loginWnd.SetSystem(this);
         _loginWnd.SetWindowState();
     }
 
@@ -26,5 +26,6 @@ public class LoginSystem : BaseSystem<LoginSystem>
     public void OnLoginSucceed(string entityID)
     {
         _characterController.EntityID = entityID; 
+        SceneMainInstance.Instance._currentEntityID = entityID;
     }
 }

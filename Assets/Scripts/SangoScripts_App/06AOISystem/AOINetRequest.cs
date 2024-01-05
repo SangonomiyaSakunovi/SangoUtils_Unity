@@ -17,10 +17,7 @@ public class AOINetRequest : BaseNetRequest
 
     protected override void DefaultOperationRequest()
     {
-        SangoLogger.Log(_message.AOIActiveMoveEntitys[0].ToString());
-
         string jsonString = SetJsonString(_message);
-        SangoLogger.Log(jsonString);
         NetService.Instance.SendOperationRequest(NetOperationCode, jsonString);
     }
 

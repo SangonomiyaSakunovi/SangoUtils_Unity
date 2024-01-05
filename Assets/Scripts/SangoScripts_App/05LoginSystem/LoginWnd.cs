@@ -22,5 +22,6 @@ public class LoginWnd : BaseWindow
     private void OnBtnLoginAsGuestClicked(Button button)
     {
         _loginSystem.LoginAsGuest();
+        base.SetWindowState(false);
     }
 }
