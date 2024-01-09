@@ -1,4 +1,4 @@
-public class BaseConstant
+public abstract class BaseConstant
 {
 
 }

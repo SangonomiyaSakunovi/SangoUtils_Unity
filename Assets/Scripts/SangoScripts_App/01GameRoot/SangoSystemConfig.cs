@@ -46,8 +46,9 @@ public static class SangoSystemConfig
 
     public static NetEnvironmentConfig NetEnvironmentConfig = new()
     {
-        NetEnvMode = NetEnvMode.Online_IOCP,
+        NetEnvMode = NetEnvMode.Online_WebSocket,
         ServerAddress = "127.0.0.1",
-        ServerPort = 52037
+        ServerPort = 52037,
+        ServerAddressAndPort = "ws://sync_game.isunupcg.com:7272",
     };
 }

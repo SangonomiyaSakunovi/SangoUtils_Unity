@@ -1,21 +1,22 @@
 using SangoNetProtol;
 using System;
+using UnityEngine;
 
 public abstract class BaseNetEvent
 {
-    public NetOperationCode NetOperationCode { get; private set; }
+    public NetOperationCode NetOperationCode { get; protected set; } = NetOperationCode.Default;
 
-    public abstract void OnOperationEvent(string message);
+    public abstract void OnEventData(string message);
 
-    public virtual void OnInit(NetOperationCode netOperationCode)
+    public virtual void OnInit<T>(NetOperationCode netOperationCode, BaseNetService<T> instance) where T : MonoBehaviour
     {
         NetOperationCode = netOperationCode;
-        NetService.Instance.AddNetEvent(this);
+        instance.AddNetEvent(this);
     }
 
-    public virtual void OnDispose()
+    public virtual void OnDispose<T>(BaseNetService<T> instance) where T : MonoBehaviour
     {
-        NetService.Instance.RemoveNetEvent(this);
+        instance.RemoveNetEvent(this);
     }
 
     protected static string SetJsonString(object ob)

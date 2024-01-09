@@ -1,4 +1,4 @@
-public class BaseCache
+public abstract class BaseCache
 {
     public string CacheId { get; protected set; }
 

@@ -3,7 +3,7 @@ using SangoUtils_Common.Messages;
 
 public class LoginSystem : BaseSystem<LoginSystem>
 {
-    private LoginNetRequest _loginNetRequest;
+    private LoginWebSocketRequest _loginWebSocketRequest;
     public LoginWnd _loginWnd;
     public GameObjectCharacterController _characterController;
 
@@ -13,14 +13,14 @@ public class LoginSystem : BaseSystem<LoginSystem>
     {
         base.OnInit();
         _instance = this;
-        _loginNetRequest = NetService.Instance.GetNetRequest<LoginNetRequest>(NetOperationCode.Login);
+        _loginWebSocketRequest = WebSocketService.Instance.GetNetRequest<LoginWebSocketRequest>(NetOperationCode.Login);
         _loginWnd.SetSystem(this);
         _loginWnd.SetWindowState();
     }
 
     public void LoginAsGuest()
     {
-        _loginNetRequest.SetAndSendLoginReqMessage(LoginMode.Guest, _entityId, "");
+        _loginWebSocketRequest.SetAndSendLoginReqMessage(LoginMode.Guest, _entityId, "");
     }
 
     public void OnLoginSucceed(string entityID)

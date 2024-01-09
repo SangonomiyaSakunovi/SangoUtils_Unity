@@ -1,4 +1,4 @@
-public class BaseInfo : BaseCache
+public abstract class BaseInfo : BaseCache
 {
     public InfoCode InfoCode { get; protected set; }
 }

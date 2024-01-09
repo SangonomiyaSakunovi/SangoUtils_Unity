@@ -1,4 +1,4 @@
-public class BaseUdpEvent
+public abstract class BaseUdpEvent
 {
     public int UdpEventPortId { get; private set; }
 

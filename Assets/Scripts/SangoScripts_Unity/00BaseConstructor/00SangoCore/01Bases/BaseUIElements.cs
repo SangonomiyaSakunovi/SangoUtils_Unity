@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class BaseUIElements : MonoBehaviour
+public abstract class BaseUIElements : MonoBehaviour
 {
     List<GameObject> _childrenObjectList = new List<GameObject>();
 

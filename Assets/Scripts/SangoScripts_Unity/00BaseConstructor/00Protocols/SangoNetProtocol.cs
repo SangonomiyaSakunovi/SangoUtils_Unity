@@ -62,16 +62,20 @@ namespace SangoNetProtol
         NetOperationRequest = 1,
         NetOperationResponse = 2,
         NetEventData = 3,
+        NetBroadcast = 4,
     }
 
     [global::ProtoBuf.ProtoContract()]
     public enum NetOperationCode
     {
         Default = 1,
-        Login = 2,
-        Regist = 3,
-        Aoi = 4,
-        SyncTransformInfo = 5,
+        Ping = 2,
+        Login = 3,
+        Regist = 4,
+        Select = 5,
+        LoadResource = 6,
+        Aoi = 7,
+        OperationKey = 8,
     }
 
     [global::ProtoBuf.ProtoContract()]

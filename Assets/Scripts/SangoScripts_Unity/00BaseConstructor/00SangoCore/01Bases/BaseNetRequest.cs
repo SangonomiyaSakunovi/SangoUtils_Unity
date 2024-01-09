@@ -1,23 +1,24 @@
 using SangoNetProtol;
 using System;
+using UnityEngine;
 
 public abstract class BaseNetRequest
 {
-    public NetOperationCode NetOperationCode { get; private set; }
+    public NetOperationCode NetOperationCode { get; protected set; } = NetOperationCode.Default;
 
     protected abstract void DefaultOperationRequest();
 
     public abstract void OnOperationResponse(string message);
 
-    public virtual void OnInit(NetOperationCode netOperationCode)
+    public virtual void OnInit<T>(NetOperationCode netOperationCode, BaseNetService<T> instance) where T : MonoBehaviour
     {
         NetOperationCode = netOperationCode;
-        NetService.Instance.AddNetRequest(this);
+        instance.AddNetRequest(this);
     }
 
-    public virtual void OnDispose()
+    public virtual void OnDispose<T>(BaseNetService<T> instance) where T : MonoBehaviour
     {
-        NetService.Instance.RemoveNetRequest(this);
+        instance.RemoveNetRequest(this);
     }
 
     protected static string SetJsonString(object ob)

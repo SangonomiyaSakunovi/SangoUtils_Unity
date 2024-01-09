@@ -6,16 +6,17 @@ using UnityEngine;
 
 public class AOISystem : BaseSystem<AOISystem>
 {
-    private AOINetRequest _aoiNetRequest;
-    private AOINetEvent _aoiNetEvent;
+    private AOIIOCPRequest _aoiIOCPRequest;
+    private AOIIOCPEvent _aoiIOCPEvent;
+
     private Dictionary<string, GameObject> _entityID_ObjectDict = new();
 
     public override void OnInit()
     {
         base.OnInit();
         _instance = this;
-        _aoiNetRequest = NetService.Instance.GetNetRequest<AOINetRequest>(NetOperationCode.Aoi);
-        _aoiNetEvent = NetService.Instance.GetNetEvent<AOINetEvent>(NetOperationCode.Aoi);
+        _aoiIOCPRequest = IOCPService.Instance.GetNetRequest<AOIIOCPRequest>(NetOperationCode.Aoi);
+        _aoiIOCPEvent = IOCPService.Instance.GetNetEvent<AOIIOCPEvent>(NetOperationCode.Aoi);
     }
 
     public void AddAOIActiveMoveEntity(string entityId, Transform transform)
@@ -26,12 +27,12 @@ public class AOISystem : BaseSystem<AOISystem>
         TransformInfo transformInfo = new(position, rotation, scale);
 
         AOIActiveMoveEntity activeMoveEntity = new AOIActiveMoveEntity(entityId, transformInfo);
-        _aoiNetRequest.AddAOIActiveMoveEntity(activeMoveEntity);
+        _aoiIOCPRequest.AddAOIActiveMoveEntity(activeMoveEntity);
     }
 
     public void SendAOIReqMessage()
     {
-        _aoiNetRequest.SendAOIReqMessage();
+        _aoiIOCPRequest.SendAOIReqMessage();
     }
 
     //´¦ÀíÍË³ö DestoryObject

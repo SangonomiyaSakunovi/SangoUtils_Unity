@@ -1,4 +1,4 @@
-public class BasePrefab : BaseUIElements
+public abstract class BasePrefab : BaseUIElements
 {
     
 }

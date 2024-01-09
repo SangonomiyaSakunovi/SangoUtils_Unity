@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BasePanel : BaseUIElements
+public abstract class BasePanel : BaseUIElements
 {
     public virtual void SetRoot<T>(BaseRoot<T> baseRoot) where T : MonoBehaviour
     {

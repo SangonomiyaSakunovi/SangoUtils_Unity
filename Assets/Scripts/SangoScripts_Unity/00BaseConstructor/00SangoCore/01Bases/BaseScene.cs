@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BaseScene<T> : MonoSingleton<T> where T : MonoBehaviour
+public abstract class BaseScene<T> : MonoSingleton<T> where T : MonoBehaviour
 {
     private void Awake()
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BaseSystem<T> : MonoSingleton<T> where T : MonoBehaviour
+public abstract class BaseSystem<T> : MonoSingleton<T> where T : MonoBehaviour
 {
     private void Update()
     {

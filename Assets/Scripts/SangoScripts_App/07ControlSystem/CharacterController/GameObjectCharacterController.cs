@@ -13,8 +13,6 @@ public class GameObjectCharacterController : MonoBehaviour
     private float _horizontal;
     private Vector3 _moveDirection;
 
-    private float _timeCounter = 0;
-
     private Vector3 _positionLast;
     private Quaternion _rotationLast;
     private Vector3 _scaleLast;
@@ -51,21 +49,10 @@ public class GameObjectCharacterController : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(EntityID) && IsCurrent)
         {
-            if (_timeCounter > 0)
+            if (transform.position != _positionLast)
             {
-                _timeCounter -= Time.deltaTime;
-            }
-            else
-            {
-                if (transform.position != _positionLast || transform.rotation != _rotationLast || transform.localScale != _scaleLast)
-                {
-                    AOISystem.Instance.AddAOIActiveMoveEntity(EntityID, transform);
-                    AOISystem.Instance.SendAOIReqMessage();
-                    _positionLast = transform.position;
-                    _rotationLast = transform.rotation;
-                    _scaleLast = transform.localScale;
-                }
-                _timeCounter = 0.01f;
+                OperationKeyMoveSystem.Instance.AddOperationMove(transform.position);
+                _positionLast = transform.position;
             }
         }
         if (!IsCurrent)

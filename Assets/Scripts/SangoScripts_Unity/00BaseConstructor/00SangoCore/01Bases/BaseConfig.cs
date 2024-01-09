@@ -1,4 +1,4 @@
-public class BaseConfig
+public abstract class BaseConfig
 {
 
 }
