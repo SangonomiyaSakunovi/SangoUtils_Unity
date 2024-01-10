@@ -13,10 +13,10 @@ public class LoginWebSocketRequest : BaseNetRequest
     public override void OnOperationResponse(string message)
     {
         SangoLogger.Done("The loginResult from server: " + message);
-        LoginRspMessage loginRspMessage = DeJsonString<LoginRspMessage>(message);
+        LoginRspMessage_SunUp loginRspMessage = DeJsonString<LoginRspMessage_SunUp>(message);
         if (loginRspMessage != null)
         {
-            LoginSystem.Instance.OnLoginSucceed(loginRspMessage.EntityID);
+            LoginSystem.Instance.OnLoginSucceed(loginRspMessage.client_id);
         }
     }
 

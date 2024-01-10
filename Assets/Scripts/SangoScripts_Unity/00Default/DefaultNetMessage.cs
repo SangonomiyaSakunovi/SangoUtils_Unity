@@ -15,7 +15,7 @@ public class DefaultIOCPEvent : BaseNetEvent
 {
     public override void OnEventData(string message)
     {
-        SangoLogger.Error("A strange message Received.");
+        SangoLogger.Warning("A Net EventData have no Implement!");
     }
 }
 
@@ -23,7 +23,7 @@ public class DefaultWebSocketRequest : BaseNetRequest
 {
     public override void OnOperationResponse(string message)
     {
-        throw new System.NotImplementedException();
+        SangoLogger.Warning("A Net OperationResponse have no Implement!");
     }
 
     protected override void DefaultOperationRequest()
@@ -36,7 +36,7 @@ public class DefaultWebSocketEvent : BaseNetEvent
 {
     public override void OnEventData(string message)
     {
-        throw new System.NotImplementedException();
+        SangoLogger.Warning("A Net EventData have no Implement!");
     }
 }
 
@@ -49,6 +49,6 @@ public class DefaultWebSocketBroadcast : BaseNetBroadcast
 
     public override void OnBroadcast(string message)
     {
-        throw new System.NotImplementedException();
+        SangoLogger.Warning("A Net Broadcast have no Implement!");
     }
 }

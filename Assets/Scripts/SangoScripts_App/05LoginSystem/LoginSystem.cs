@@ -5,7 +5,7 @@ public class LoginSystem : BaseSystem<LoginSystem>
 {
     private LoginWebSocketRequest _loginWebSocketRequest;
     public LoginWnd _loginWnd;
-    public GameObjectCharacterController _characterController;
+    public PlayerController _playerController;
 
     private string _entityId = "SangoTestCapsule001";
 
@@ -25,7 +25,9 @@ public class LoginSystem : BaseSystem<LoginSystem>
 
     public void OnLoginSucceed(string entityID)
     {
-        _characterController.EntityID = entityID; 
-        SceneMainInstance.Instance._currentEntityID = entityID;
+        _playerController.EntityID = entityID;
+        TransformData transformData = new(new(0, 0, 0), new(0, 0, 0, 0), new(1, 1, 1));
+        CacheService.Instance.PlayerEntityThis = new(entityID, transformData, PlayerState.Online);
+        _playerController.SetPlayerEntity(CacheService.Instance.PlayerEntityThis);
     }
 }

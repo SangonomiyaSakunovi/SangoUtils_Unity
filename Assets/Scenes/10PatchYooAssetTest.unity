@@ -273,7 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _loginWnd: {fileID: 1080533944}
-  _characterController: {fileID: 1837069296}
+  _playerController: {fileID: 5738502728779353147}
 --- !u!114 &33061999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3888,18 +3888,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797976972}
   m_CullTransparentMesh: 1
---- !u!114 &1837069296 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6507721867167112210, guid: ea7cdd4c5c5b46a4fa9d9606fe72b5d0,
-    type: 3}
-  m_PrefabInstance: {fileID: 5738502728779353146}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8667e5f21cec7884e9c402b1edc1efd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2017528980
 GameObject:
   m_ObjectHideFlags: 0
@@ -4299,11 +4287,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: Capsule
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6507721867167112210, guid: ea7cdd4c5c5b46a4fa9d9606fe72b5d0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea7cdd4c5c5b46a4fa9d9606fe72b5d0, type: 3}
+--- !u!114 &5738502728779353147 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4436290474185893932, guid: ea7cdd4c5c5b46a4fa9d9606fe72b5d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 5738502728779353146}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e70ff26b573ab44a2b8b8014006cee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

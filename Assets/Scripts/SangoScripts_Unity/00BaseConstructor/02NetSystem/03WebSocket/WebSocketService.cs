@@ -37,6 +37,11 @@ public class WebSocketService : BaseNetService<WebSocketService>
         NetMessageCommandBroadcast(sangoNetMessage);
     }
 
+    //public override void OnBinaryReceived(SangoNetMessage sangoNetMessage)
+    //{
+    //    NetMessageCommandBroadcast(sangoNetMessage);
+    //}
+
     private void InitClientInstance(string ipAddressAndPort)
     {
         _clientPeerInstance = new(ipAddressAndPort);

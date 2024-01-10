@@ -8,7 +8,7 @@ public class AOIIOCPEvent : BaseNetEvent
         AOIEventMessage eventMessage = DeJsonString<AOIEventMessage>(message);
         if (eventMessage != null)
         {
-            SceneMainInstance.Instance.OnAOIOperationEvent(eventMessage);
+            SangoLogger.Warning("Why we received a message from AOISystem?");
         }
     }
 }

@@ -1,3 +1,4 @@
+using SangoNetProtol;
 using UnityEngine;
 
 public class SangoGameRoot : BaseRoot<SangoGameRoot>
@@ -67,6 +68,7 @@ public class SangoGameRoot : BaseRoot<SangoGameRoot>
                 IOCPService.Instance.OnInit();
                 break;
             case NetEnvMode.Online_WebSocket:
+                WebSocketService.Instance.GetNetEvent<PingWebSocketEvent>(NetOperationCode.Ping);
                 WebSocketService.Instance.SetConfig(SangoSystemConfig.NetEnvironmentConfig);
                 WebSocketService.Instance.OnInit();
                 break;

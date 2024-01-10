@@ -14,6 +14,6 @@ public class OperationKeyCoreSystem : BaseSystem<OperationKeyCoreSystem>
 
     public void SetAndSendOperationKey(OperationKeyType operationKeyType, string operationString)
     {
-        _operationKeyBroadcast.SetAndSendOperationKeyReqMessage(CacheService.Instance.EntityID, operationKeyType, operationString, CacheService.Instance.RoomID);
+        _operationKeyBroadcast.SetAndSendOperationKeyReqMessage(CacheService.Instance.PlayerEntityThis.EntityID, operationKeyType, operationString, CacheService.Instance.RoomID);
     }
 }

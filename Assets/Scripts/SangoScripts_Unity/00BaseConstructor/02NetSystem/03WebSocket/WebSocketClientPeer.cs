@@ -3,8 +3,6 @@ using Best.WebSockets;
 using SangoNetProtol;
 using SangoUtils_Common.Utils;
 using System;
-using System.Collections.Generic;
-using static System.Net.WebRequestMethods;
 
 public class WebSocketClientPeer
 {
@@ -67,16 +65,23 @@ public class WebSocketClientPeer
         _websocketClient.Close();
     }
 
-    //private void SendData(SangoNetMessage message)
-    //{
-    //    byte[] bytes = ProtoUtils.SetProtoBytes(message);
-    //    _websocketClient.Send(bytes);        
-    //}
-
     private void SendData(SangoNetMessage message)
     {
         string messageJson = JsonUtils.SetJsonString(message);
-        _websocketClient.Send(messageJson);
+        Send(messageJson);
+        //byte[] bytes = ProtoUtils.SetProtoBytes(message);
+        //Send(bytes);
+    }
+
+    private void Send(string jsonMessage)
+    {
+        _websocketClient.Send(jsonMessage);
+    }
+
+    private void Send(byte[] bufferMessage)
+    {
+        int count = bufferMessage.Length;
+        _websocketClient.SendAsBinary(new BufferSegment(bufferMessage, 0, count));
     }
 
     private void OnWebSocketOpen(WebSocket webSocket)
@@ -86,13 +91,8 @@ public class WebSocketClientPeer
 
     private void OnMessageReceived(WebSocket webSocket, string message)
     {
-        SangoLogger.Warning("Text Message received from server: " + message);
         SangoNetMessage sangoNetMessage = JsonUtils.DeJsonString<SangoNetMessage>(message);
-        if (sangoNetMessage == null)
-        {
-            SangoLogger.Error("Can`t Dejson!!!");
-        }
-        else
+        if (sangoNetMessage != null)
         {
             WebSocketService.Instance.OnMessageReceived(sangoNetMessage);
         }
@@ -100,15 +100,10 @@ public class WebSocketClientPeer
 
     private void OnBinaryMessageReceived(WebSocket webSocket, BufferSegment buffer)
     {
-        SangoLogger.Log("Binary Message received from server. Length: " + buffer.Count);
-        SangoNetMessage sangoNetMessage = ProtoUtils.DeProtoBytes<SangoNetMessage>(buffer);
+        byte[] data = new byte[buffer.Count];
+        Buffer.BlockCopy(buffer.Data, 0, data, 0, buffer.Count);
+        SangoNetMessage sangoNetMessage = ProtoUtils.DeProtoBytes<SangoNetMessage>(data);
         WebSocketService.Instance.OnMessageReceived(sangoNetMessage);
-        //long messageTimestamp = Convert.ToInt64(sangoNetMessage.NetMessageTimestamp);
-        //if (messageTimestamp > _lastMessageTimestamp)
-        //{
-        //    _lastMessageTimestamp = messageTimestamp;
-        //    WebSocketService.Instance.OnMessageReceived(sangoNetMessage);
-        //}
     }
 
     private void OnWebSocketClosed(WebSocket webSocket, WebSocketStatusCodes code, string message)

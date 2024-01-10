@@ -9,6 +9,7 @@ public class OperationKeyBroadcast : BaseNetBroadcast
         OperationKey operationKey = new(entityID, operationKeyType, operationString);
         _message.OperationKey = operationKey;
         _message.RoomID = roomID;
+        DefaultOperationBroadcast();
     }
 
     public override void OnBroadcast(string message)

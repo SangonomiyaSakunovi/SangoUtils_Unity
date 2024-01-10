@@ -8,7 +8,10 @@ public class CacheService : BaseService<CacheService>
         _entityCache = new EntityCache();
     }
 
-    public string EntityID { get => _entityCache.EntityID_This; set => _entityCache.EntityID_This = value; }
+    public uint RoomID { get; set; } = 0;
 
-    public uint RoomID { get => _entityCache.RoomID; set => _entityCache.RoomID = value; }
+    public PlayerEntity PlayerEntityThis { get => _entityCache.PlayerEntity_This; set => _entityCache.PlayerEntity_This = value; }
+
+
+
 }
