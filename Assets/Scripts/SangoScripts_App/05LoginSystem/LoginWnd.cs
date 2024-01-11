@@ -2,15 +2,7 @@ using UnityEngine.UI;
 
 public class LoginWnd : BaseWindow
 {
-    private LoginSystem _loginSystem;
-
     private Button _btnLoginAsGuest;
-
-    public override void SetSystem<T>(BaseSystem<T> baseSystem)
-    {
-        base.SetSystem(baseSystem);
-        _loginSystem = baseSystem as LoginSystem;
-    }
 
     protected override void OnInit()
     {
@@ -21,7 +13,7 @@ public class LoginWnd : BaseWindow
 
     private void OnBtnLoginAsGuestClicked(Button button)
     {
-        _loginSystem.LoginAsGuest();
+        SystemRoot.Instance.LoginSystem.LoginAsGuest();       
         base.SetWindowState(false);
     }
 }

@@ -15,7 +15,9 @@ public abstract class UnitySingleton<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     GameObject gameObject = new GameObject("[" + typeof(T).FullName + "]");
                     _instance = gameObject.AddComponent<T>();
+                    gameObject.hideFlags = HideFlags.HideInHierarchy;
                     DontDestroyOnLoad(gameObject);
+                    
                 }
             }
             return _instance;

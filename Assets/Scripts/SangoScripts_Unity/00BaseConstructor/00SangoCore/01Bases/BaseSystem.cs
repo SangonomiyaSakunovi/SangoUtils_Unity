@@ -1,20 +1,10 @@
-using UnityEngine;
-
-public abstract class BaseSystem<T> : MonoSingleton<T> where T : MonoBehaviour
+public abstract class BaseSystem<T> where T : class
 {
-    private void Update()
+    public string SystemID { get; protected set; } = "";
+    
+    public void Update()
     {
         OnUpdate();
-    }
-
-    public virtual void SetSystem()
-    {
-
-    }
-
-    public virtual void OnInit()
-    {
-
     }
 
     protected virtual void OnUpdate()

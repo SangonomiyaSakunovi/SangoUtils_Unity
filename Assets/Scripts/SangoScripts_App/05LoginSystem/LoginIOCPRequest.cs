@@ -22,7 +22,7 @@ public class LoginIOCPRequest : BaseNetRequest
         LoginRspMessage loginReqMessage = DeJsonString<LoginRspMessage>(message);
         if (loginReqMessage != null )
         {
-            LoginSystem.Instance.OnLoginSucceed(loginReqMessage.EntityID);
+            SystemRoot.Instance.LoginSystem.OnLoginSucceed(loginReqMessage.EntityID);
         }
     }
 } 

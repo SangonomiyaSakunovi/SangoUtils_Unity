@@ -26,9 +26,9 @@ public class SangoPatchWnd : BaseWindow
         SetText(_tips, "欢迎使用热更新系统");
     }
 
-    public override void SetRoot<T>(BaseRoot<T> baseRoot)
+    public void SetRoot(SangoPatchRoot root)
     {
-        _sangoHotFixRoot = baseRoot as SangoPatchRoot;
+        _sangoHotFixRoot = root;
     }
 
     public void ShowMessageBox(string content, Action onMessageBoxOKBtnClickedCB)

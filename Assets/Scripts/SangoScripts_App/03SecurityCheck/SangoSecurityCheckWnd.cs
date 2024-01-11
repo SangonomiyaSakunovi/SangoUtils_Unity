@@ -18,9 +18,9 @@ public class SangoSecurityCheckWnd : BaseWindow
 
     private TMP_Text[] _inputShowTexts = null;
 
-    public override void SetRoot<T>(BaseRoot<T> baseRoot)
+    public void SetRoot(SangoSecurityCheckRoot root)
     {
-        _sangoSecurityCheckRoot = baseRoot as SangoSecurityCheckRoot;
+        _sangoSecurityCheckRoot = root;
     }
 
     public void SetInfo(TypeInConfig config)

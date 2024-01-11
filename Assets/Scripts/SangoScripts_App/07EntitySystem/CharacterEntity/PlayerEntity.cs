@@ -1,5 +1,4 @@
 public class PlayerEntity : BaseObjectEntity
-
 {
     public PlayerEntity(string entityID, TransformData transformData, PlayerState playerState) : base(entityID, transformData, playerState) { }
 
@@ -15,7 +14,20 @@ public class PlayerEntity : BaseObjectEntity
 
     public void SendMoveKey(TransformData transformData)
     {
-        OperationKeyMoveSystem.Instance.AddOperationMove(transformData.Position);
+        SystemRoot.Instance.OperationKeyMoveSystem.AddOperationMove(transformData.Position);
+    }
+
+    protected override void OnUpdate()
+    {
+        base.OnUpdate();
+        if (MoveKeyTransformData != TransformData)
+        {
+            if (_controller != null)
+            {
+                //_controller.
+                //TODO
+            }
+        }
     }
 }
 

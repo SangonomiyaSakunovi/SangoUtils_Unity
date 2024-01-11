@@ -5,15 +5,13 @@ public class OperationKeyCoreSystem : BaseSystem<OperationKeyCoreSystem>
 {
     private OperationKeyBroadcast _operationKeyBroadcast;
 
-    public override void OnInit()
+    public OperationKeyCoreSystem()
     {
-        base.OnInit();
-        _instance = this;
         _operationKeyBroadcast = WebSocketService.Instance.GetNetBroadcast<OperationKeyBroadcast>(NetOperationCode.OperationKey);
     }
 
     public void SetAndSendOperationKey(OperationKeyType operationKeyType, string operationString)
     {
-        _operationKeyBroadcast.SetAndSendOperationKeyReqMessage(CacheService.Instance.PlayerEntityThis.EntityID, operationKeyType, operationString, CacheService.Instance.RoomID);
+        _operationKeyBroadcast.SetAndSendOperationKeyReqMessage(CacheService.Instance.EntityCache.PlayerEntity_This.EntityID, operationKeyType, operationString, CacheService.Instance.RoomID);
     }
 }

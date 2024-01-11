@@ -5,18 +5,12 @@ public class SangoGameRoot : BaseRoot<SangoGameRoot>
 {
     public SceneMainInstance SceneMainInstance;
 
-    private Transform _systemRootTrans;
-
-    private LoginSystem _loginSystem;
-    private OperationKeyCoreSystem _operationKeyCoreSystem;
-
     private void Awake()
     {
         Physics.autoSyncTransforms = true;
+        //gameObject.AddComponent<RuntimeLogger>();
 
         OnInit();
-
-
 
         SceneMainInstance.OnInit();
 
@@ -46,11 +40,8 @@ public class SangoGameRoot : BaseRoot<SangoGameRoot>
 
     private void InitSystem()
     {
-        _systemRootTrans = transform.Find("SystemRoot");
-        //_systemRootTrans.GetComponent<AOISystem>().OnInit();
-        _systemRootTrans.GetComponent<LoginSystem>().OnInit();
-        _systemRootTrans.GetComponent<OperationKeyCoreSystem>().OnInit();
-        _systemRootTrans.GetComponent<OperationKeyMoveSystem>().OnInit();
+        GetComponent<WindowRoot>().OnInit();
+        SystemRoot systemRoot = new();
     }
 
     private void SetConfig()

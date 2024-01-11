@@ -14,18 +14,23 @@ public class EventCache : BaseCache
     {
         Type eventType = typeof(T);
         int eventId = eventType.GetHashCode();
-        if (!_eventCacheDict.ContainsKey(eventId))
+        AddEventListener(eventId, eventMessage);
+    }
+
+    public void AddEventListener(int eventHash, Action<IEventMessageBase> eventMessage)
+    {        
+        if (!_eventCacheDict.ContainsKey(eventHash))
         {
-            _eventCacheDict.Add(eventId, new List<Action<IEventMessageBase>>());
+            _eventCacheDict.Add(eventHash, new List<Action<IEventMessageBase>>());
         }
-        if (!_eventCacheDict[eventId].Contains(eventMessage))
+        if (!_eventCacheDict[eventHash].Contains(eventMessage))
         {
-            _eventCacheDict[eventId].Add(eventMessage);
-            EventService.Instance.AddEventListener(eventId, eventMessage);
+            _eventCacheDict[eventHash].Add(eventMessage);
+            EventService.Instance.AddEventListener(eventHash, eventMessage);
         }
         else
         {
-            SangoLogger.Warning($"Event listener is exist : {eventType}");
+            SangoLogger.Warning($"Event listener is exist : {eventHash}");
         }
     }
 

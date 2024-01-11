@@ -14,14 +14,13 @@ public class OperationKeyBroadcast : BaseNetBroadcast
 
     public override void OnBroadcast(string message)
     {
-        SangoLogger.Processing("OperationKeyMessage Received: " + message);
         OperationKeyReqMessage reqMessage = DeJsonString<OperationKeyReqMessage>(message);
         if (reqMessage != null )
         {
             switch (reqMessage.OperationKey.OperationKeyType)
             {
                 case OperationKeyType.Move:
-                    OperationKeyMoveSystem.Instance.OnMessageReceived(reqMessage);
+                    SystemRoot.Instance.OperationKeyMoveSystem.OnMessageReceived(reqMessage.OperationKey);
                     break;
             }
         }

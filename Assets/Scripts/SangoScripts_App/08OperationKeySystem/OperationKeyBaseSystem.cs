@@ -1,17 +1,16 @@
 using SangoUtils_Common.Messages;
 using System;
-using UnityEngine;
 
-public abstract class OperationKeyBaseSystem<T> : BaseSystem<T> where T : MonoBehaviour
+public abstract class OperationKeyBaseSystem<T> : BaseSystem<T> where T : class, new()
 {
     protected OperationKeyType OperationKeyType { get; set; } = OperationKeyType.None;
 
     protected void SetAndSendOperationKey(string jsonString)
     {
-        OperationKeyCoreSystem.Instance.SetAndSendOperationKey(OperationKeyType, jsonString);
+        SystemRoot.Instance.OperationKeyCoreSystem.SetAndSendOperationKey(OperationKeyType, jsonString);
     }
 
-    public abstract void OnMessageReceived(OperationKeyReqMessage reqMessage);
+    public abstract void OnMessageReceived(OperationKey operationKey);
 
     protected string SetJsonString(object ob)
     {

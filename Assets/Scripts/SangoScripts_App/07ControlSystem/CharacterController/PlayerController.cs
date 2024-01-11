@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : BaseObjectController
 {
     private CharacterController _characterController;
     private PlayerEntity _playerEntity;
@@ -37,48 +37,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        //if (IsCurrent) 
-        //{
-        //    _vertical = Input.GetAxis("Vertical");
-        //    _horizontal = Input.GetAxis("Horizontal");
-        //    _moveDirection = new Vector3(_horizontal, 0f, _vertical);
-
-        //    _moveDirection = transform.TransformDirection(_moveDirection) * _movespeed;
-
-        //    _characterController.Move(_moveDirection * _movespeed * Time.deltaTime);
-        //}
-    }
-
     private void Update()
     {
         UpdateMoveKey();
-
-
-        //if (!string.IsNullOrEmpty(EntityID) && IsCurrent)
-        //{
-        //    if (transform.position != _positionLast)
-        //    {
-        //        OperationKeyMoveSystem.Instance.AddOperationMove(transform.position);
-        //        _positionLast = transform.position;
-        //    }
-        //}
-        //if (!IsCurrent)
-        //{
-        //    if (PositionTarget != transform.position)
-        //    {
-        //        Vector3 dir = PositionTarget - transform.position;
-        //        if (IsLerp)
-        //        {
-        //            transform.position = Vector3.MoveTowards(transform.position, PositionTarget, _movespeed * Time.deltaTime);
-        //        }
-        //        else
-        //        {
-        //            transform.position = PositionTarget;
-        //        }
-        //    }
-        //}
     }
 
     private Vector2 lastKeyDir = Vector2.zero;
@@ -109,7 +70,7 @@ public class PlayerController : MonoBehaviour
             if (dir != Vector2.zero)
             {
                 logicDir.Position = new(dirVector3.x, dirVector3.y, dirVector3.z);
-            }            
+            }
             _playerEntity.SendMoveKey(logicDir);
             lastStickDir = dir;
         }

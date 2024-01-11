@@ -11,10 +11,8 @@ public class AOISystem : BaseSystem<AOISystem>
 
     private Dictionary<string, GameObject> _entityID_ObjectDict = new();
 
-    public override void OnInit()
+    public AOISystem()
     {
-        base.OnInit();
-        _instance = this;
         _aoiIOCPRequest = IOCPService.Instance.GetNetRequest<AOIIOCPRequest>(NetOperationCode.Aoi);
         _aoiIOCPEvent = IOCPService.Instance.GetNetEvent<AOIIOCPEvent>(NetOperationCode.Aoi);
     }

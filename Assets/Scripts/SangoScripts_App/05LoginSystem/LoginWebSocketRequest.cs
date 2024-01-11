@@ -9,14 +9,14 @@ public class LoginWebSocketRequest : BaseNetRequest
         _message = new(loginMode, uID, password);
         DefaultOperationRequest();
     }
-    
+
     public override void OnOperationResponse(string message)
     {
         SangoLogger.Done("The loginResult from server: " + message);
         LoginRspMessage_SunUp loginRspMessage = DeJsonString<LoginRspMessage_SunUp>(message);
         if (loginRspMessage != null)
         {
-            LoginSystem.Instance.OnLoginSucceed(loginRspMessage.client_id);
+            SystemRoot.Instance.LoginSystem.OnLoginSucceed(loginRspMessage.client_id);
         }
     }
 

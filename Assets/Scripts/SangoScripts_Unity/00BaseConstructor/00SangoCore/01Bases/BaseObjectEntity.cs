@@ -1,5 +1,5 @@
 public abstract class BaseObjectEntity
-{
+{   
     public BaseObjectEntity(string entityID, TransformData transformData, PlayerState playerState)
     {
         EntityID = entityID;
@@ -10,6 +10,18 @@ public abstract class BaseObjectEntity
     public TransformData MoveKeyTransformData { get; set; }
     public TransformData TransformData { get; set; }
     public PlayerState PlayerState { get; set; }
+
+    public void Update()
+    {
+        OnUpdate();
+    }
+
+    protected virtual void OnUpdate()
+    {
+
+    }
+
+
 }
 
 public enum PlayerState

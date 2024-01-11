@@ -2,14 +2,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class SceneMainInstance : BaseScene<SceneMainInstance>
+public class SceneMainInstance : BaseScene
 {
+    public static SceneMainInstance Instance { get; private set; }
+
     private string _capsulePath = "ResTest/Capsule";
-    public Transform _parent;
 
     private Dictionary<string, GameObject> _entityDict = new();
-
-    public LoginSystem _loginSystem;
 
     private Transform _canvasTrans;
     private SangoPatchRoot _patchRoot;
@@ -21,7 +20,7 @@ public class SceneMainInstance : BaseScene<SceneMainInstance>
     public override void OnInit()
     {
         base.OnInit();
-        _instance = this;
+        Instance = this;
         _currentSceneViewConfig = SangoSystemConfig.SceneViewConfig;
         _currentNetEnvironmentConfig = SangoSystemConfig.NetEnvironmentConfig;
         SceneService.Instance.SetHandleEventMessageCallBack(OnHandleEventMessage);
@@ -32,7 +31,7 @@ public class SceneMainInstance : BaseScene<SceneMainInstance>
     private void GetTrans()
     {
         _canvasTrans = transform.Find("Canvas");
-        _patchRoot = _canvasTrans.Find("SangoPatchRoot").GetOrAddComponent<SangoPatchRoot>();
+        _patchRoot = _canvasTrans.Find("SangoPatchRoot").AddComponent<SangoPatchRoot>();
     }
 
     private void GameStart()
@@ -68,7 +67,6 @@ public class SceneMainInstance : BaseScene<SceneMainInstance>
                 //TODO
                 break;
             case NetEnvMode.Online_IOCP:
-                _loginSystem.OnInit();
                 break;
         }
     }

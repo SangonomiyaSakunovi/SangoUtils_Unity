@@ -1,5 +1,9 @@
 public class TypeInBaseSystem : BaseSystem<TypeInBaseSystem>
 {
+    public virtual void SetSystem()
+    {
+    }
+
     public virtual void ShowKeyboard() { }
 
     public virtual void HideKeyboard() { }

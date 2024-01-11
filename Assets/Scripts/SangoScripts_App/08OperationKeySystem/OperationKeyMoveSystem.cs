@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class OperationKeyMoveSystem : OperationKeyBaseSystem<OperationKeyMoveSystem>
 {
-    public override void OnInit()
+    public OperationKeyMoveSystem()
     {
-        base.OnInit();
-        _instance = this;
         OperationKeyType = OperationKeyType.Move;
     }
 
-    public override void OnMessageReceived(OperationKeyReqMessage reqMessage)
+    public override void OnMessageReceived(OperationKey operationKey)
     {
-
+        Vector3Info vector3Info = DeJsonString<Vector3Info>(operationKey.OperationString);
+        if (vector3Info != null)
+        {
+            TransformData transformData = new();
+            transformData.Position = new(vector3Info.X, vector3Info.Y, vector3Info.Z);
+            CacheService.Instance.EntityCache.AddEntityMoveKeyOnline(operationKey.EntityID, transformData);
+        }
     }
 
     public void AddOperationMove(Vector3 position)

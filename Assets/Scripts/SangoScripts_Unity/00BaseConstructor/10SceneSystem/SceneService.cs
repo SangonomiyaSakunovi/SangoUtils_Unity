@@ -30,6 +30,11 @@ public class SceneService : BaseService<SceneService>
         _eventCache.AddEventListener<SceneSystemEventMessage.ChangeToBattleScene>(OnHandleEventMessage);
     }
 
+    public void AddEvent(int eventHash)
+    {
+        _eventCache.AddEventListener(eventHash, OnHandleEventMessage);
+    }
+
     private void OnHandleEventMessage(IEventMessageBase message)
     {
         _onHandleEventMessage?.Invoke(message);

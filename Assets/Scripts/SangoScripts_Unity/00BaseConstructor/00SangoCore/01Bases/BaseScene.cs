@@ -1,28 +1,8 @@
 using UnityEngine;
 
-public abstract class BaseScene<T> : MonoSingleton<T> where T : MonoBehaviour
+public abstract class BaseScene : MonoBehaviour
 {
-    private void Awake()
-    {
-        OnAwake();
-    }
-
-    private void OnDestroy()
-    {
-        OnDispose();
-    }
-
     public virtual void OnInit()
-    {
-
-    }
-
-    protected virtual void OnAwake()
-    {
-
-    }
-
-    protected virtual void OnDispose()
     {
 
     }

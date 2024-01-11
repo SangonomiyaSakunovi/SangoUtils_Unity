@@ -91,6 +91,7 @@ public class WebSocketClientPeer
 
     private void OnMessageReceived(WebSocket webSocket, string message)
     {
+        SangoLogger.Processing("ClientMessage: " + message);
         SangoNetMessage sangoNetMessage = JsonUtils.DeJsonString<SangoNetMessage>(message);
         if (sangoNetMessage != null)
         {
