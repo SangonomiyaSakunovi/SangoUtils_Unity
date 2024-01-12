@@ -76,6 +76,7 @@ namespace SangoNetProtol
         LoadResource = 6,
         Aoi = 7,
         OperationKey = 8,
+        OperationResult = 9,
     }
 
     [global::ProtoBuf.ProtoContract()]

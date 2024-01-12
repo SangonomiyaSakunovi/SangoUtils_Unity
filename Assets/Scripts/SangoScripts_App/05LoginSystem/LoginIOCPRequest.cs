@@ -1,3 +1,4 @@
+using SangoScripts_Unity.Net;
 using SangoUtils_Common.Messages;
 
 public class LoginIOCPRequest : BaseNetRequest

@@ -1,7 +1,10 @@
-public class PatchLinkedFSM_DownloadPackageOver : FSMLinkedStaterItemBase
+namespace SangoScripts_Unity.Patch
 {
-    public override void OnEnter()
+    public class PatchLinkedFSM_DownloadPackageOver : FSMLinkedStaterItemBase
     {
-        _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_ClearPackageCache>();
+        public override void OnEnter()
+        {
+            _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_ClearPackageCache>();
+        }
     }
 }

@@ -1,48 +1,62 @@
+using SangoScripts_App.Entity;
+using SangoScripts_App.Scene;
+using SangoUtils_FixedNum;
 using System.Collections.Generic;
 
-public class EntityCache : BaseCache
+namespace SangoScripts_App.Cache
 {
-    public PlayerEntity PlayerEntity_This { get; private set; }
-
-    private Dictionary<string, PlayerEntity> _playerEntitysOnline = new();
-
-    public PlayerEntity AddEntityLocal(string entityID)
+    public class EntityCache : BaseCache
     {
-        TransformData transformData = new(new(0, 0, 0), new(0, 0, 0, 0), new(1, 1, 1));
-        PlayerEntity_This = new(entityID, transformData, PlayerState.Online);
-        return PlayerEntity_This;
-    }
+        public PlayerEntity PlayerEntity_This { get; private set; }
 
-    public PlayerEntity AddEntityOnline(string entityID)
-    {
-        TransformData transformData = new(new(0, 0, 0), new(0, 0, 0, 0), new(1, 1, 1));
-        PlayerEntity entity = new(entityID, transformData, PlayerState.Online);
-        _playerEntitysOnline.Add(entity.EntityID, entity);
-        return entity;
-    }
+        private Dictionary<string, PlayerEntity> _playerEntitysOnline = new();
 
-    public void RemoveEntityLocal()
-    {
-
-    }
-
-    public void RemoveEntityOnline()
-    {
-
-    }
-
-    public void AddEntityMoveKeyOnline(string entityID, TransformData transformData)
-    {
-        if (entityID != PlayerEntity_This.EntityID)
+        public PlayerEntity AddEntityLocal(string entityID)
         {
-            if (_playerEntitysOnline.TryGetValue(entityID, out var entity))
+            TransformData transformData = new(new(0, 0, 0), new(0, 0, 0, 0), new(1, 1, 1));
+            PlayerEntity_This = new(entityID, transformData, PlayerState.Online);
+            return PlayerEntity_This;
+        }
+
+        public PlayerEntity AddEntityOnline(string entityID)
+        {
+            TransformData transformData = new(new(0, 0, 0), new(0, 0, 0, 0), new(1, 1, 1));
+            PlayerEntity entity = new(entityID, transformData, PlayerState.Online);
+            SceneMainInstance.Instance.AddNewOnlineCapsule(entity);
+            _playerEntitysOnline.Add(entity.EntityID, entity);
+            return entity;
+        }
+
+        public void RemoveEntityLocal()
+        {
+
+        }
+
+        public void RemoveEntityOnline()
+        {
+
+        }
+
+        public void AddEntityMoveKeyOnline(string entityID, FixedVector3 logicDirection)
+        {
+            if (entityID != PlayerEntity_This.EntityID)
             {
-                entity.MoveKeyTransformData = transformData;
+                if (_playerEntitysOnline.TryGetValue(entityID, out PlayerEntity entity))
+                {
+                    //entity.LogicDirection = logicDirection;
+                    entity.LogicPosition = logicDirection;
+                }
+                else
+                {
+                    entity = AddEntityOnline(entityID);
+                    //entity.LogicDirection = logicDirection;
+                    entity.LogicPosition = logicDirection;
+                }
             }
             else
             {
-                entity = AddEntityOnline(entityID);
-                entity.MoveKeyTransformData = transformData;
+                //PlayerEntity_This.LogicDirection = logicDirection;
+                PlayerEntity_This.LogicPosition = logicDirection;
             }
         }
     }

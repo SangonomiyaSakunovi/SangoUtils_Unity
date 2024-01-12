@@ -1,4 +1,7 @@
 using SangoNetProtol;
+using SangoScripts_App.Scene;
+using SangoScripts_Unity.Net;
+using SangoScripts_Unity.Patch;
 using UnityEngine;
 
 public class SangoGameRoot : BaseRoot<SangoGameRoot>

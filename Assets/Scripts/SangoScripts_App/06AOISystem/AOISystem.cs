@@ -1,6 +1,7 @@
 using SangoNetProtol;
-using SangoUtils_Common.Infos;
+using SangoScripts_Unity.Net;
 using SangoUtils_Common.Messages;
+using SangoUtils_FixedNum;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,12 +18,13 @@ public class AOISystem : BaseSystem<AOISystem>
         _aoiIOCPEvent = IOCPService.Instance.GetNetEvent<AOIIOCPEvent>(NetOperationCode.Aoi);
     }
 
-    public void AddAOIActiveMoveEntity(string entityId, Transform transform)
+    public void AddAOIActiveMoveEntity(string entityId, FixedVector3 logicPosition)
     {
-        Vector3Info position = new(transform.position.x, transform.position.y, transform.position.z);
-        QuaternionInfo rotation = new(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w);
-        Vector3Info scale = new(transform.localScale.x, transform.localScale.y, transform.localScale.z);
-        TransformInfo transformInfo = new(position, rotation, scale);
+        Vector3Message position = new(logicPosition.X.ScaledValue, logicPosition.Y.ScaledValue, logicPosition.Z.ScaledValue);
+        //QuaternionMessage rotation = new(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w);
+        //Vector3Message scale = new(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+        //TransformMessage transformInfo = new(position, rotation, scale);
+        TransformMessage transformInfo = new();
 
         AOIActiveMoveEntity activeMoveEntity = new AOIActiveMoveEntity(entityId, transformInfo);
         _aoiIOCPRequest.AddAOIActiveMoveEntity(activeMoveEntity);

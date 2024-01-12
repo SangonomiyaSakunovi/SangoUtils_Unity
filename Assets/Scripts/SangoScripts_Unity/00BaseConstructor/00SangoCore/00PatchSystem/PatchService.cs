@@ -1,46 +1,49 @@
 using System.Collections;
 using YooAsset;
 
-public class PatchService : BaseService<PatchService>
+namespace SangoScripts_Unity.Patch
 {
-    private PatchConfig _currentPatchConfig;
-
-    private CoroutineHandler coroutine = null;
-
-    public override void OnInit()
+    public class PatchService : BaseService<PatchService>
     {
-        base.OnInit();
-        coroutine = StartOperation().Start();
+        private PatchConfig _currentPatchConfig;
+
+        private CoroutineHandler coroutine = null;
+
+        public override void OnInit()
+        {
+            base.OnInit();
+            coroutine = StartOperation().Start();
+        }
+
+        public void SetConfig(PatchConfig patchConfig)
+        {
+            _currentPatchConfig = patchConfig;
+        }
+
+        private IEnumerator StartOperation()
+        {
+            YooAssets.Initialize();
+
+            PatchOperation hotFixOperation = new PatchOperation(_currentPatchConfig);
+            YooAssets.StartOperation(hotFixOperation);
+            yield return hotFixOperation;
+
+            ResourcePackage assetPackage = YooAssets.GetPackage(_currentPatchConfig.PackageName);
+            YooAssets.SetDefaultPackage(assetPackage);
+
+            PatchSystemEventMessage.ClosePatchWindow_PatchSystemEventMessage.SendEventMessage();
+            SceneSystemEventMessage.ChangeToHomeScene.SendEventMessage();
+        }
     }
 
-    public void SetConfig(PatchConfig patchConfig)
+    public class PatchConfig : BaseConfig
     {
-        _currentPatchConfig = patchConfig;
+        public string HostServerIP { get; set; }
+        public string AppId { get; set; }
+        public string AppVersion { get; set; }
+
+        public string PackageName { get; set; }
+        public EPlayMode PlayMode { get; set; }
+        public EDefaultBuildPipeline BuildPipeline { get; set; }
     }
-
-    private IEnumerator StartOperation()
-    {
-        YooAssets.Initialize();
-
-        PatchOperation hotFixOperation = new PatchOperation(_currentPatchConfig);
-        YooAssets.StartOperation(hotFixOperation);
-        yield return hotFixOperation;
-
-        ResourcePackage assetPackage = YooAssets.GetPackage(_currentPatchConfig.PackageName);
-        YooAssets.SetDefaultPackage(assetPackage);
-
-        PatchSystemEventMessage.ClosePatchWindow_PatchSystemEventMessage.SendEventMessage();
-        SceneSystemEventMessage.ChangeToHomeScene.SendEventMessage();
-    }
-}
-
-public class PatchConfig : BaseConfig
-{
-    public string HostServerIP { get; set; }
-    public string AppId { get; set; }
-    public string AppVersion { get; set; }
-
-    public string PackageName { get; set; }
-    public EPlayMode PlayMode { get; set; }
-    public EDefaultBuildPipeline BuildPipeline { get; set; }
 }

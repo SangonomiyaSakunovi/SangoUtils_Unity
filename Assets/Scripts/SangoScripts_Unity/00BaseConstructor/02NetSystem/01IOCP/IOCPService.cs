@@ -1,89 +1,92 @@
 using SangoNetProtol;
 using System.Collections.Generic;
 
-public class IOCPService : BaseNetService<IOCPService>
+namespace SangoScripts_Unity.Net
 {
-    private IOCPPeer<IOCPClientPeer> _clientPeerInstance;
-
-    private Queue<SangoNetMessage> _netMessageProxyQueue = new();
-
-    private NetEnvironmentConfig _currentNetEnvironmentConfig;
-
-    public override void OnInit()
+    public class IOCPService : BaseNetService<IOCPService>
     {
-        base.OnInit();
+        private IOCPPeer<IOCPClientPeer> _clientPeerInstance;
 
-        string ipAddress = _currentNetEnvironmentConfig.ServerAddress;
-        int port = _currentNetEnvironmentConfig.ServerPort;
-        InitClientInstance(ipAddress, port);
+        private Queue<SangoNetMessage> _netMessageProxyQueue = new();
 
-        DefaultIOCPRequest defaultNetRequest = GetNetRequest<DefaultIOCPRequest>(NetOperationCode.Default);
-        DefaultIOCPEvent defaultNetEvent = GetNetEvent<DefaultIOCPEvent>(NetOperationCode.Default);
-    }
+        private NetEnvironmentConfig _currentNetEnvironmentConfig;
 
-    public override void SetConfig(NetEnvironmentConfig netEnvironmentConfig)
-    {
-        _currentNetEnvironmentConfig = netEnvironmentConfig;
-    }
-
-    protected override void OnUpdate()
-    {
-        if (_netMessageProxyQueue.Count > 0)
+        public override void OnInit()
         {
-            SangoNetMessage sangoNetMessage = _netMessageProxyQueue.Dequeue();
-            OnMessageReceivedInMainThread(sangoNetMessage);
+            base.OnInit();
+
+            string ipAddress = _currentNetEnvironmentConfig.ServerAddress;
+            int port = _currentNetEnvironmentConfig.ServerPort;
+            InitClientInstance(ipAddress, port);
+
+            DefaultIOCPRequest defaultNetRequest = GetNetRequest<DefaultIOCPRequest>(NetOperationCode.Default);
+            DefaultIOCPEvent defaultNetEvent = GetNetEvent<DefaultIOCPEvent>(NetOperationCode.Default);
+        }
+
+        public override void SetConfig(NetEnvironmentConfig netEnvironmentConfig)
+        {
+            _currentNetEnvironmentConfig = netEnvironmentConfig;
+        }
+
+        protected override void OnUpdate()
+        {
+            if (_netMessageProxyQueue.Count > 0)
+            {
+                SangoNetMessage sangoNetMessage = _netMessageProxyQueue.Dequeue();
+                OnMessageReceivedInMainThread(sangoNetMessage);
+            }
+        }
+
+        public override void SendOperationRequest(NetOperationCode operationCode, string messageStr)
+        {
+            _clientPeerInstance.ClientPeer.SendOperationRequest(operationCode, messageStr);
+        }
+
+        public override void SendOperationBroadcast(NetOperationCode operationCode, string messageStr)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void AddNetMessageProxy(SangoNetMessage sangoNetMessage)
+        {
+            _netMessageProxyQueue.Enqueue(sangoNetMessage);
+        }
+
+        public override void OnMessageReceived(SangoNetMessage sangoNetMessage)
+        {
+            AddNetMessageProxy(sangoNetMessage);
+        }
+
+        private void OnMessageReceivedInMainThread(SangoNetMessage sangoNetMessage)
+        {
+            NetMessageCommandBroadcast(sangoNetMessage);
+        }
+
+        private void InitClientInstance(string ipAddress, int port)
+        {
+            _clientPeerInstance = new IOCPPeer<IOCPClientPeer>();
+            _clientPeerInstance.InitAsClient(ipAddress, port);
+        }
+
+        public void CloseClientInstance()
+        {
+            _clientPeerInstance.CloseClient();
         }
     }
 
-    public override void SendOperationRequest(NetOperationCode operationCode, string messageStr)
+    public class NetEnvironmentConfig : BaseConfig
     {
-        _clientPeerInstance.ClientPeer.SendOperationRequest(operationCode, messageStr);
+        public NetEnvMode NetEnvMode { get; set; } = NetEnvMode.Offline;
+        public string ServerAddress { get; set; } = "127.0.0.1";
+        public int ServerPort { get; set; } = 52037;
+        public string ServerAddressAndPort { get; set; } = "ws://127.0.0.1:52037";
     }
 
-    public override void SendOperationBroadcast(NetOperationCode operationCode, string messageStr)
+    public enum NetEnvMode
     {
-        throw new System.NotImplementedException();
+        Offline,
+        Online_IOCP,
+        Online_Http,
+        Online_WebSocket
     }
-
-    private void AddNetMessageProxy(SangoNetMessage sangoNetMessage)
-    {
-        _netMessageProxyQueue.Enqueue(sangoNetMessage);
-    }
-
-    public override void OnMessageReceived(SangoNetMessage sangoNetMessage)
-    {
-        AddNetMessageProxy(sangoNetMessage);
-    }
-
-    private void OnMessageReceivedInMainThread(SangoNetMessage sangoNetMessage)
-    {
-        NetMessageCommandBroadcast(sangoNetMessage);
-    }
-
-    private void InitClientInstance(string ipAddress, int port)
-    {
-        _clientPeerInstance = new IOCPPeer<IOCPClientPeer>();
-        _clientPeerInstance.InitAsClient(ipAddress, port);
-    }
-
-    public void CloseClientInstance()
-    {
-        _clientPeerInstance.CloseClient();
-    }
-}
-
-public class NetEnvironmentConfig : BaseConfig
-{
-    public NetEnvMode NetEnvMode { get; set; } = NetEnvMode.Offline;
-    public string ServerAddress { get; set; } = "127.0.0.1";
-    public int ServerPort { get; set; } = 52037;
-    public string ServerAddressAndPort { get; set; } = "ws://127.0.0.1:52037";
-}
-
-public enum NetEnvMode
-{
-    Offline,
-    Online_IOCP,
-    Online_Http,
-    Online_WebSocket
 }

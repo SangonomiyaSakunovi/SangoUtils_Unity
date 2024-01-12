@@ -1,3 +1,5 @@
+using SangoScripts_Unity.Net;
+
 public abstract class BaseUdpEvent
 {
     public int UdpEventPortId { get; private set; }

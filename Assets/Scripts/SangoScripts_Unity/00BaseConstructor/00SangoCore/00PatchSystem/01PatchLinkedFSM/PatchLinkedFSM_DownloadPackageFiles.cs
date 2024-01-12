@@ -1,27 +1,30 @@
 using System.Collections;
 using YooAsset;
 
-public class PatchLinkedFSM_DownloadPackageFiles : FSMLinkedStaterItemBase
+namespace SangoScripts_Unity.Patch
 {
-    private CoroutineHandler coroutine = null;
-
-    public override void OnEnter()
+    public class PatchLinkedFSM_DownloadPackageFiles : FSMLinkedStaterItemBase
     {
-        PatchSystemEventMessage.PatchStatesChange_PatchSystemEventMessage.SendEventMessage("开始下载补丁文件！");
-        coroutine = BeginDownload().Start();
-    }
+        private CoroutineHandler coroutine = null;
 
-    private IEnumerator BeginDownload()
-    {
-        var downloader = (ResourceDownloaderOperation)_fsmLinkedStater.GetBlackboardValue("Downloader");
-        downloader.OnDownloadErrorCallback = PatchSystemEventMessage.WebFileDownloadFailed_PatchSystemEventMessage.SendEventMessage;
-        downloader.OnDownloadProgressCallback = PatchSystemEventMessage.DownloadProgressUpdate_PatchSystemEventMessage.SendEventMessage;
-        downloader.BeginDownload();
-        yield return downloader;
+        public override void OnEnter()
+        {
+            PatchSystemEventMessage.PatchStatesChange_PatchSystemEventMessage.SendEventMessage("开始下载补丁文件！");
+            coroutine = BeginDownload().Start();
+        }
 
-        if (downloader.Status != EOperationStatus.Succeed)
-            yield break;
+        private IEnumerator BeginDownload()
+        {
+            var downloader = (ResourceDownloaderOperation)_fsmLinkedStater.GetBlackboardValue("Downloader");
+            downloader.OnDownloadErrorCallback = PatchSystemEventMessage.WebFileDownloadFailed_PatchSystemEventMessage.SendEventMessage;
+            downloader.OnDownloadProgressCallback = PatchSystemEventMessage.DownloadProgressUpdate_PatchSystemEventMessage.SendEventMessage;
+            downloader.BeginDownload();
+            yield return downloader;
 
-        _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_DownloadPackageOver>();
+            if (downloader.Status != EOperationStatus.Succeed)
+                yield break;
+
+            _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_DownloadPackageOver>();
+        }
     }
 }

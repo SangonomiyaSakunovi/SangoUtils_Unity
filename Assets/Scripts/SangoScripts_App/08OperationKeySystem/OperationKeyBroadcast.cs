@@ -1,34 +1,38 @@
+using SangoScripts_Unity.Net;
 using SangoUtils_Common.Messages;
 
-public class OperationKeyBroadcast : BaseNetBroadcast
+namespace SangoScripts_App.Operation
 {
-    private OperationKeyReqMessage _message = new();
-
-    public void SetAndSendOperationKeyReqMessage(string entityID, OperationKeyType operationKeyType, string operationString, uint roomID = 0)
+    public class OperationKeyBroadcast : BaseNetBroadcast
     {
-        OperationKey operationKey = new(entityID, operationKeyType, operationString);
-        _message.OperationKey = operationKey;
-        _message.RoomID = roomID;
-        DefaultOperationBroadcast();
-    }
+        private OperationKeyReqMessage _message = new();
 
-    public override void OnBroadcast(string message)
-    {
-        OperationKeyReqMessage reqMessage = DeJsonString<OperationKeyReqMessage>(message);
-        if (reqMessage != null )
+        public void SetAndSendOperationKeyReqMessage(string entityID, OperationKeyType operationKeyType, string operationString, uint roomID = 0)
         {
-            switch (reqMessage.OperationKey.OperationKeyType)
+            OperationKey operationKey = new(entityID, operationKeyType, operationString);
+            _message.OperationKey = operationKey;
+            _message.RoomID = roomID;
+            DefaultOperationBroadcast();
+        }
+
+        public override void OnBroadcast(string message)
+        {
+            OperationKeyReqMessage reqMessage = DeJsonString<OperationKeyReqMessage>(message);
+            if (reqMessage != null)
             {
-                case OperationKeyType.Move:
-                    SystemRoot.Instance.OperationKeyMoveSystem.OnMessageReceived(reqMessage.OperationKey);
-                    break;
+                switch (reqMessage.OperationKey.OperationKeyType)
+                {
+                    case OperationKeyType.Move:
+                        SystemRoot.Instance.OperationKeyMoveSystem.OnMessageReceived(reqMessage.OperationKey);
+                        break;
+                }
             }
         }
-    }
 
-    public override void DefaultOperationBroadcast()
-    {
-        string jsonString = SetJsonString(_message);
-        WebSocketService.Instance.SendOperationBroadcast(NetOperationCode, jsonString);
+        public override void DefaultOperationBroadcast()
+        {
+            string jsonString = SetJsonString(_message);
+            WebSocketService.Instance.SendOperationBroadcast(NetOperationCode, jsonString);
+        }
     }
 }

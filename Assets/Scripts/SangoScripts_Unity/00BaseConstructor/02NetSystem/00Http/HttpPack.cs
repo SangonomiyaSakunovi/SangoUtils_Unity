@@ -2,50 +2,57 @@
 using System;
 using UnityEngine.Networking;
 
-public enum HttpType
+namespace SangoScripts_Unity.Net
 {
-    Get,
-    Post,
-    Put
-}
-
-public abstract class HttpPack
-{
-    public int Id { get; set; }
-    public string Url { get; set; }
-    public HttpType HttpType { get; set; }
-    public Type DataType { get; set; }
-    public string Parame { get; set; }
-    public int TryCount { get; set; }
-    public UnityWebRequest WebRequest { get; set; }
-
-    public abstract void OnDataReceived(string dataStr, int code, int messageId);
-}
-
-public class HttpPack<T> : HttpPack where T : class
-{
-    public override void OnDataReceived(string dataStr, int code, int messageId)
+    public enum HttpType
     {
-        SangoLogger.Log("HttpMessageId:[" + messageId + "], ReceivedStr: " + dataStr);
-        JObject recvObj = JObject.Parse(dataStr);
-        int resCode = recvObj["res"].Value<int>();
-        if (resCode == 0)
+        Get,
+        Post,
+        Put
+    }
+
+    public abstract class HttpPack
+    {
+        public int Id { get; set; }
+        public string Url { get; set; }
+        public HttpType HttpType { get; set; }
+        public Type DataType { get; set; }
+        public string Parame { get; set; }
+        public int TryCount { get; set; }
+        public UnityWebRequest WebRequest { get; set; }
+
+        public abstract void OnDataReceived(string dataStr, int code, int messageId);
+    }
+
+    public class HttpPack<T> : HttpPack where T : class
+    {
+        public override void OnDataReceived(string dataStr, int code, int messageId)
         {
-            string recievedData = recvObj["data"].ToString();
-            if (!string.IsNullOrEmpty(recievedData))
+            SangoLogger.Log("HttpMessageId:[" + messageId + "], ReceivedStr: " + dataStr);
+            JObject recvObj = JObject.Parse(dataStr);
+            int resCode = recvObj["res"].Value<int>();
+            if (resCode == 0)
             {
-                T data;
-                if (typeof(T).Name == "String")
+                string recievedData = recvObj["data"].ToString();
+                if (!string.IsNullOrEmpty(recievedData))
                 {
-                    data = recievedData as T;
+                    T data;
+                    if (typeof(T).Name == "String")
+                    {
+                        data = recievedData as T;
+                    }
+                    else
+                    {
+                        data = JsonUtils.DeJsonString<T>(recievedData.ToString());
+                    }
+                    if (data != null)
+                    {
+                        HttpService.Instance?.HttpBroadcast<T>(data, messageId, resCode);
+                    }
                 }
                 else
                 {
-                    data = JsonUtils.DeJsonString<T>(recievedData.ToString());
-                }
-                if (data != null)
-                {
-                    HttpService.Instance?.HttpBroadcast<T>(data, messageId, resCode);
+                    HttpService.Instance?.HttpBroadcast<T>(null, messageId, resCode);
                 }
             }
             else
@@ -53,9 +60,6 @@ public class HttpPack<T> : HttpPack where T : class
                 HttpService.Instance?.HttpBroadcast<T>(null, messageId, resCode);
             }
         }
-        else
-        {
-            HttpService.Instance?.HttpBroadcast<T>(null, messageId, resCode);
-        }
     }
 }
+

@@ -2,37 +2,39 @@ using System.Collections;
 using UnityEngine;
 using YooAsset;
 
-public class PatchLinkedFSM_UpdatePackageManifest : FSMLinkedStaterItemBase
+namespace SangoScripts_Unity.Patch
 {
-    private CoroutineHandler coroutine = null;
-
-    public override void OnEnter()
+    public class PatchLinkedFSM_UpdatePackageManifest : FSMLinkedStaterItemBase
     {
-        PatchSystemEventMessage.PatchStatesChange_PatchSystemEventMessage.SendEventMessage("更新资源清单！");
-        coroutine = UpdateManifest().Start();
-    }
+        private CoroutineHandler coroutine = null;
 
-    private IEnumerator UpdateManifest()
-    {
-        yield return new WaitForSecondsRealtime(0.5f);
-
-        var packageName = (string)_fsmLinkedStater.GetBlackboardValue("PackageName");
-        var packageVersion = (string)_fsmLinkedStater.GetBlackboardValue("PackageVersion");
-        var package = YooAssets.GetPackage(packageName);
-        bool savePackageVersion = true;
-        var operation = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);
-        yield return operation;
-
-        if (operation.Status != EOperationStatus.Succeed)
+        public override void OnEnter()
         {
-            Debug.LogWarning(operation.Error);
-            PatchSystemEventMessage.PatchManifestUpdateFailed_PatchSystemEventMessage.SendEventMessage();
-            yield break;
+            PatchSystemEventMessage.PatchStatesChange_PatchSystemEventMessage.SendEventMessage("更新资源清单！");
+            coroutine = UpdateManifest().Start();
         }
-        else
+
+        private IEnumerator UpdateManifest()
         {
-            _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_CreatePackageDownloader>();
+            yield return new WaitForSecondsRealtime(0.5f);
+
+            var packageName = (string)_fsmLinkedStater.GetBlackboardValue("PackageName");
+            var packageVersion = (string)_fsmLinkedStater.GetBlackboardValue("PackageVersion");
+            var package = YooAssets.GetPackage(packageName);
+            bool savePackageVersion = true;
+            var operation = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);
+            yield return operation;
+
+            if (operation.Status != EOperationStatus.Succeed)
+            {
+                Debug.LogWarning(operation.Error);
+                PatchSystemEventMessage.PatchManifestUpdateFailed_PatchSystemEventMessage.SendEventMessage();
+                yield break;
+            }
+            else
+            {
+                _fsmLinkedStater.InvokeTargetStaterItem<PatchLinkedFSM_CreatePackageDownloader>();
+            }
         }
     }
 }
-

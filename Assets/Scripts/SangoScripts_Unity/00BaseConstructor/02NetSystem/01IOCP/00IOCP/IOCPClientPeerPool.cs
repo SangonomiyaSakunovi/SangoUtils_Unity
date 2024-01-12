@@ -1,33 +1,36 @@
 using System.Collections.Generic;
 
-public class IOCPClientPeerPool<T> where T : IClientPeer_IOCP, new()
+namespace SangoScripts_Unity.Net
 {
-    private Stack<T> _clientPeerStack;
-    public int Size => _clientPeerStack.Count;
-
-    public IOCPClientPeerPool(int capacity)
+    public class IOCPClientPeerPool<T> where T : IClientPeer_IOCP, new()
     {
-        _clientPeerStack = new Stack<T>(capacity);
-    }
+        private Stack<T> _clientPeerStack;
+        public int Size => _clientPeerStack.Count;
 
-    public T Pop()
-    {
-        lock (_clientPeerStack)
+        public IOCPClientPeerPool(int capacity)
         {
-            return _clientPeerStack.Pop();
+            _clientPeerStack = new Stack<T>(capacity);
         }
-    }
 
-    public void Push(T peer)
-    {
-        if (peer == null)
+        public T Pop()
         {
-            IOCPLogger.Error("The clientPeer to pool can`t be null");
-            return;
+            lock (_clientPeerStack)
+            {
+                return _clientPeerStack.Pop();
+            }
         }
-        lock (_clientPeerStack)
+
+        public void Push(T peer)
         {
-            _clientPeerStack.Push(peer);
+            if (peer == null)
+            {
+                IOCPLogger.Error("The clientPeer to pool can`t be null");
+                return;
+            }
+            lock (_clientPeerStack)
+            {
+                _clientPeerStack.Push(peer);
+            }
         }
     }
 }

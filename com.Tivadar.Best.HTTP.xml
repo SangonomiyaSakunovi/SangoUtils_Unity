@@ -29161,11 +29161,6 @@
             Called when the Unity application's foreground state changed.
             </summary>
         </member>
-        <member name="M:Best.HTTP.Shared.HTTPUpdateDelegator.ResetSetup">
-            <summary>
-            Called after scene loaded to support Configurable Enter Play Mode (https://docs.unity3d.com/2019.3/Documentation/Manual/ConfigurableEnterPlayMode.html)
-            </summary>
-        </member>
         <member name="M:Best.HTTP.Shared.HTTPUpdateDelegator.CheckInstance">
             <summary>
             Will create the HTTPUpdateDelegator instance and set it up.
