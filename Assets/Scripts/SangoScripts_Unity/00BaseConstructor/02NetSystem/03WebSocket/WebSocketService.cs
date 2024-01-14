@@ -1,10 +1,12 @@
 using SangoNetProtol;
+using SangoUtils_NetOperation;
 
 namespace SangoScripts_Unity.Net
 {
-    public class WebSocketService : BaseNetService<WebSocketService>
+    public class WebSocketService : BaseService<WebSocketService>, INetOperation
     {
         private WebSocketClientPeer _clientPeerInstance;
+        private NetClientOperationHandler _netOperationHandler = new();
 
         private NetEnvironmentConfig _currentNetEnvironmentConfig;
 
@@ -14,29 +16,29 @@ namespace SangoScripts_Unity.Net
             string ipAddressAndPort = _currentNetEnvironmentConfig.ServerAddressAndPort;
             InitClientInstance(ipAddressAndPort);
 
-            DefaultWebSocketRequest defaultWebSocketRequest = GetNetRequest<DefaultWebSocketRequest>(NetOperationCode.Default);
-            DefaultWebSocketEvent defaultWebSocketEvent = GetNetEvent<DefaultWebSocketEvent>(NetOperationCode.Default);
-            DefaultWebSocketBroadcast defaultWebSocketBroadcast = GetNetBroadcast<DefaultWebSocketBroadcast>(NetOperationCode.Default);
+            DefaultWebSocketRequest defaultWebSocketRequest = _netOperationHandler.GetNetRequest<DefaultWebSocketRequest>(NetOperationCode.Default);
+            DefaultWebSocketEvent defaultWebSocketEvent = _netOperationHandler.GetNetEvent<DefaultWebSocketEvent>(NetOperationCode.Default);
+            DefaultWebSocketBroadcast defaultWebSocketBroadcast = _netOperationHandler.GetNetBroadcast<DefaultWebSocketBroadcast>(NetOperationCode.Default);
         }
 
-        public override void SetConfig(NetEnvironmentConfig netEnvironmentConfig)
+        public void SetConfig(NetEnvironmentConfig netEnvironmentConfig)
         {
             _currentNetEnvironmentConfig = netEnvironmentConfig;
         }
 
-        public override void SendOperationRequest(NetOperationCode operationCode, string messageStr)
+        public void SendOperationRequest(NetOperationCode operationCode, string messageStr)
         {
             _clientPeerInstance.SendOperationRequest(operationCode, messageStr);
         }
 
-        public override void SendOperationBroadcast(NetOperationCode operationCode, string messageStr)
+        public void SendOperationBroadcast(NetOperationCode operationCode, string messageStr)
         {
             _clientPeerInstance.SendOperationBroadcast(operationCode, messageStr);
         }
 
-        public override void OnMessageReceived(SangoNetMessage sangoNetMessage)
+        public void OnMessageReceived(SangoNetMessage sangoNetMessage)
         {
-            NetMessageCommandBroadcast(sangoNetMessage);
+            _netOperationHandler.NetMessageCommandBroadcast(sangoNetMessage);
         }
 
         //public override void OnBinaryReceived(SangoNetMessage sangoNetMessage)
@@ -52,6 +54,21 @@ namespace SangoScripts_Unity.Net
         public void CloseClientInstance()
         {
             _clientPeerInstance.Close();
+        }
+
+        public T GetNetRequest<T>(NetOperationCode netOperationCode) where T : BaseNetRequest, new()
+        {
+            return _netOperationHandler.GetNetRequest<T>(netOperationCode);
+        }
+
+        public T GetNetEvent<T>(NetOperationCode operationCode) where T : BaseNetEvent, new()
+        {
+            return _netOperationHandler.GetNetEvent<T>(operationCode);
+        }
+
+        public T GetNetBroadcast<T>(NetOperationCode operationCode) where T : BaseNetBroadcast, new()
+        {
+            return _netOperationHandler.GetNetBroadcast<T>(operationCode);
         }
     }
 }

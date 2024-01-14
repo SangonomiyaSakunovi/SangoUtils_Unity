@@ -1,12 +1,14 @@
 using SangoNetProtol;
 using SangoUtils_IOCP;
+using SangoUtils_NetOperation;
 using System.Collections.Generic;
 
 namespace SangoScripts_Unity.Net
 {
-    public class IOCPService : BaseNetService<IOCPService>
+    public class IOCPService : BaseService<IOCPService>, INetOperation
     {
         private IOCPPeer<IOCPClientPeer> _clientPeerInstance;
+        private NetClientOperationHandler _netOperationHandler = new();
 
         private Queue<SangoNetMessage> _netMessageProxyQueue = new();
 
@@ -20,11 +22,11 @@ namespace SangoScripts_Unity.Net
             int port = _currentNetEnvironmentConfig.ServerPort;
             InitClientInstance(ipAddress, port);
 
-            DefaultIOCPRequest defaultNetRequest = GetNetRequest<DefaultIOCPRequest>(NetOperationCode.Default);
-            DefaultIOCPEvent defaultNetEvent = GetNetEvent<DefaultIOCPEvent>(NetOperationCode.Default);
+            DefaultIOCPRequest defaultNetRequest = _netOperationHandler.GetNetRequest<DefaultIOCPRequest>(NetOperationCode.Default);
+            DefaultIOCPEvent defaultNetEvent = _netOperationHandler.GetNetEvent<DefaultIOCPEvent>(NetOperationCode.Default);
         }
 
-        public override void SetConfig(NetEnvironmentConfig netEnvironmentConfig)
+        public void SetConfig(NetEnvironmentConfig netEnvironmentConfig)
         {
             _currentNetEnvironmentConfig = netEnvironmentConfig;
         }
@@ -38,12 +40,12 @@ namespace SangoScripts_Unity.Net
             }
         }
 
-        public override void SendOperationRequest(NetOperationCode operationCode, string messageStr)
+        public void SendOperationRequest(NetOperationCode operationCode, string messageStr)
         {
             _clientPeerInstance.ClientPeer.SendOperationRequest(operationCode, messageStr);
         }
 
-        public override void SendOperationBroadcast(NetOperationCode operationCode, string messageStr)
+        public void SendOperationBroadcast(NetOperationCode operationCode, string messageStr)
         {
             throw new System.NotImplementedException();
         }
@@ -53,25 +55,41 @@ namespace SangoScripts_Unity.Net
             _netMessageProxyQueue.Enqueue(sangoNetMessage);
         }
 
-        public override void OnMessageReceived(SangoNetMessage sangoNetMessage)
+        public void OnMessageReceived(SangoNetMessage sangoNetMessage)
         {
             AddNetMessageProxy(sangoNetMessage);
         }
 
         private void OnMessageReceivedInMainThread(SangoNetMessage sangoNetMessage)
         {
-            NetMessageCommandBroadcast(sangoNetMessage);
+            _netOperationHandler.NetMessageCommandBroadcast(sangoNetMessage);
         }
 
         private void InitClientInstance(string ipAddress, int port)
         {
             _clientPeerInstance = new IOCPPeer<IOCPClientPeer>();
             _clientPeerInstance.OpenAsUnityClient(ipAddress, port);
+            _netOperationHandler = new();
         }
 
         public void CloseClientInstance()
         {
             _clientPeerInstance.CloseAsClient();
+        }
+
+        public T GetNetRequest<T>(NetOperationCode netOperationCode) where T : BaseNetRequest, new()
+        {
+            return _netOperationHandler.GetNetRequest<T>(netOperationCode);
+        }
+
+        public T GetNetEvent<T>(NetOperationCode operationCode) where T : BaseNetEvent, new()
+        {
+            return _netOperationHandler.GetNetEvent<T>(operationCode);
+        }
+
+        public T GetNetBroadcast<T>(NetOperationCode operationCode) where T : BaseNetBroadcast, new()
+        {
+            return _netOperationHandler.GetNetBroadcast<T>(operationCode);
         }
     }
 
