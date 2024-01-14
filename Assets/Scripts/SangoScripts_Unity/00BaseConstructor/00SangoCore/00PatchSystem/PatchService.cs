@@ -1,4 +1,5 @@
 using SangoUtils_Extensions_UnityEngine.Core;
+using SangoUtils_Patch_YooAsset;
 using System.Collections;
 using YooAsset;
 
@@ -23,28 +24,37 @@ namespace SangoScripts_Unity.Patch
 
         private IEnumerator StartOperation()
         {
-            YooAssets.Initialize();
+            PatchHandler patchHandler = new(_currentPatchConfig, OnPatchOperationCompleted);
 
-            PatchOperation hotFixOperation = new PatchOperation(_currentPatchConfig);
-            YooAssets.StartOperation(hotFixOperation);
-            yield return hotFixOperation;
+            yield return patchHandler.StartPathOperation();
 
-            ResourcePackage assetPackage = YooAssets.GetPackage(_currentPatchConfig.PackageName);
-            YooAssets.SetDefaultPackage(assetPackage);
+            //YooAssets.Initialize();
 
-            PatchSystemEventMessage.ClosePatchWindow_PatchSystemEventMessage.SendEventMessage();
+            //PatchOperation hotFixOperation = new PatchOperation();
+            //YooAssets.StartOperation(hotFixOperation);
+            //yield return hotFixOperation;
+
+            //ResourcePackage assetPackage = YooAssets.GetPackage(_currentPatchConfig.PackageName);
+            //YooAssets.SetDefaultPackage(assetPackage);
+
+            //PatchSystemEventMessage.ClosePatchWindow_PatchSystemEventMessage.SendEventMessage();
+            //SceneSystemEventMessage.ChangeToHomeScene.SendEventMessage();
+        }
+
+        private void OnPatchOperationCompleted()
+        {
             SceneSystemEventMessage.ChangeToHomeScene.SendEventMessage();
         }
     }
 
-    public class PatchConfig : BaseConfig
-    {
-        public string HostServerIP { get; set; }
-        public string AppId { get; set; }
-        public string AppVersion { get; set; }
+    //public class PatchConfig : BaseConfig
+    //{
+    //    public string HostServerIP { get; set; }
+    //    public string AppId { get; set; }
+    //    public string AppVersion { get; set; }
 
-        public string PackageName { get; set; }
-        public EPlayMode PlayMode { get; set; }
-        public EDefaultBuildPipeline BuildPipeline { get; set; }
-    }
+    //    public string PackageName { get; set; }
+    //    public EPlayMode PlayMode { get; set; }
+    //    public EDefaultBuildPipeline BuildPipeline { get; set; }
+    //}
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using SangoScripts_Unity.Patch;
 using SangoUtils_Event;
+using SangoUtils_Patch_YooAsset;
 
 namespace SangoScripts_App.Patch
 {
