@@ -1,5 +1,6 @@
 using SangoScripts_Unity.Net;
 using SangoScripts_Unity.Patch;
+using SangoUtils_Logger;
 using System;
 using YooAsset;
 
@@ -43,7 +44,7 @@ public static class SangoSystemConfig
         EnableCoverLog = true,
         SaveLogPath = string.Format("{0}Logs\\", AppDomain.CurrentDomain.BaseDirectory),
         SaveLogName = "SangoLog.txt",
-        LoggerType = LoggerType.OnEditorConsole
+        LoggerType = LoggerType.OnUnityConsole
     };
 
     public static NetEnvironmentConfig NetEnvironmentConfig = new()

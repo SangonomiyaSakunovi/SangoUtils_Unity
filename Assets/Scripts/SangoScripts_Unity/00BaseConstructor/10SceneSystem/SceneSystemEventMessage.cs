@@ -1,3 +1,5 @@
+using SangoUtils_Event;
+
 public class SceneSystemEventMessage
 {
     public class ChangeToHomeScene : IEventMessageBase

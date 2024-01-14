@@ -1,5 +1,7 @@
 using SangoNetProtol;
 using SangoUtils_Common.Utils;
+using SangoUtils_IOCP;
+using SangoUtils_Logger;
 using System;
 
 namespace SangoScripts_Unity.Net
@@ -13,17 +15,17 @@ namespace SangoScripts_Unity.Net
 
         public string UID { get { return _uid; } }
 
-        protected override void OnIOCPOpen()
+        protected override void OnOpen()
         {
             SangoLogger.Log("Connect to Server.");
         }
 
-        protected override void OnIOCPClosed()
+        protected override void OnClosed()
         {
             SangoLogger.Log("We now DisConnect.");
         }
 
-        protected override void OnMessageReceived(byte[] byteMessages)
+        protected override void OnBinary(byte[] byteMessages)
         {
             SangoNetMessage sangoNetMessage = ProtoUtils.DeProtoBytes<SangoNetMessage>(byteMessages);
             long messageTimestamp = Convert.ToInt64(sangoNetMessage.NetMessageTimestamp);
@@ -57,7 +59,7 @@ namespace SangoScripts_Unity.Net
         private void SendData(SangoNetMessage message)
         {
             byte[] bytes = ProtoUtils.SetProtoBytes(message);
-            SendMessage(bytes);
+            Send(bytes);
         }
     }
 }

@@ -2,6 +2,7 @@ using Best.HTTP.Shared.PlatformSupport.Memory;
 using Best.WebSockets;
 using SangoNetProtol;
 using SangoUtils_Common.Utils;
+using SangoUtils_Logger;
 using System;
 
 namespace SangoScripts_Unity.Net
@@ -93,7 +94,7 @@ namespace SangoScripts_Unity.Net
 
         private void OnMessageReceived(WebSocket webSocket, string message)
         {
-            //SangoLogger.Processing("ClientMessage: " + message);
+            SangoLogger.Processing("ClientMessage: " + message);
             SangoNetMessage sangoNetMessage = JsonUtils.DeJsonString<SangoNetMessage>(message);
             if (sangoNetMessage != null)
             {

@@ -1,3 +1,4 @@
+using SangoUtils_Event;
 using System;
 
 public class SceneService : BaseService<SceneService>

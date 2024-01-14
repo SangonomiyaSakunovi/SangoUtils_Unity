@@ -1,4 +1,6 @@
-public class TypeInBaseSystem : BaseSystem<TypeInBaseSystem>
+using UnityEngine;
+
+public class TypeInBaseSystem : MonoBehaviour
 {
     public virtual void SetSystem()
     {

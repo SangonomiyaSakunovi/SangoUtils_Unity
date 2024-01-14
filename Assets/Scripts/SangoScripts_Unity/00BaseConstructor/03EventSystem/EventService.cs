@@ -1,26 +1,27 @@
-﻿using System;
+﻿using SangoUtils_Event;
+using System;
 
 public class EventService : BaseService<EventService>
 {
-    private EventProxy _eventProxy;
+    private EventListenerHandler _eventHandler;
 
     public override void OnInit()
     {
         base.OnInit();
-        _eventProxy = new EventProxy();
-        _eventProxy.Init();
+        _eventHandler = new();
+        _eventHandler.Init();
     }
 
     protected override void OnUpdate()
     {
         base.OnUpdate();
-        _eventProxy.UpdateEventProxyQueue();
+        _eventHandler.UpdateEventListenerQueue();
     }
 
     public override void OnDispose()
     {
         base.OnDispose();
-        _eventProxy.Clear();
+        _eventHandler.Clear();
     }
 
     public void AddEventListener<T>(Action<IEventMessageBase> eventMessage) where T : IEventMessageBase
@@ -32,7 +33,7 @@ public class EventService : BaseService<EventService>
 
     public void AddEventListener(int eventId, Action<IEventMessageBase> eventMessage)
     {
-        _eventProxy.AddEventMessageHandler(eventId, eventMessage);
+        _eventHandler.AddEventMessageListener(eventId, eventMessage);
     }
 
     public void RemoveEventListener<T>() where T : IEventMessageBase
@@ -44,26 +45,21 @@ public class EventService : BaseService<EventService>
 
     public void RemoveEventListener(int eventId)
     {
-        _eventProxy.RemoveEventMessageHandlerByEventId(eventId);
+        _eventHandler.RemoveEventMessageListenerByEventId(eventId);
     }
 
     public void RemoveTargetListener(object target)
     {
-        _eventProxy.RemoveEventMessageHandlerByTarget(target);
+        _eventHandler.RemoveEventMessageListenerByTarget(target);
     }
 
     public void SendEventMessage(IEventMessageBase eventMessage)
     {
-        _eventProxy.InvokeEventMessageImmediately(eventMessage);
+        _eventHandler.SendEventMessage(eventMessage);
     }
 
     public void PostEventMessage(IEventMessageBase eventMessage)
     {
-        _eventProxy.InvokeEventMessageProxyMode(eventMessage);
+        _eventHandler.SendEventMessageAsync(eventMessage);
     }
-}
-
-public interface IEventMessageBase
-{
-
 }

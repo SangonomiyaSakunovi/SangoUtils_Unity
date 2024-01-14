@@ -1,3 +1,5 @@
+using SangoUtils_Logger;
+
 public class PingWebSocketEvent : BaseNetEvent
 {
     public override void OnEventData(string message)

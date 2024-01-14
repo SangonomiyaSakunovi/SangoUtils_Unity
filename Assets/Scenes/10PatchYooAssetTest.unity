@@ -2534,6 +2534,7 @@ GameObject:
   - component: {fileID: 1160295355}
   - component: {fileID: 1160295354}
   - component: {fileID: 1160295357}
+  - component: {fileID: 1160295358}
   m_Layer: 0
   m_Name: GameRoot
   m_TagString: Untagged
@@ -2583,6 +2584,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LoginWnd: {fileID: 1080533944}
   PlayerController: {fileID: 5738502728779353147}
+--- !u!114 &1160295358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160295353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 945797662, guid: acfe702bbe400174184410a715c5766e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1180414524
 GameObject:
   m_ObjectHideFlags: 0

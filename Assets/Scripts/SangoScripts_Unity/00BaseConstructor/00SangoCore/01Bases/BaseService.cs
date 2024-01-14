@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SangoUtils_Extensions_UnityEngine.Core;
+using UnityEngine;
 
 public abstract class BaseService<T> : UnitySingleton<T> where T : MonoBehaviour
 {    

@@ -1,7 +1,9 @@
+using SangoUtils_Event;
+using SangoUtils_Logger;
 using System;
 using System.Collections.Generic;
 
-public class EventCache : BaseCache
+public class EventCache
 {
     private Dictionary<int, List<Action<IEventMessageBase>>> _eventCacheDict;
 

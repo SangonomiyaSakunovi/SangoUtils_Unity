@@ -1,4 +1,5 @@
 using SangoNetProtol;
+using SangoUtils_IOCP;
 using System.Collections.Generic;
 
 namespace SangoScripts_Unity.Net
@@ -65,12 +66,12 @@ namespace SangoScripts_Unity.Net
         private void InitClientInstance(string ipAddress, int port)
         {
             _clientPeerInstance = new IOCPPeer<IOCPClientPeer>();
-            _clientPeerInstance.InitAsClient(ipAddress, port);
+            _clientPeerInstance.OpenAsUnityClient(ipAddress, port);
         }
 
         public void CloseClientInstance()
         {
-            _clientPeerInstance.CloseClient();
+            _clientPeerInstance.CloseAsClient();
         }
     }
 
