@@ -1,5 +1,5 @@
-using SangoScripts_Unity.Net;
-using SangoScripts_Unity.Patch;
+using SangoUtils_Unity_Scripts.Net;
+using SangoUtils_Unity_Scripts.Patch;
 using SangoUtils_Logger;
 using System;
 using YooAsset;

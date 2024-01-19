@@ -1,3 +1,4 @@
+using SangoUtils_Extensions_UnityEngine.Core;
 using UnityEngine.UI;
 
 public class LoginWnd : BaseWindow
@@ -8,10 +9,10 @@ public class LoginWnd : BaseWindow
     {
         base.OnInit();
         _btnLoginAsGuest = transform.Find("btnLoginAsGuest").GetComponent<Button>();
-        SetButtonListener(_btnLoginAsGuest, OnBtnLoginAsGuestClicked);
+        _btnLoginAsGuest.AddListener_OnClick(OnBtnLoginAsGuestClicked);
     }
 
-    private void OnBtnLoginAsGuestClicked(Button button)
+    private void OnBtnLoginAsGuestClicked()
     {
         SystemRoot.Instance.LoginSystem.LoginAsGuest();       
         base.SetWindowState(false);

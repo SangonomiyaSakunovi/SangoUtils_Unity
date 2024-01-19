@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SangoScripts_Unity.Net
+namespace SangoUtils_Unity_Scripts.Net
 {
     public class HttpId
     {

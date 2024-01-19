@@ -2,7 +2,7 @@ using SangoUtils_Extensions_UnityEngine.Core;
 using System.Collections;
 using YooAsset;
 
-namespace SangoScripts_Unity.Patch
+namespace SangoUtils_Unity_Scripts.Patch
 {
     public class PatchService : BaseService<PatchService>
     {

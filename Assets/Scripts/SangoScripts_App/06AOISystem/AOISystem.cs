@@ -1,5 +1,5 @@
 using SangoNetProtol;
-using SangoScripts_Unity.Net;
+using SangoUtils_Unity_Scripts.Net;
 using SangoUtils_Common.Messages;
 using SangoUtils_FixedNum;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using SangoUtils_IOCP;
 using SangoUtils_Logger;
 using System;
 
-namespace SangoScripts_Unity.Net
+namespace SangoUtils_Unity_Scripts.Net
 {
     public class IOCPClientPeer : IClientPeer_IOCP
     {

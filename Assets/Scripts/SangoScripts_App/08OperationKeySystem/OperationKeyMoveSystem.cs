@@ -1,7 +1,7 @@
 using SangoUtils_Common.Messages;
 using SangoUtils_FixedNum;
 
-namespace SangoScripts_App.Operation
+namespace SangoUtils_Unity_App.Operation
 {
     public class OperationKeyMoveSystem : OperationKeyBaseSystem<OperationKeyMoveSystem>
     {

@@ -1,6 +1,6 @@
 using SangoUtils_FSM;
 
-namespace SangoScripts_Unity.Patch
+namespace SangoUtils_Unity_Scripts.Patch
 {
     public class PatchLinkedFSM_DownloadPackageOver : FSMLinkedStaterItemBase
     {

@@ -1,8 +1,8 @@
-using SangoScripts_App.Entity;
+using SangoUtils_Unity_App.Entity;
 using SangoUtils_FixedNum;
 using UnityEngine;
 
-namespace SangoScripts_App.Controller
+namespace SangoUtils_Unity_App.Controller
 {
     public class PlayerController : BaseObjectController
     {
@@ -11,7 +11,7 @@ namespace SangoScripts_App.Controller
 
         public string EntityID { get; set; } = "";
 
-        private float _movespeed = 2f;
+        //private float _movespeed = 2f;
 
         private float _vertical;
         private float _horizontal;

@@ -1,8 +1,8 @@
-using SangoScripts_Unity.Net;
+using SangoUtils_Unity_Scripts.Net;
 using SangoUtils_Common.Messages;
 using SangoUtils_NetOperation;
 
-namespace SangoScripts_App.Operation
+namespace SangoUtils_Unity_App.Operation
 {
     public class OperationKeyBroadcast : BaseNetBroadcast
     {

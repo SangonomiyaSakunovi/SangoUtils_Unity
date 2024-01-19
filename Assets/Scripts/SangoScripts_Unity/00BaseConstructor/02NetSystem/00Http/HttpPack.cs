@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
-using SangoUtils_Logger;
+﻿using SangoUtils_Logger;
 using System;
 using UnityEngine.Networking;
 
-namespace SangoScripts_Unity.Net
+namespace SangoUtils_Unity_Scripts.Net
 {
     public enum HttpType
     {
@@ -30,37 +29,45 @@ namespace SangoScripts_Unity.Net
         public override void OnDataReceived(string dataStr, int code, int messageId)
         {
             SangoLogger.Log("HttpMessageId:[" + messageId + "], ReceivedStr: " + dataStr);
-            JObject recvObj = JObject.Parse(dataStr);
-            int resCode = recvObj["res"].Value<int>();
-            if (resCode == 0)
+            HttpDataInfo dataInfo = JsonUtils.DeJsonString<HttpDataInfo>(dataStr);
+            if (dataInfo != null)
             {
-                string recievedData = recvObj["data"].ToString();
-                if (!string.IsNullOrEmpty(recievedData))
+                if (dataInfo.res == 0)
                 {
-                    T data;
-                    if (typeof(T).Name == "String")
+                    if (!string.IsNullOrEmpty(dataInfo.data))
                     {
-                        data = recievedData as T;
+                        T data;
+                        if (typeof(T).Name == "String")
+                        {
+                            data = dataInfo.data as T;
+                        }
+                        else
+                        {
+                            data = JsonUtils.DeJsonString<T>(dataInfo.data);
+                        }
+                        if (data != null)
+                        {
+                            HttpService.Instance?.HttpBroadcast<T>(data, messageId, dataInfo.res);
+                        }
                     }
                     else
                     {
-                        data = JsonUtils.DeJsonString<T>(recievedData.ToString());
-                    }
-                    if (data != null)
-                    {
-                        HttpService.Instance?.HttpBroadcast<T>(data, messageId, resCode);
+                        HttpService.Instance?.HttpBroadcast<T>(null, messageId, dataInfo.res);
                     }
                 }
                 else
                 {
-                    HttpService.Instance?.HttpBroadcast<T>(null, messageId, resCode);
+                    HttpService.Instance?.HttpBroadcast<T>(null, messageId, dataInfo.res);
                 }
             }
-            else
-            {
-                HttpService.Instance?.HttpBroadcast<T>(null, messageId, resCode);
-            }
+
         }
+    }
+
+    public class HttpDataInfo
+    {
+        public int res { get; set; } = 0;
+        public string data { get; set; } = "";
     }
 }
 

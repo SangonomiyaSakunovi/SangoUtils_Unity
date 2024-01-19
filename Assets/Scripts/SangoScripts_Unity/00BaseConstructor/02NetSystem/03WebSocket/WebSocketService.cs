@@ -1,9 +1,9 @@
 using SangoNetProtol;
 using SangoUtils_NetOperation;
 
-namespace SangoScripts_Unity.Net
+namespace SangoUtils_Unity_Scripts.Net
 {
-    public class WebSocketService : BaseService<WebSocketService>, INetOperation
+    public class WebSocketService : BaseService<WebSocketService>, INetClientOperation
     {
         private WebSocketClientPeer _clientPeerInstance;
         private NetClientOperationHandler _netOperationHandler = new();

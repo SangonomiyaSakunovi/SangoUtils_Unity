@@ -1,10 +1,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using System;
-using SangoScripts_Unity.Patch;
+using SangoUtils_Unity_Scripts.Patch;
 using SangoUtils_Event;
 
-namespace SangoScripts_App.Patch
+namespace SangoUtils_Unity_App.Patch
 {
     public class SangoPatchRoot : BaseRoot<SangoSecurityCheckRoot>
     {

@@ -1,6 +1,6 @@
 using SangoUtils_FixedNum;
 
-namespace SangoScripts_App.Entity
+namespace SangoUtils_Unity_App.Entity
 {
     public abstract class BaseObjectEntity
     {

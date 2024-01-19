@@ -1,7 +1,7 @@
 using SangoUtils_Common.Messages;
 using System;
 
-namespace SangoScripts_App.Operation
+namespace SangoUtils_Unity_App.Operation
 {
     public abstract class OperationKeyBaseSystem<T> : BaseSystem<T> where T : class, new()
     {

@@ -1,6 +1,6 @@
 using SangoNetProtol;
-using SangoScripts_App.Controller;
-using SangoScripts_Unity.Net;
+using SangoUtils_Unity_App.Controller;
+using SangoUtils_Unity_Scripts.Net;
 using SangoUtils_Common.Messages;
 
 public class LoginSystem : BaseSystem<LoginSystem>

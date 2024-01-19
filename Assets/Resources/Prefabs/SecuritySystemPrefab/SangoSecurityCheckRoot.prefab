@@ -431,11 +431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625ccade56f9b3c40969d0bb1d6cfe26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _keyboardTrans: {fileID: 158179413835908881}
-  _inputShowParentTrans: {fileID: 8663841840225547806}
-  _registBtn: {fileID: 690409726952224080}
-  _skipBtn: {fileID: 6254161389187377607}
-  _resultShow: {fileID: 1191156106927026349}
 --- !u!1 &948341162380468047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1388,7 +1383,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13acc129c6ecc5341aae870217a72371, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sangoSecurityCheckWnd: {fileID: 7705002060375955452}
 --- !u!1 &6287218192216519614
 GameObject:
   m_ObjectHideFlags: 0

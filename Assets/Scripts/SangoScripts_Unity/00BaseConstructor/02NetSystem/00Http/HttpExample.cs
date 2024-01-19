@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using UnityEngine;
 
-namespace SangoScripts_Unity.Net
+namespace SangoUtils_Unity_Scripts.Net
 {
     public class HttpExample : MonoBehaviour
     {

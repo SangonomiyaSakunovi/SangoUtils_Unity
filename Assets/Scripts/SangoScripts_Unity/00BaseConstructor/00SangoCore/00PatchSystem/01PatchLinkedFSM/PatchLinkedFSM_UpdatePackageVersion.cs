@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEngine;
 using YooAsset;
 
-namespace SangoScripts_Unity.Patch
+namespace SangoUtils_Unity_Scripts.Patch
 {
     public class PatchLinkedFSM_UpdatePackageVersion : FSMLinkedStaterItemBase
     {

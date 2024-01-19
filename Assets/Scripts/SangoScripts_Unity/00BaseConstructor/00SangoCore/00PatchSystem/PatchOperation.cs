@@ -3,7 +3,7 @@ using SangoUtils_FSM;
 using System;
 using YooAsset;
 
-namespace SangoScripts_Unity.Patch
+namespace SangoUtils_Unity_Scripts.Patch
 {
     public class PatchOperation : GameAsyncOperation
     {

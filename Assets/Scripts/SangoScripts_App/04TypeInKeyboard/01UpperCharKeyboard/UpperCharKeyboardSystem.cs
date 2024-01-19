@@ -1,35 +1,38 @@
-public class UpperCharKeyboardSystem : TypeInBaseSystem
+namespace SangoUtils_Unity_App.InputSystem
 {
-    public UpperCharKeyboardPanel _upperCharKeyboardPanel;
-
-    public override void SetSystem()
+    public class UpperCharKeyboardSystem : TypeInBaseSystem
     {
-        _upperCharKeyboardPanel.SetSystem(this);
-    }
+        public UpperCharKeyboardPanel _upperCharKeyboardPanel;
 
-    public override void ShowKeyboard()
-    {
-        _upperCharKeyboardPanel.ShowKeyboard();
-    }
-
-    public override void HideKeyboard()
-    {
-        _upperCharKeyboardPanel.HideKeyboard();
-    }
-
-    public override void SetKeyboardDirection(KeyboradDirectionCode directionCode)
-    {
-        base.SetKeyboardDirection(directionCode);
-        _upperCharKeyboardPanel.SetKeyboradDirection(directionCode);
-    }
-
-    public void OnSpecialButtonClickedCallBack(string buttonName)
-    {
-        switch (buttonName)
+        public override void SetSystem()
         {
-            case "Delet":
-                TypeInService.Instance.OnTypedInWord(TypeInCommand.Delet);
-                break;
+            _upperCharKeyboardPanel.SetSystem(this);
+        }
+
+        public override void ShowKeyboard()
+        {
+            _upperCharKeyboardPanel.ShowKeyboard();
+        }
+
+        public override void HideKeyboard()
+        {
+            _upperCharKeyboardPanel.HideKeyboard();
+        }
+
+        public override void SetKeyboardDirection(KeyboradDirectionCode directionCode)
+        {
+            base.SetKeyboardDirection(directionCode);
+            _upperCharKeyboardPanel.SetKeyboradDirection(directionCode);
+        }
+
+        public void OnSpecialButtonClickedCallBack(string buttonName)
+        {
+            switch (buttonName)
+            {
+                case "Delet":
+                    TypeInService.Instance.OnTypedInWord(TypeInCommand.Delet);
+                    break;
+            }
         }
     }
 }

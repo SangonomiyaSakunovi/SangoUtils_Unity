@@ -1,7 +1,7 @@
 using SangoUtils_FSM;
 using YooAsset;
 
-namespace SangoScripts_Unity.Patch
+namespace SangoUtils_Unity_Scripts.Patch
 {
     public class PatchLinkedFSM_ClearPackageCache : FSMLinkedStaterItemBase
     {

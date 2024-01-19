@@ -1,4 +1,4 @@
-﻿using SangoScripts_Unity.Net;
+﻿using SangoUtils_Unity_Scripts.Net;
 using System.Collections.Generic;
 
 public abstract class BaseHttpRequest

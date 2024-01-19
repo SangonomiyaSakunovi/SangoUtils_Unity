@@ -3,9 +3,9 @@ using SangoUtils_IOCP;
 using SangoUtils_NetOperation;
 using System.Collections.Generic;
 
-namespace SangoScripts_Unity.Net
+namespace SangoUtils_Unity_Scripts.Net
 {
-    public class IOCPService : BaseService<IOCPService>, INetOperation
+    public class IOCPService : BaseService<IOCPService>, INetClientOperation
     {
         private IOCPPeer<IOCPClientPeer> _clientPeerInstance;
         private NetClientOperationHandler _netOperationHandler = new();

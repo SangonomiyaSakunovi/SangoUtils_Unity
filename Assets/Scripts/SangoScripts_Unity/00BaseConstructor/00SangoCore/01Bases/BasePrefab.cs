@@ -1,4 +1,6 @@
-public abstract class BasePrefab : BaseUIElements
+using UnityEngine;
+
+public abstract class BasePrefab : MonoBehaviour
 {
     
 }

@@ -1,7 +1,7 @@
 using SangoNetProtol;
-using SangoScripts_App.Scene;
-using SangoScripts_Unity.Net;
-using SangoScripts_Unity.Patch;
+using SangoUtils_Unity_App.Scene;
+using SangoUtils_Unity_Scripts.Net;
+using SangoUtils_Unity_Scripts.Patch;
 using SangoUtils_Logger;
 using UnityEngine;
 

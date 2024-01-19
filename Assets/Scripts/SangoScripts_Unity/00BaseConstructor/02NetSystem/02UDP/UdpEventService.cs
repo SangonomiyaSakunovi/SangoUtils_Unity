@@ -1,89 +1,34 @@
-using System.Collections.Generic;
+﻿using SangoUtils_UDP;
 
-namespace SangoScripts_Unity.Net
+namespace SangoUtils_Unity_Scripts.Net
 {
-    public class UdpEventService : BaseService<UdpEventService>
+    public class UDPEventService : BaseService<UDPEventService>
     {
-        private Dictionary<int, UdpClientSango> _udpListenerClients;
-        private Dictionary<int, BaseUdpEvent> _eventDict;
-
-        private List<UdpData> _udpDatas = new List<UdpData>(10);
+        private NetUdpEventHandler _eventHandler;
 
         public override void OnInit()
         {
             base.OnInit();
-            _eventDict = new Dictionary<int, BaseUdpEvent>();
-            _udpListenerClients = new Dictionary<int, UdpClientSango>();
-            InitUdpListenerClients();
-        }
-
-        protected override void OnUpdate()
-        {
-            base.OnUpdate();
-            HandleEventReceivedData();
-        }
-
-        public override void OnDispose()
-        {
-            base.OnDispose();
-        }
-
-        private void InitUdpListenerClients()
-        {
-            UdpClientSango typeInClient = new UdpClientSango<string>(UdpEventListenPortId.typeInPort);
-            _udpListenerClients.Add(typeInClient.UDPListenerPortId, typeInClient);
-        }
-
-        private void HandleEventReceivedData()
-        {
-            if (_udpDatas.Count == 0) return;
-            for (int i = 0; i < _udpDatas.Count; i++)
-            {
-                UdpData data = _udpDatas[i];
-                data.OnDataSync();
-            }
-            _udpDatas.Clear();
-        }
-
-        public void AddUpdEventReceivedData(UdpData udpData)
-        {
-            lock ("locker_AddUpdEventReceivedData")
-            {
-                _udpDatas.Add(udpData);
-            }
-        }
-
-        public void UdpEventBroadcast<T>(T data, int eventId) where T : class
-        {
-            if (_eventDict.TryGetValue(eventId, out BaseUdpEvent netEvent))
-            {
-                netEvent.OnEventDataReceived<T>(data);
-            }
-        }
-
-        public void AddUdpEvent(BaseUdpEvent evt)
-        {
-            _eventDict.Add(evt.UdpEventPortId, evt);
+            _eventHandler = new NetUdpEventHandler();
+            UdpClientPeer<string> peer = new UdpClientPeer<string>(UdpEventListenPortID.TestPort, _eventHandler);
+            peer.Open();
+            _eventHandler.AddUdpClientPeer(peer);
         }
 
         public T GetUdpEvent<T>(int udpEventPortId) where T : BaseUdpEvent, new()
         {
-            if (_eventDict.ContainsKey(udpEventPortId))
-            {
-                return (T)_eventDict[udpEventPortId];
-            }
-            else
-            {
-                T udpEvent = new T();
-                udpEvent.OnInit(udpEventPortId);
-                return udpEvent;
-            }
+            return _eventHandler.GetUdpEvent<T>(udpEventPortId);
         }
 
-        public void RemoveUdpEvent(BaseUdpEvent evt)
+        protected override void OnUpdate()
         {
-            _eventDict.Remove(evt.UdpEventPortId);
+            _eventHandler.OnUpdate();
         }
     }
 }
 
+public class UdpEventListenPortID : UdpEventBaseListenPortID<UdpEventListenPortID>
+{
+    [UdpEventPortApiKey("TestPort")]
+    public const int TestPort = 10010;
+}

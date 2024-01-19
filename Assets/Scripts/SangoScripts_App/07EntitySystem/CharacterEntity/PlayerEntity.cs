@@ -1,8 +1,8 @@
-using SangoScripts_App.Controller;
+using SangoUtils_Unity_App.Controller;
 using SangoUtils_FixedNum;
 using SangoUtils_Physics;
 
-namespace SangoScripts_App.Entity
+namespace SangoUtils_Unity_App.Entity
 {
     public class PlayerEntity : BaseObjectEntity
     {

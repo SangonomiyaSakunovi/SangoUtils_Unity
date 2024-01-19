@@ -3,7 +3,7 @@ using SangoUtils_FSM;
 using System.Collections;
 using YooAsset;
 
-namespace SangoScripts_Unity.Patch
+namespace SangoUtils_Unity_Scripts.Patch
 {
     public class PatchLinkedFSM_DownloadPackageFiles : FSMLinkedStaterItemBase
     {

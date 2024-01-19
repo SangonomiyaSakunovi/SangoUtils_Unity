@@ -1,3 +1,5 @@
+using SangoUtils_Extensions_UnityEngine.Core;
+using SangoUtils_Unity_App.InputSystem;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +32,7 @@ public class SangoSecurityCheckWnd : BaseWindow
 
     public void UpdateResult(string result)
     {
-        SetText(_resultShow, result);
+        _resultShow.SetText(result);
     }
 
     protected override void OnInit()
@@ -43,8 +45,8 @@ public class SangoSecurityCheckWnd : BaseWindow
         _skipBtn = transform.Find("skipBtn").GetComponent<Button>();
         _resultShow = transform.Find("SignData/resultShow").GetComponent<TMP_Text>();
 
-        SetButtonListener(_registBtn, OnRegistSoftwareBtnClicked);
-        SetActive(_skipBtn, false);
+        _registBtn.AddListener_OnClick(OnRegistSoftwareBtnClicked);
+        _skipBtn.SetActive(false);
         ShowKeyboard(_currentTypeInfConfig);
         UpdateBtnInfo("RegistBtn", "¼¤»î");
         _inputShowTexts = _inputShowParentTrans.GetComponentsInChildren<TMP_Text>();
@@ -54,7 +56,7 @@ public class SangoSecurityCheckWnd : BaseWindow
     {
         base.OnDispose();
         HideKeyboard();
-        RemoveAllListeners(_registBtn);
+        _registBtn.onClick.RemoveAllListeners();
     }
 
     public void UpdateBtnInfo(string btnName, string commands)
@@ -64,15 +66,15 @@ public class SangoSecurityCheckWnd : BaseWindow
             case "RegistBtn":
                 if (commands == "È·¶¨")
                 {
-                    RemoveAllListeners(_registBtn);
-                    SetButtonListener(_registBtn, OnRegistOKBtnClicked);
-                    SetActive(_skipBtn, false);
+                    _registBtn.onClick.RemoveAllListeners();
+                    _registBtn.AddListener_OnClick(OnRegistOKBtnClicked);
+                    _skipBtn.SetActive(false);
                 }
-                SetText(_registBtn, commands);
+                _registBtn.SetText(commands);
                 break;
             case "SkipBtn":
-                SetActive(_skipBtn);
-                SetButtonListener(_skipBtn, OnRegistOKBtnClicked);
+                _skipBtn.gameObject.SetActive(true);
+                _skipBtn.AddListener_OnClick(OnRegistOKBtnClicked);
                 break;
         }
     }
@@ -103,12 +105,12 @@ public class SangoSecurityCheckWnd : BaseWindow
     {
         TypeInService.Instance.HideKeyboard();
     }
-    private void OnRegistSoftwareBtnClicked(Button button)
+    private void OnRegistSoftwareBtnClicked()
     {
         _sangoSecurityCheckRoot.UpdateRegistInfo(_inputStr);
     }
 
-    private void OnRegistOKBtnClicked(Button button)
+    private void OnRegistOKBtnClicked()
     {
         _sangoSecurityCheckRoot.OnSecurityCheckResultValid();
     }

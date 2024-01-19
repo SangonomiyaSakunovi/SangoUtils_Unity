@@ -1,4 +1,4 @@
-using SangoScripts_App.Cache;
+using SangoUtils_Unity_App.Cache;
 
 public class CacheService : BaseService<CacheService>
 {

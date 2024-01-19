@@ -1,75 +1,79 @@
+using SangoUtils_Extensions_UnityEngine.Core;
 using System;
 using TMPro;
 using UnityEngine.UI;
 
-public class FloatableKeyboardKeyPrefab : BasePrefab
+namespace SangoUtils_Unity_App.InputSystem
 {
-    private Button _keyButton;
-    private TMP_Text _keyTextMiddle;
-    private TMP_Text _keyTextLeftUp;
-
-    private Button _specialKeyButton;
-
-    private string _typeInWord;
-    private Action<string> _specialButtonClickedCallBack;
-
-    public void InitStandardKey(TMP_FontAsset fontAsset)
+    public class FloatableKeyboardKeyPrefab : BasePrefab
     {
-        _keyButton = GetComponent<Button>();
-        _keyTextLeftUp = transform.GetChild(0).GetComponent<TMP_Text>();
-        _keyTextMiddle = transform.GetChild(1).GetComponent<TMP_Text>();
-        _keyTextLeftUp.font = fontAsset;
-        _keyTextMiddle.font = fontAsset;
-    }
+        private Button _keyButton;
+        private TMP_Text _keyTextMiddle;
+        private TMP_Text _keyTextLeftUp;
 
-    public void InitSpecialKey(TMP_FontAsset fontAsset)
-    {
-        _specialKeyButton = GetComponent<Button>();
-        transform.GetChild(0).GetComponent<TMP_Text>().font = fontAsset;
-    }
+        private Button _specialKeyButton;
 
-    public void UpdateStandardButtonListener(string middleText, string leftUpText, bool isDispose)
-    {
-        if (!isDispose)
+        private string _typeInWord;
+        private Action<string> _specialButtonClickedCallBack;
+
+        public void InitStandardKey(TMP_FontAsset fontAsset)
         {
-            RemoveAllListeners(_keyButton);
-            _typeInWord = middleText;
-            UpdateButtonName(middleText, leftUpText);
-            SetButtonListener(_keyButton, OnStandardButtonClicked);
+            _keyButton = GetComponent<Button>();
+            _keyTextLeftUp = transform.GetChild(0).GetComponent<TMP_Text>();
+            _keyTextMiddle = transform.GetChild(1).GetComponent<TMP_Text>();
+            _keyTextLeftUp.font = fontAsset;
+            _keyTextMiddle.font = fontAsset;
         }
-        else
+
+        public void InitSpecialKey(TMP_FontAsset fontAsset)
         {
-            RemoveAllListeners(_keyButton);
+            _specialKeyButton = GetComponent<Button>();
+            transform.GetChild(0).GetComponent<TMP_Text>().font = fontAsset;
         }
-    }
 
-    public void UpdateSpecialButtonListener(Action<string> specialButtonClickedCallBack, bool isDispose)
-    {
-        if (!isDispose)
+        public void UpdateStandardButtonListener(string middleText, string leftUpText, bool isDispose)
         {
-            _specialButtonClickedCallBack = specialButtonClickedCallBack;
-            SetButtonListener(_specialKeyButton, OnSpecialButtonClicked);
+            if (!isDispose)
+            {
+                _keyButton.onClick.RemoveAllListeners();
+                _typeInWord = middleText;
+                UpdateButtonName(middleText, leftUpText);
+                _keyButton.AddListener_OnClick(OnStandardButtonClicked);
+            }
+            else
+            {
+                _keyButton.onClick.RemoveAllListeners();
+            }
         }
-        else
+
+        public void UpdateSpecialButtonListener(Action<string> specialButtonClickedCallBack, bool isDispose)
         {
-            RemoveAllListeners(_specialKeyButton);
-            _specialButtonClickedCallBack = null;
+            if (!isDispose)
+            {
+                _specialButtonClickedCallBack = specialButtonClickedCallBack;
+                _specialKeyButton.AddListener_OnClick(OnSpecialButtonClicked);
+            }
+            else
+            {
+                _specialKeyButton.onClick.RemoveAllListeners();
+                _specialButtonClickedCallBack = null;
+            }
         }
-    }
 
-    private void UpdateButtonName(string middleText, string leftUpText)
-    {
-        SetText(_keyTextMiddle, middleText);
-        SetText(_keyTextLeftUp, leftUpText);
-    }
+        private void UpdateButtonName(string middleText, string leftUpText)
+        {
+            _keyTextMiddle.SetText(middleText);
+            _keyTextLeftUp.SetText(leftUpText);
+        }
 
-    private void OnStandardButtonClicked(Button button)
-    {
-        TypeInService.Instance.OnTypedInWord(TypeInCommand.TypeIn, _typeInWord);
-    }
+        private void OnStandardButtonClicked()
+        {
+            TypeInService.Instance.OnTypedInWord(TypeInCommand.TypeIn, _typeInWord);
+        }
 
-    public void OnSpecialButtonClicked(Button button)
-    {
-        _specialButtonClickedCallBack?.Invoke(button.name);
+        public void OnSpecialButtonClicked(Button button)
+        {
+            _specialButtonClickedCallBack?.Invoke(button.name);
+        }
     }
 }

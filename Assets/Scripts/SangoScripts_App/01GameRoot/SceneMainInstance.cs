@@ -1,19 +1,19 @@
-using SangoScripts_App.Controller;
-using SangoScripts_App.Entity;
-using SangoScripts_App.Patch;
-using SangoScripts_Unity.Net;
+using SangoUtils_Unity_App.Controller;
+using SangoUtils_Unity_App.Entity;
+using SangoUtils_Unity_App.Patch;
+using SangoUtils_Unity_Scripts.Net;
 using SangoUtils_Event;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace SangoScripts_App.Scene
+namespace SangoUtils_Unity_App.Scene
 {
     public class SceneMainInstance : BaseScene
     {
         public static SceneMainInstance Instance { get; private set; }
 
-        private string _capsulePath = "ResTest/Capsule";
+        //private string _capsulePath = "ResTest/Capsule";
 
         private Dictionary<string, GameObject> _entityDict = new();
 

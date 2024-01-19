@@ -1,9 +1,10 @@
+using SangoUtils_Extensions_UnityEngine.Core;
 using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SangoScripts_App.Patch
+namespace SangoUtils_Unity_App.Patch
 {
     public class SangoPatchWnd : BaseWindow
     {
@@ -24,8 +25,8 @@ namespace SangoScripts_App.Patch
             _messageBoxOkBtn = _messageBoxTrans.Find("messageBoxOkBtn").GetComponent<Button>();
             _messageBoxContent = _messageBoxTrans.Find("messageBoxContent").GetComponent<TMP_Text>();
 
-            SetActive(_messageBoxTrans, false);
-            SetText(_tips, "欢迎使用热更新系统");
+            _messageBoxTrans.gameObject.SetActive(false);
+            _tips.SetText("欢迎使用热更新系统");
         }
 
         public void SetRoot(SangoPatchRoot root)
@@ -35,17 +36,17 @@ namespace SangoScripts_App.Patch
 
         public void ShowMessageBox(string content, Action onMessageBoxOKBtnClickedCB)
         {
-            RemoveAllListeners(_messageBoxOkBtn);
-            SetText(_messageBoxContent, content);
+            _messageBoxOkBtn.onClick.RemoveAllListeners();
+            _messageBoxContent.SetText(content);
             _clickMessageBoxOkCB = onMessageBoxOKBtnClickedCB;
-            SetButtonListener(_messageBoxOkBtn, OnMessageBoxOKBtnClicked);
-            SetActive(_messageBoxTrans);
+            _messageBoxOkBtn.AddListener_OnClick(OnMessageBoxOKBtnClicked);
+            _messageBoxTrans.gameObject.SetActive(true);
             _messageBoxTrans.SetAsLastSibling();
         }
 
         public void UpdateTips(string content)
         {
-            SetText(_tips, content);
+            _tips.SetText(content);
         }
 
         public void UpdateSliderValue(float value)
@@ -53,10 +54,10 @@ namespace SangoScripts_App.Patch
 
         }
 
-        private void OnMessageBoxOKBtnClicked(Button button)
+        private void OnMessageBoxOKBtnClicked()
         {
             _clickMessageBoxOkCB?.Invoke();
-            SetActive(_messageBoxTrans, false);
+            _messageBoxTrans.gameObject.SetActive(false);
         }
     }
 }

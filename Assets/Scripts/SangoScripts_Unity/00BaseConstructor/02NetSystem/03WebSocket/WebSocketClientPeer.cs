@@ -5,13 +5,13 @@ using SangoUtils_Common.Utils;
 using SangoUtils_Logger;
 using System;
 
-namespace SangoScripts_Unity.Net
+namespace SangoUtils_Unity_Scripts.Net
 {
     public class WebSocketClientPeer
     {
         private WebSocket _websocketClient;
 
-        private long _lastMessageTimestamp = long.MinValue;
+        //private long _lastMessageTimestamp = long.MinValue;
 
         public WebSocketClientPeer(string ipAddressAndPort)
         {
