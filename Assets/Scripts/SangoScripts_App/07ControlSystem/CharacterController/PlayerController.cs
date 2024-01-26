@@ -1,6 +1,7 @@
 using SangoUtils_Unity_App.Entity;
 using SangoUtils_FixedNum;
 using UnityEngine;
+using SangoUtils_Bases_UnityEngine;
 
 namespace SangoUtils_Unity_App.Controller
 {

@@ -1,3 +1,4 @@
+using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Unity_App.Cache;
 
 public class CacheService : BaseService<CacheService>

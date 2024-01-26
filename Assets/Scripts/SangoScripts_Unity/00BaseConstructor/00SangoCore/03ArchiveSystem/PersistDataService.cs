@@ -1,3 +1,5 @@
+using SangoUtils_Bases_UnityEngine;
+
 public class PersistDataService : BaseService<PersistDataService>
 {
     private PersistDataType _persistDataType = PersistDataType.PlayerPrefs;

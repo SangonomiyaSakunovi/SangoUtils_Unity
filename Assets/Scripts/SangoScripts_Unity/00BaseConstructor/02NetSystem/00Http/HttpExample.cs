@@ -72,10 +72,8 @@ namespace SangoUtils_Unity_Scripts.Net
     [Serializable]
     public class SangoHttpExampleData
     {
-        [JsonConverter(typeof(NullableInt32Converter))]
-        public int id { get; set; }
-        [JsonConverter(typeof(NullableStringConverter))]
-        public string discription { get; set; }
+        public int id { get; set; } = 0;
+        public string discription { get; set; } = "UnDefine";
     }
 
     public class SangoHttpExampleInfo

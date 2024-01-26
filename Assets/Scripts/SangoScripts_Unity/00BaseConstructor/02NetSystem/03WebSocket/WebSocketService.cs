@@ -1,4 +1,5 @@
 using SangoNetProtol;
+using SangoUtils_Bases_UnityEngine;
 using SangoUtils_NetOperation;
 
 namespace SangoUtils_Unity_Scripts.Net

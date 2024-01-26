@@ -1,3 +1,4 @@
+using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Extensions_UnityEngine.Core;
 using SangoUtils_Unity_App.InputSystem;
 using TMPro;
@@ -37,8 +38,6 @@ public class SangoSecurityCheckWnd : BaseWindow
 
     protected override void OnInit()
     {
-        base.OnInit();
-
         _keyboardTrans = transform.Find("KeyboradTrans");
         _inputShowParentTrans = transform.Find("SignData/InputShowParent");
         _registBtn = transform.Find("registBtn").GetComponent<Button>();
@@ -54,7 +53,6 @@ public class SangoSecurityCheckWnd : BaseWindow
 
     protected override void OnDispose()
     {
-        base.OnDispose();
         HideKeyboard();
         _registBtn.onClick.RemoveAllListeners();
     }

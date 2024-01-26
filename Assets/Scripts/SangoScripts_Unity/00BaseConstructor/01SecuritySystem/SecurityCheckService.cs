@@ -1,3 +1,6 @@
+using SangoUtils_Bases_UnityEngine;
+using SangoUtils_Bases_Universal;
+using SangoUtils_Extensions_Universal.Utils;
 using SangoUtils_Logger;
 using System;
 using UnityEngine;
@@ -60,7 +63,7 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         switch (_securityCheckServiceConfig.RegistMixSignDataProtocol)
         {
             case RegistMixSignDataProtocol.SIGN:
-                SecurityCheckMapSango.CheckProtocl_SIGNDATA(registLimitTimestampNew, signData, _securityCheckServiceConfig, WriteRegistInfo);
+                SecurityCheckUtils.CheckProtocl_SIGNDATA(registLimitTimestampNew, signData, _securityCheckServiceConfig, WriteRegistInfo);
                 break;
         }
     }
@@ -75,24 +78,24 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         switch (_securityCheckServiceConfig.RegistMixSignDataProtocol)
         {
             case RegistMixSignDataProtocol.A_B_C_SIGN:
-                SecurityCheckMapSango.CheckProtocol_A_B_C_SIGN(mixSignData, _securityCheckServiceConfig, WriteRegistInfo);
+                SecurityCheckUtils.CheckProtocol_A_B_C_SIGN(mixSignData, _securityCheckServiceConfig, WriteRegistInfo);
                 break;
         }
     }
 
     private void WriteRegistInfo(string registLimitTimestampNew)
     {
-        long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
+        long nowTimestamp = DateTime.Now.ToUnixTimestamp();
         if (Convert.ToInt64(registLimitTimestampNew) > nowTimestamp)
         {
-            string registLimitTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(registLimitTimestampNew);
-            string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
+            string registLimitTimestampDataNew = DateTimeUtils.ToBase64(registLimitTimestampNew);
+            string registLastRunTimestampDataNew = DateTimeUtils.ToBase64(nowTimestamp);
             bool res1 = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampDataNew);
             bool res2 = PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampDataNew);
             if (res1 && res2)
             {
                 _isApplicationRunValid = true;
-                DateTime registNewLimitDateTime = TimeUtils.GetDateTimeFromTimestamp(registLimitTimestampNew);
+                DateTime registNewLimitDateTime = DateTimeUtils.FromUnixTimestampString(registLimitTimestampNew);
                 _securityCheckServiceConfig.OnCheckedResult?.Invoke(RegistInfoCheckResult.UpdateOK_Success, registNewLimitDateTime.ToString("yyyy-MM-dd"));
             }
             else
@@ -109,8 +112,8 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
 
     public void CheckRegistValidation()
     {
-        long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
-        long defaultRegistLimitTimestamp = TimeUtils.GetUnixDateTimeSeconds(_securityCheckServiceConfig.DefaultRegistLimitDateTime);
+        long nowTimestamp = DateTime.Now.ToUnixTimestamp();
+        long defaultRegistLimitTimestamp = _securityCheckServiceConfig.DefaultRegistLimitDateTime.ToUnixTimestamp();
 
         string registLimitTimestampData = PersistDataService.Instance.GetPersistData(_limitTimestampKey);
         string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(_lastRunTimestampKey);
@@ -121,8 +124,8 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         if (string.IsNullOrEmpty(registLimitTimestampData) || string.IsNullOrEmpty(registLastRunTimestampData))
         {
             bool res = false;
-            registLimitTimestampData = TimeCryptoUtils.EncryptTimestamp(defaultRegistLimitTimestamp);
-            registLastRunTimestampData = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
+            registLimitTimestampData = DateTimeUtils.ToBase64(defaultRegistLimitTimestamp);
+            registLastRunTimestampData = DateTimeUtils.ToBase64(nowTimestamp);
             SangoLogger.Warning("That`s the First Time open this software, we give the default registLimitTimestamp is: [ " + defaultRegistLimitTimestamp + " ]");
             bool res1 = PersistDataService.Instance.AddPersistData(_limitTimestampKey, registLimitTimestampData);
             bool res2 = PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampData);
@@ -139,8 +142,8 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
         }
         else
         {
-            long registLimitTimestamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLimitTimestampData));
-            long registLastRunTimestamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLastRunTimestampData));
+            long registLimitTimestamp = Convert.ToInt64(DateTimeUtils.FromBase64ToString(registLimitTimestampData));
+            long registLastRunTimestamp = Convert.ToInt64(DateTimeUtils.FromBase64ToString(registLastRunTimestampData));
             SangoLogger.Processing("We DeCrypt the RegistInfo, please wait....................................");
             SangoLogger.Log("The RegistLimitTimestamp is: [ " + registLimitTimestamp + " ]");
             SangoLogger.Log("The LastRunTimestamp is: [ " + registLastRunTimestamp + " ]");
@@ -177,20 +180,20 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
 
     private void TickUpdateRunTime()
     {
-        long nowTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now);
+        long nowTimestamp = DateTime.Now.ToUnixTimestamp();
         string registLastRunTimestampData = PersistDataService.Instance.GetPersistData(_lastRunTimestampKey);
         if (string.IsNullOrEmpty(registLastRunTimestampData))
         {
             return;
         }
-        long lastRunTimetamp = Convert.ToInt64(TimeCryptoUtils.DecryptTimestamp(registLastRunTimestampData));
+        long lastRunTimetamp = Convert.ToInt64(DateTimeUtils.FromBase64ToString(registLastRunTimestampData));
         if (lastRunTimetamp > nowTimestamp)
         {
             return;
         }
         else
         {
-            string registLastRunTimestampDataNew = TimeCryptoUtils.EncryptTimestamp(nowTimestamp);
+            string registLastRunTimestampDataNew = DateTimeUtils.ToBase64(nowTimestamp);
             PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampDataNew);
         }
     }

@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using SangoUtils_Unity_Scripts.Patch;
 using SangoUtils_Event;
+using SangoUtils_Bases_UnityEngine;
 
 namespace SangoUtils_Unity_App.Patch
 {

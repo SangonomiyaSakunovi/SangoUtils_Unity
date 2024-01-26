@@ -1,4 +1,5 @@
-﻿using SangoUtils_Event;
+﻿using SangoUtils_Bases_UnityEngine;
+using SangoUtils_Event;
 using System;
 
 public class EventService : BaseService<EventService>
@@ -7,7 +8,7 @@ public class EventService : BaseService<EventService>
 
     public override void OnInit()
     {
-        base.OnInit();
+        base.OnInit(); 
         _eventHandler = new();
         _eventHandler.Init();
     }

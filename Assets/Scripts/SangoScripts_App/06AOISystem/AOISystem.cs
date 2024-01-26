@@ -4,6 +4,7 @@ using SangoUtils_Common.Messages;
 using SangoUtils_FixedNum;
 using System.Collections.Generic;
 using UnityEngine;
+using SangoUtils_Bases_Universal;
 
 public class AOISystem : BaseSystem<AOISystem>
 {

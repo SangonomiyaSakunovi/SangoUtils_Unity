@@ -2,6 +2,7 @@ using Best.HTTP.Shared.PlatformSupport.Memory;
 using Best.WebSockets;
 using SangoNetProtol;
 using SangoUtils_Common.Utils;
+using SangoUtils_Extensions_Universal.Utils;
 using SangoUtils_Logger;
 using System;
 
@@ -38,7 +39,7 @@ namespace SangoUtils_Unity_Scripts.Net
             {
                 NetMessageHead = messageHead,
                 NetMessageBody = messageBody,
-                NetMessageTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now).ToString()
+                NetMessageTimestamp = DateTime.Now.ToUnixTimestampString()
             };
             SendData(message);
         }
@@ -58,7 +59,7 @@ namespace SangoUtils_Unity_Scripts.Net
             {
                 NetMessageHead = messageHead,
                 NetMessageBody = messageBody,
-                NetMessageTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now).ToString()
+                NetMessageTimestamp = DateTime.Now.ToUnixTimestampString()
             };
             SendData(message);
         }
@@ -70,7 +71,7 @@ namespace SangoUtils_Unity_Scripts.Net
 
         private void SendData(SangoNetMessage message)
         {
-            string messageJson = JsonUtils.SetJsonString(message);
+            string messageJson = JsonUtils.ToJson(message);
             Send(messageJson);
             //byte[] bytes = ProtoUtils.SetProtoBytes(message);
             //Send(bytes);
@@ -95,7 +96,7 @@ namespace SangoUtils_Unity_Scripts.Net
         private void OnMessageReceived(WebSocket webSocket, string message)
         {
             SangoLogger.Processing("ClientMessage: " + message);
-            SangoNetMessage sangoNetMessage = JsonUtils.DeJsonString<SangoNetMessage>(message);
+            SangoNetMessage sangoNetMessage = JsonUtils.FromJson<SangoNetMessage>(message);
             if (sangoNetMessage != null)
             {
                 WebSocketService.Instance.OnMessageReceived(sangoNetMessage);

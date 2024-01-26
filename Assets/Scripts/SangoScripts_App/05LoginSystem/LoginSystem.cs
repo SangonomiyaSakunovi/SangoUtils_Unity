@@ -2,6 +2,7 @@ using SangoNetProtol;
 using SangoUtils_Unity_App.Controller;
 using SangoUtils_Unity_Scripts.Net;
 using SangoUtils_Common.Messages;
+using SangoUtils_Bases_Universal;
 
 public class LoginSystem : BaseSystem<LoginSystem>
 {

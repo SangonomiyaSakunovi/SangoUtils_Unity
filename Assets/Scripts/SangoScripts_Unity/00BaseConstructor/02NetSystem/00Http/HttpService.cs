@@ -1,4 +1,6 @@
-﻿using SangoUtils_Logger;
+﻿using SangoUtils_Bases_UnityEngine;
+using SangoUtils_Extensions_Universal.Utils;
+using SangoUtils_Logger;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -102,7 +104,7 @@ namespace SangoUtils_Unity_Scripts.Net
 
         public void HttpPost<T>(int httpId, object postParame) where T : class
         {
-            string postParameStr = JsonUtils.SetJsonString(postParame);
+            string postParameStr = JsonUtils.ToJson(postParame);
             _httpClient.SendHttpRequest<T>(httpId, HttpType.Post, postParameStr);
         }
 
@@ -118,7 +120,7 @@ namespace SangoUtils_Unity_Scripts.Net
 
         public void HttpPut(int httpId, object putParame)
         {
-            string putParameStr = JsonUtils.SetJsonString(putParame);
+            string putParameStr = JsonUtils.ToJson(putParame);
             _httpClient.SendHttpRequest<string>(httpId, HttpType.Put, putParameStr);
         }
 

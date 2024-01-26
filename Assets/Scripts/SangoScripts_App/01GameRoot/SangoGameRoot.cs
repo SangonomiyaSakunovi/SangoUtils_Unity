@@ -4,6 +4,7 @@ using SangoUtils_Unity_Scripts.Net;
 using SangoUtils_Unity_Scripts.Patch;
 using SangoUtils_Logger;
 using UnityEngine;
+using SangoUtils_Bases_UnityEngine;
 
 public class SangoGameRoot : BaseRoot<SangoGameRoot>
 {

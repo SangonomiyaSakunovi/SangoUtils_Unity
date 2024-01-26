@@ -1,6 +1,7 @@
 using SangoNetProtol;
 using SangoUtils_Unity_Scripts.Net;
 using SangoUtils_Common.Messages;
+using SangoUtils_Bases_Universal;
 
 namespace SangoUtils_Unity_App.Operation
 {
@@ -8,7 +9,7 @@ namespace SangoUtils_Unity_App.Operation
     {
         private OperationKeyBroadcast _operationKeyBroadcast;
 
-        public OperationKeyCoreSystem()
+        public OperationKeyCoreSystem() 
         {
             _operationKeyBroadcast = WebSocketService.Instance.GetNetBroadcast<OperationKeyBroadcast>(NetOperationCode.OperationKey);
         }

@@ -1,3 +1,4 @@
+using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Extensions_UnityEngine.Core;
 using System;
 using TMPro;
@@ -18,7 +19,6 @@ namespace SangoUtils_Unity_App.Patch
 
         protected override void OnInit()
         {
-            base.OnInit();
             _messageBoxTrans = transform.Find("MessageBox");
             _tips = transform.Find("tips").GetComponent<TMP_Text>();
 
@@ -58,6 +58,11 @@ namespace SangoUtils_Unity_App.Patch
         {
             _clickMessageBoxOkCB?.Invoke();
             _messageBoxTrans.gameObject.SetActive(false);
+        }
+
+        protected override void OnDispose()
+        {
+
         }
     }
 }

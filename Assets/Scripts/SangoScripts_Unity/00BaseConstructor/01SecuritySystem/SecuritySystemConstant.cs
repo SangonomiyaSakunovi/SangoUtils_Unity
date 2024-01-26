@@ -1,3 +1,5 @@
+using SangoUtils_Bases_Universal;
+
 public class SecuritySystemConstant : BaseConstant
 {
     public const string SangoSecurityCheckRootPrefab_1KH_Path = "Prefabs/SecuritySystemPrefab/SangoSecurityCheckRoot";

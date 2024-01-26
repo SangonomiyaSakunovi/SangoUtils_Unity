@@ -1,5 +1,6 @@
 using SangoNetProtol;
 using SangoUtils_Common.Utils;
+using SangoUtils_Extensions_Universal.Utils;
 using SangoUtils_IOCP;
 using SangoUtils_Logger;
 using System;
@@ -51,7 +52,7 @@ namespace SangoUtils_Unity_Scripts.Net
             {
                 NetMessageHead = messageHead,
                 NetMessageBody = messageBody,
-                NetMessageTimestamp = TimeUtils.GetUnixDateTimeSeconds(DateTime.Now).ToString()
+                NetMessageTimestamp = DateTime.Now.ToUnixTimestampString() 
             };
             SendData(message);
         }

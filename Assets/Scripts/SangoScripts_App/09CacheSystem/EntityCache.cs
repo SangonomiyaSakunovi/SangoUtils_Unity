@@ -2,6 +2,8 @@ using SangoUtils_Unity_App.Entity;
 using SangoUtils_Unity_App.Scene;
 using SangoUtils_FixedNum;
 using System.Collections.Generic;
+using SangoUtils_Bases_Universal;
+using SangoUtils_Extensions_UnityEngine;
 
 namespace SangoUtils_Unity_App.Cache
 {

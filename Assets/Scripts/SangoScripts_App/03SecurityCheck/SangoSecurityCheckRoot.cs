@@ -2,6 +2,7 @@ using SangoUtils_Unity_App.Scene;
 using SangoUtils_Logger;
 using Unity.VisualScripting;
 using UnityEngine;
+using SangoUtils_Bases_UnityEngine;
 
 public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
 {

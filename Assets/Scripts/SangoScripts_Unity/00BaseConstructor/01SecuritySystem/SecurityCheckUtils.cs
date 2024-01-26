@@ -1,6 +1,8 @@
+using SangoUtils_Converter;
+using SangoUtils_Extensions_Universal.Utils;
 using System;
 
-public static class SecurityCheckMapSango
+public static class SecurityCheckUtils
 {
     private static bool CheckSignDataValid(string rawData, string signData, SecurityCheckServiceConfig config, SecuritySignConvertProtocol signConvertProtocol)
     {
@@ -46,14 +48,14 @@ public static class SecurityCheckMapSango
         int numYear = 2023 + numYearPostNum;
         int numMonth = NumberUtilsSango.GetNumberFromNumberConvertProtocol(mixSignData[1], NumberConvertProtocol.ASCII_A0a26);
         int numDay = NumberUtilsSango.GetNumberFromNumberConvertProtocol(mixSignData[2], NumberConvertProtocol.ASCII_A0a26);
-        DateTime newRegistLimitDateTime = TimeUtils.GetDateTimeFromDateNumer(numYear, numMonth, numDay);
+        DateTime newRegistLimitDateTime = DateTimeUtils.ToDataTime(numYear, numMonth, numDay);
         if (newRegistLimitDateTime == DateTime.MinValue)
         {
             config.OnCheckedResult?.Invoke(RegistInfoCheckResult.UpdateError_SyntexError, "");
             return;
         }
         string md5DataStr = mixSignData.Substring(3, config.CheckLength);
-        long registLimitTimestampNew = TimeUtils.GetUnixDateTimeSeconds(newRegistLimitDateTime);
+        long registLimitTimestampNew = newRegistLimitDateTime.ToUnixTimestamp();
         if (CheckSignDataValid(registLimitTimestampNew, md5DataStr, config, SecuritySignConvertProtocol.AllToUpperChar))
         {
             writeRegistInfoCallBack?.Invoke(registLimitTimestampNew.ToString());

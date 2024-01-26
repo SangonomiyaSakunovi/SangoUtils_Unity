@@ -1,3 +1,4 @@
+using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Logger;
 using TMPro;
 using UnityEngine;
@@ -109,5 +110,15 @@ public class _10VideoPlayerTestWnd : BaseWindow
                 playOrPauseBtn.GetComponentInChildren<TMP_Text>().text = "Play";
             }
         }
+    }
+
+    protected override void OnInit()
+    {
+
+    }
+
+    protected override void OnDispose()
+    {
+
     }
 }

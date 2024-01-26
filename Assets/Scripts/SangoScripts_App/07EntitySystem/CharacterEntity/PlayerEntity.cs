@@ -1,12 +1,14 @@
 using SangoUtils_Unity_App.Controller;
 using SangoUtils_FixedNum;
 using SangoUtils_Physics;
+using SangoUtils_Bases_Universal;
+using SangoUtils_Extensions_UnityEngine;
 
 namespace SangoUtils_Unity_App.Entity
 {
     public class PlayerEntity : BaseObjectEntity
     {
-        public PlayerEntity(string entityID, TransformData transformData, PlayerState playerState) : base(entityID, transformData, playerState)
+        public PlayerEntity(string entityID, TransformData transformData, PlayerState playerState) : base(entityID, playerState)
         {
             //FixedCylinderCollider = new();
         }

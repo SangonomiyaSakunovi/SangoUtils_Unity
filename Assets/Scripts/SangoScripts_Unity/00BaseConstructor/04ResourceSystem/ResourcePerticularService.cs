@@ -1,3 +1,4 @@
+using SangoUtils_Bases_UnityEngine;
 using UnityEngine;
 
 public class ResourcePerticularService : BaseService<ResourcePerticularService>

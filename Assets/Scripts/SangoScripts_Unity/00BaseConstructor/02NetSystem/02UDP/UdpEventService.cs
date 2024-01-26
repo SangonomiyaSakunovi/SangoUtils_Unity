@@ -1,4 +1,5 @@
-﻿using SangoUtils_UDP;
+﻿using SangoUtils_Bases_UnityEngine;
+using SangoUtils_UDP;
 
 namespace SangoUtils_Unity_Scripts.Net
 {

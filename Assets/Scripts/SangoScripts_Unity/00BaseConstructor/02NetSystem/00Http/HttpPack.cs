@@ -1,4 +1,5 @@
-﻿using SangoUtils_Logger;
+﻿using SangoUtils_Extensions_Universal.Utils;
+using SangoUtils_Logger;
 using System;
 using UnityEngine.Networking;
 
@@ -29,7 +30,7 @@ namespace SangoUtils_Unity_Scripts.Net
         public override void OnDataReceived(string dataStr, int code, int messageId)
         {
             SangoLogger.Log("HttpMessageId:[" + messageId + "], ReceivedStr: " + dataStr);
-            HttpDataInfo dataInfo = JsonUtils.DeJsonString<HttpDataInfo>(dataStr);
+            HttpDataInfo dataInfo = JsonUtils.FromJson<HttpDataInfo>(dataStr);
             if (dataInfo != null)
             {
                 if (dataInfo.res == 0)
@@ -43,7 +44,7 @@ namespace SangoUtils_Unity_Scripts.Net
                         }
                         else
                         {
-                            data = JsonUtils.DeJsonString<T>(dataInfo.data);
+                            data = JsonUtils.FromJson<T>(dataInfo.data);
                         }
                         if (data != null)
                         {
