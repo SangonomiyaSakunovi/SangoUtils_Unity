@@ -5,6 +5,7 @@ using SangoUtils_Unity_Scripts.Patch;
 using SangoUtils_Logger;
 using UnityEngine;
 using SangoUtils_Bases_UnityEngine;
+using SangoUtils_Extensions_UnityEngine.Service;
 
 public class SangoGameRoot : BaseRoot<SangoGameRoot>
 {
@@ -34,7 +35,6 @@ public class SangoGameRoot : BaseRoot<SangoGameRoot>
 
     private void InitService()
     {
-        ResourceService.Instance.OnInit();
         AssetService.Instance.OnInit();
         EventService.Instance.OnInit();
         SceneService.Instance.OnInit();

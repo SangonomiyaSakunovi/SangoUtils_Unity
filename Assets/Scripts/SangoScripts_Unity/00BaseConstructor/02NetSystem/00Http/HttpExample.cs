@@ -1,3 +1,5 @@
+using SangoUtils_Extensions_UnityEngine.Service;
+using SangoUtils_Extensions_UnityEngine.UnityWebRequestNet;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -15,12 +17,12 @@ namespace SangoUtils_Unity_Scripts.Net
         public void InitService()
         {
             Instance = this;
-            HttpService.Instance.OnInit();
+            UnityWebRequestService.Instance.OnInit();
         }
 
         private void InitRequest()
         {
-            _sangoHttpExampleRequest = HttpService.Instance.GetRequest<SangoHttpExampleRequest>(HttpId.loginId);
+            //_sangoHttpExampleRequest = UnityWebRequestService.Instance.GetRequest<SangoHttpExampleRequest>(UnityWebRequestId.loginId);
         }
 
         private void SendRequestAsync()
@@ -41,7 +43,7 @@ namespace SangoUtils_Unity_Scripts.Net
         }
     }
 
-    public class SangoHttpExampleRequest : BaseHttpRequest
+    public class SangoHttpExampleRequest : BaseUnityWebRequestRequest
     {
         public override void OnInit(int httpId)
         {
