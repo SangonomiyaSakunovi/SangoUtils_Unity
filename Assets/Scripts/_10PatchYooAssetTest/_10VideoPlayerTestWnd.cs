@@ -1,5 +1,8 @@
 using SangoUtils_Bases_UnityEngine;
+using SangoUtils_Extensions_UnityEngine.Service;
+using SangoUtils_Extensions_UnityEngine.Utils;
 using SangoUtils_Logger;
+using SangoUtils_Patch_YooAsset;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,24 +40,19 @@ public class _10VideoPlayerTestWnd : BaseWindow
 
     private void Start()
     {
-        videoPlayerConfig = new VideoPlayerConfig
-        {
-            videoRawImage = videoRawImage,
-            videoRenderTexture = videoRenderTexture,
-            playOrPauseBtn = playOrPauseBtn,
-            fullScreenBtn = fullScreenBtn,
-            muteBtn = muteBtn,
-            videoProgressSlider = videoProgressSlider,
-            audioVolumeSlider = audioVolumeSlider,
-            videoFullTimeTMPText = videoFullTimeTMPText,
-            videoCurrentTimeTMPText = videoCurrentTimeTMPText,
-            defaultAudioVolume = defaultAudioVolume,
-            normalScreenRectTransValue = normalScreenRectTransValue,
-            fullScreenRectTransValue = fullScreenRectTransValue,
-            OnPlayOrPauseCallBack = OnPlayOrPauseBtnClickedCallBack
-        };
+        videoPlayerConfig = new VideoPlayerConfig(videoRawImage,videoRenderTexture);
+        videoPlayerConfig.PlayOrPauseBtn = playOrPauseBtn;
+        videoPlayerConfig.FullScreenBtn = fullScreenBtn;
+        videoPlayerConfig.MuteBtn = muteBtn;
+        videoPlayerConfig.VideoProgressSlider = videoProgressSlider;
+        videoPlayerConfig.AudioVolumeSlider = audioVolumeSlider;
+        videoPlayerConfig.VideoFullTimeTMPText = videoFullTimeTMPText;
+        videoPlayerConfig.VideoCurrentTimeTMPText = videoCurrentTimeTMPText;
+        videoPlayerConfig.DefaultAudioVolume = defaultAudioVolume;
+        videoPlayerConfig.NormalScreenRectTransValue = normalScreenRectTransValue;
+        videoPlayerConfig.FullScreenRectTransValue = fullScreenRectTransValue;
+        videoPlayerConfig.OnPlayOrPauseCallBack = OnPlayOrPauseBtnClickedCallBack;        
 
-        VideoPlayerService.Instance.OnInit();
         VideoPlayerService.Instance.AddVideoPlayer(_videoId, videoPlayerConfig);
 
         btn1.onClick.AddListener(OnButton1Clicked);
@@ -120,5 +118,10 @@ public class _10VideoPlayerTestWnd : BaseWindow
     protected override void OnDispose()
     {
 
+    }
+
+    protected override void OnAwake()
+    {
+        
     }
 }
