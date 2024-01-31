@@ -17,10 +17,10 @@ namespace SangoUtils_Unity_Scripts.Net
         public WebSocketClientPeer(string ipAddressAndPort)
         {
             _websocketClient = new(new Uri(ipAddressAndPort));
-            _websocketClient.OnOpen += OnWebSocketOpen;
-            _websocketClient.OnMessage += OnMessageReceived;
-            _websocketClient.OnBinary += OnBinaryMessageReceived;
-            _websocketClient.OnClosed += OnWebSocketClosed;
+            _websocketClient.OnOpen += OnOpen;
+            _websocketClient.OnMessage += OnMessage;
+            _websocketClient.OnBinary += OnBinary;
+            _websocketClient.OnClosed += OnClosed;
             _websocketClient.Open();
         }
 
@@ -41,7 +41,7 @@ namespace SangoUtils_Unity_Scripts.Net
                 NetMessageBody = messageBody,
                 NetMessageTimestamp = DateTime.Now.ToUnixTimestampString()
             };
-            SendData(message);
+            Send(message);
         }
 
         public void SendOperationBroadcast(NetOperationCode operationCode, string messageStr)
@@ -61,7 +61,7 @@ namespace SangoUtils_Unity_Scripts.Net
                 NetMessageBody = messageBody,
                 NetMessageTimestamp = DateTime.Now.ToUnixTimestampString()
             };
-            SendData(message);
+            Send(message);
         }
 
         public void Close()
@@ -69,7 +69,7 @@ namespace SangoUtils_Unity_Scripts.Net
             _websocketClient.Close();
         }
 
-        private void SendData(SangoNetMessage message)
+        private void Send(SangoNetMessage message)
         {
             string messageJson = JsonUtils.ToJson(message);
             Send(messageJson);
@@ -88,12 +88,12 @@ namespace SangoUtils_Unity_Scripts.Net
             _websocketClient.SendAsBinary(new BufferSegment(bufferMessage, 0, count));
         }
 
-        private void OnWebSocketOpen(WebSocket webSocket)
+        private void OnOpen(WebSocket webSocket)
         {
             SangoLogger.Done("WebSocket is open!");
         }
 
-        private void OnMessageReceived(WebSocket webSocket, string message)
+        private void OnMessage(WebSocket webSocket, string message)
         {
             SangoLogger.Processing("ClientMessage: " + message);
             SangoNetMessage sangoNetMessage = JsonUtils.FromJson<SangoNetMessage>(message);
@@ -103,7 +103,7 @@ namespace SangoUtils_Unity_Scripts.Net
             }
         }
 
-        private void OnBinaryMessageReceived(WebSocket webSocket, BufferSegment buffer)
+        private void OnBinary(WebSocket webSocket, BufferSegment buffer)
         {
             byte[] data = new byte[buffer.Count];
             Buffer.BlockCopy(buffer.Data, 0, data, 0, buffer.Count);
@@ -111,7 +111,7 @@ namespace SangoUtils_Unity_Scripts.Net
             WebSocketService.Instance.OnMessageReceived(sangoNetMessage);
         }
 
-        private void OnWebSocketClosed(WebSocket webSocket, WebSocketStatusCodes code, string message)
+        private void OnClosed(WebSocket webSocket, WebSocketStatusCodes code, string message)
         {
             SangoLogger.Done("WebSocket is Closed!");
             if (code == WebSocketStatusCodes.NormalClosure)

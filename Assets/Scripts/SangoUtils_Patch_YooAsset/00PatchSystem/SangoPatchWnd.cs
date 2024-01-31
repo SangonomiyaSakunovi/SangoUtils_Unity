@@ -65,9 +65,10 @@ namespace SangoUtils_Patch_YooAsset
 
         }
 
-        protected override void OnAwake()
+        public override void OnAwake()
         {
-            
+            WindowLayer = WindowLayer.Base;
+            AddWindow(this);
         }
     }
 }

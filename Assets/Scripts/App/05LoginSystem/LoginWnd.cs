@@ -6,9 +6,10 @@ public class LoginWnd : BaseWindow
 {
     private Button _btnLoginAsGuest;
 
-    protected override void OnAwake()
+    public override void OnAwake()
     {
-        
+        WindowLayer = WindowLayer.Base;
+        AddWindow(this);
     }
 
     protected override void OnDispose()
@@ -20,11 +21,14 @@ public class LoginWnd : BaseWindow
     {       
         _btnLoginAsGuest = transform.Find("btnLoginAsGuest").GetComponent<Button>();
         _btnLoginAsGuest.AddListener_OnClick(OnBtnLoginAsGuestClicked);
+
+        WindowLayer = WindowLayer.Base;
+        AddWindow(this);
     }
 
     private void OnBtnLoginAsGuestClicked()
     {
-        SystemRoot.Instance.LoginSystem.LoginAsGuest();       
+        SystemService.Instance.LoginSystem.LoginAsGuest();       
         base.SetWindowState(false);
     }
 }

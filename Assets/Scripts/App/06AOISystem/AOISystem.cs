@@ -31,9 +31,29 @@ public class AOISystem : BaseSystem<AOISystem>
         _aoiIOCPRequest.AddAOIActiveMoveEntity(activeMoveEntity);
     }
 
+    public override void OnAwake()
+    {
+        
+    }
+
+    public override void OnDispose()
+    {
+        
+    }
+
+    public override void OnInit()
+    {
+        
+    }
+
     public void SendAOIReqMessage()
     {
         _aoiIOCPRequest.SendAOIReqMessage();
+    }
+
+    protected override void OnUpdate()
+    {
+        
     }
 
     //´¦ÀíÍË³ö DestoryObject

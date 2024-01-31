@@ -1,18 +1,26 @@
+using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Unity_App.Operation;
 
-public class SystemRoot
-{
-    public static SystemRoot Instance { get; private set; }
-
+public class SystemService : BaseService<SystemService>
+{   
     public LoginSystem LoginSystem { get; private set; }
     public OperationKeyCoreSystem OperationKeyCoreSystem { get; private set; }
     public OperationKeyMoveSystem OperationKeyMoveSystem { get; private set; }
 
-    public SystemRoot()
+    public override void OnInit()
     {
-        Instance = this;
         LoginSystem = new();
         OperationKeyCoreSystem = new();
         OperationKeyMoveSystem = new();
+    }
+
+    protected override void OnUpdate()
+    {
+        
+    }
+
+    public override void OnDispose()
+    {
+        
     }
 }

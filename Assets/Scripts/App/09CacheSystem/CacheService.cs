@@ -7,8 +7,15 @@ public class CacheService : BaseService<CacheService>
 
     public override void OnInit()
     {
-        base.OnInit();
         EntityCache = new EntityCache();
+    }
+
+    protected override void OnUpdate()
+    {
+    }
+
+    public override void OnDispose()
+    {
     }
 
     public uint RoomID { get; set; } = 0;

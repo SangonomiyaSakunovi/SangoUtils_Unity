@@ -16,16 +16,16 @@ public class LoginWebSocketRequest : BaseNetRequest
     public override void OnOperationResponse(string message)
     {
         SangoLogger.Done("The loginResult from server: " + message);
-        LoginRspMessage_SunUp loginRspMessage = DeJsonString<LoginRspMessage_SunUp>(message);
+        LoginRspMessage_SunUp loginRspMessage = FromJson<LoginRspMessage_SunUp>(message);
         if (loginRspMessage != null)
         {
-            SystemRoot.Instance.LoginSystem.OnLoginSucceed(loginRspMessage.client_id);
+            SystemService.Instance.LoginSystem.OnLoginSucceed(loginRspMessage.client_id);
         }
     }
 
     protected override void DefaultOperationRequest()
     {
-        string jsonString = SetJsonString(_message);
+        string jsonString = ToJson(_message);
         WebSocketService.Instance.SendOperationRequest(NetOperationCode, jsonString);
     }
 }

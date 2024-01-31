@@ -5,7 +5,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 
-namespace SangoUtils_Unity_App.InputSystem
+namespace SangoUtils_TypeIn
 {
     public class UpperCharKeyboardKeyPrefab : BasePrefab
     {

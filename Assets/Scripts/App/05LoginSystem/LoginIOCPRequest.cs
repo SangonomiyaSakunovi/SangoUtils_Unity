@@ -15,17 +15,17 @@ public class LoginIOCPRequest : BaseNetRequest
 
     protected override void DefaultOperationRequest()
     {
-        string jsonString = SetJsonString(_message);
+        string jsonString = ToJson(_message);
         IOCPService.Instance.SendOperationRequest(NetOperationCode, jsonString);
     }
 
     public override void OnOperationResponse(string message)
     {
         SangoLogger.Done("The loginResult from server: " + message);
-        LoginRspMessage loginReqMessage = DeJsonString<LoginRspMessage>(message);
+        LoginRspMessage loginReqMessage = FromJson<LoginRspMessage>(message);
         if (loginReqMessage != null )
         {
-            SystemRoot.Instance.LoginSystem.OnLoginSucceed(loginReqMessage.EntityID);
+            SystemService.Instance.LoginSystem.OnLoginSucceed(loginReqMessage.EntityID);
         }
     }
 } 

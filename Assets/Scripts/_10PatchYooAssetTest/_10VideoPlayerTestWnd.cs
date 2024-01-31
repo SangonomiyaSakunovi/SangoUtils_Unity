@@ -36,7 +36,7 @@ public class _10VideoPlayerTestWnd : BaseWindow
     private const string _videoString3 = "Assets/Res/Remote/Video/深港无标8-11B.mp4";
     private const string _videoId = "SangoTestId";
 
-    private VideoPlayerConfig videoPlayerConfig;    
+    private VideoPlayerConfig videoPlayerConfig;
 
     private void Start()
     {
@@ -120,8 +120,9 @@ public class _10VideoPlayerTestWnd : BaseWindow
 
     }
 
-    protected override void OnAwake()
+    public override void OnAwake()
     {
-        
+        WindowLayer = WindowLayer.Base;
+        AddWindow(this);
     }
 }

@@ -12,7 +12,6 @@ public class SceneService : BaseService<SceneService>
 
     public override void OnInit()
     {
-        base.OnInit();
         AddEvent();
     }
 
@@ -41,6 +40,14 @@ public class SceneService : BaseService<SceneService>
     private void OnHandleEventMessage(IEventMessageBase message)
     {
         _onHandleEventMessage?.Invoke(message);
+    }
+
+    protected override void OnUpdate()
+    {
+    }
+
+    public override void OnDispose()
+    {
     }
 }
 

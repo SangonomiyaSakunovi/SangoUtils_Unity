@@ -4,7 +4,7 @@ using SangoUtils_Unity_Scripts.Net;
 using System;
 using YooAsset;
 
-public static class SangoSystemConfig
+public static class GameConfig
 {
     public static readonly SceneViewConfig SceneViewConfig = new()
     {

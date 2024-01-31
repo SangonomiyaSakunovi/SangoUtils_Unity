@@ -1,7 +1,7 @@
 using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Extensions_UnityEngine.Core;
 using SangoUtils_Extensions_UnityEngine.Service;
-using SangoUtils_Unity_App.InputSystem;
+using SangoUtils_TypeIn;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -142,8 +142,9 @@ public class SangoSecurityCheckWnd : BaseWindow
         }
     }
 
-    protected override void OnAwake()
+    public override void OnAwake()
     {
-        
+        WindowLayer = WindowLayer.Base;
+        AddWindow(this);
     }
 }

@@ -1,6 +1,6 @@
 using SangoUtils_Bases_Universal;
 
-namespace SangoUtils_Unity_App.InputSystem
+namespace SangoUtils_TypeIn
 {
     public class TypeInConstant : BaseConstant
     {

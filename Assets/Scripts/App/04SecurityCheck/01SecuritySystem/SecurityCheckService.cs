@@ -19,12 +19,10 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
 
     public override void OnInit()
     {
-        base.OnInit();
     }
 
     public void InitService(SecurityCheckServiceConfig config)
     {
-        base.OnInit();
         if (config != null)
         {
             _securityCheckServiceConfig = config;
@@ -33,7 +31,6 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
 
     protected override void OnUpdate()
     {
-        base.OnUpdate();
         if (_isApplicationRunValid)
         {
             if (_currentTickTime > 0)
@@ -196,6 +193,10 @@ public class SecurityCheckService : BaseService<SecurityCheckService>
             string registLastRunTimestampDataNew = DateTimeUtils.ToBase64(nowTimestamp);
             PersistDataService.Instance.AddPersistData(_lastRunTimestampKey, registLastRunTimestampDataNew);
         }
+    }
+
+    public override void OnDispose()
+    {
     }
 }
 

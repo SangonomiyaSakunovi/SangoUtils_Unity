@@ -30,5 +30,25 @@ namespace SangoUtils_Unity_App.Operation
             string vector3InfoJson = SetJsonString(vector3Message);
             SetAndSendOperationKey(vector3InfoJson);
         }
+
+        protected override void OnUpdate()
+        {
+            
+        }
+
+        public override void OnDispose()
+        {
+            
+        }
+
+        public override void OnAwake()
+        {
+            
+        }
+
+        public override void OnInit()
+        {
+            
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace SangoUtils_Unity_App.Entity
 
         public void SendMoveKey(FixedVector3 logicDirection)
         {
-            SystemRoot.Instance.OperationKeyMoveSystem.AddOperationMove(logicDirection);
+            SystemService.Instance.OperationKeyMoveSystem.AddOperationMove(logicDirection);
         }
 
         public void CalcMoveResult(FixedVector3 logicDirection)
@@ -40,7 +40,6 @@ namespace SangoUtils_Unity_App.Entity
 
         protected override void OnUpdate()
         {
-            base.OnUpdate();
 
             //if (LogicPosition != LogicPositionLast)
             //{

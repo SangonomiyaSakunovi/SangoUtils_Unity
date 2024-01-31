@@ -20,7 +20,7 @@ public class AOIIOCPRequest : BaseNetRequest
 
     protected override void DefaultOperationRequest()
     {
-        string jsonString = SetJsonString(_message);
+        string jsonString = ToJson(_message);
         IOCPService.Instance.SendOperationRequest(NetOperationCode, jsonString);
     }
 

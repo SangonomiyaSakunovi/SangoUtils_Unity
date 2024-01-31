@@ -15,15 +15,22 @@ namespace SangoUtils_Patch_YooAsset
 
         public Action<bool> OnPatchCompleted { get; set; }
 
+        public override void OnDispose()
+        {
+        }
+
         public override void OnInit()
         {
-            base.OnInit();
             coroutine = StartOperation().Start();
         }
 
         public void SetConfig(PatchConfig patchConfig)
         {
             _currentPatchConfig = patchConfig;
+        }
+
+        protected override void OnUpdate()
+        {
         }
 
         private IEnumerator StartOperation()

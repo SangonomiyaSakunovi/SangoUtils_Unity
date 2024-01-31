@@ -1,10 +1,9 @@
 using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Extensions_UnityEngine.Service;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace SangoUtils_Unity_App.InputSystem
+namespace SangoUtils_TypeIn
 {
     public class UpperCharKeyboardPanel : BasePanel
     {
@@ -28,16 +27,6 @@ namespace SangoUtils_Unity_App.InputSystem
         private string[] _V_line2_KeyValue = { "H", "I", "J", "K", "L", "M", };
         private string[] _V_line3_KeyValue = { "N", "O", "P", "Q", "R", "S", "T" };
         private string[] _V_line4_KeyValue = { "U", "V", "W", "X", "Y", "Z" };
-
-        protected override void OnInit()
-        {
-            base.OnInit();
-        }
-
-        protected override void OnDispose()
-        {
-            base.OnDispose();
-        }
 
         public void SetSystem(UpperCharKeyboardSystem system)
         {
@@ -87,33 +76,40 @@ namespace SangoUtils_Unity_App.InputSystem
                 case KeyboradDirectionCode.Horizontal:
                     for (int i = 0; i < _keyboardLine1.childCount; i++)
                     {
-                        _keyboardLine1.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                        UpperCharKeyboardKeyPrefab prefab = _keyboardLine1.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine1.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                        prefab.InitStandardKey(_standardKeyFont);
                     }
                     for (int i = 0; i < _keyboardLine2.childCount - 1; i++)
                     {
-                        _keyboardLine2.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                        UpperCharKeyboardKeyPrefab prefab = _keyboardLine2.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine2.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                        prefab.InitStandardKey(_standardKeyFont);
                     }
                     for (int i = 0; i < _keyboardLine3.childCount; i++)
                     {
-                        _keyboardLine3.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                        UpperCharKeyboardKeyPrefab prefab = _keyboardLine3.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine3.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                        prefab.InitStandardKey(_standardKeyFont);
                     }
                     break;
                 case KeyboradDirectionCode.Vertical:
                     for (int i = 0; i < _keyboardLine1.childCount; i++)
                     {
-                        _keyboardLine1.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                        UpperCharKeyboardKeyPrefab prefab = _keyboardLine1.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine1.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                        prefab.InitStandardKey(_standardKeyFont);
                     }
                     for (int i = 0; i < _keyboardLine2.childCount; i++)
                     {
-                        _keyboardLine2.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                        UpperCharKeyboardKeyPrefab prefab = _keyboardLine2.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine2.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                        prefab.InitStandardKey(_standardKeyFont);
                     }
                     for (int i = 0; i < _keyboardLine3.childCount; i++)
                     {
-                        _keyboardLine3.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                        UpperCharKeyboardKeyPrefab prefab = _keyboardLine3.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine3.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                        prefab.InitStandardKey(_standardKeyFont);
                     }
                     for (int i = 0; i < _keyboardLine4.childCount - 1; i++)
                     {
-                        _keyboardLine4.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                        UpperCharKeyboardKeyPrefab prefab = _keyboardLine4.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine4.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                        prefab.InitStandardKey(_standardKeyFont);
                     }
                     break;
             }
@@ -128,7 +124,8 @@ namespace SangoUtils_Unity_App.InputSystem
                     {
                         if (i == _keyboardLine2.childCount - 1)
                         {
-                            _keyboardLine2.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitSpecialKey(_specialKeyFont);
+                            UpperCharKeyboardKeyPrefab prefab = _keyboardLine2.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine2.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                            prefab.InitSpecialKey(_specialKeyFont);
                         }
                     }
                     break;
@@ -137,7 +134,8 @@ namespace SangoUtils_Unity_App.InputSystem
                     {
                         if (i == _keyboardLine4.childCount - 1)
                         {
-                            _keyboardLine4.GetChild(i).GetOrAddComponent<UpperCharKeyboardKeyPrefab>().InitSpecialKey(_specialKeyFont);
+                            UpperCharKeyboardKeyPrefab prefab = _keyboardLine4.GetChild(i).GetComponent<UpperCharKeyboardKeyPrefab>() ?? _keyboardLine4.GetChild(i).gameObject.AddComponent<UpperCharKeyboardKeyPrefab>();
+                            prefab.InitSpecialKey(_specialKeyFont);
                         }
                     }
                     break;
@@ -217,6 +215,22 @@ namespace SangoUtils_Unity_App.InputSystem
         private void OnSpecialButtonClickedCallBack(string buttonName)
         {
             _upperCharKeyboardSystem.OnSpecialButtonClickedCallBack(buttonName);
+        }
+
+        public override void OnAwake()
+        {
+            PanelLayer = PanelLayer.Base;
+            AddPanel(this);
+        }
+
+        protected override void OnInit()
+        {
+
+        }
+
+        protected override void OnDispose()
+        {
+
         }
     }
 }

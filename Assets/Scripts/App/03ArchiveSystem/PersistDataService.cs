@@ -7,12 +7,10 @@ public class PersistDataService : BaseService<PersistDataService>
 
     public override void OnInit()
     {
-        base.OnInit();
     }
 
     public override void OnDispose()
     {
-        base.OnDispose();
     }
 
     public bool AddPersistData(string key, string value)
@@ -50,6 +48,10 @@ public class PersistDataService : BaseService<PersistDataService>
                 break;
         }
         return res;
+    }
+
+    protected override void OnUpdate()
+    {
     }
 }
 

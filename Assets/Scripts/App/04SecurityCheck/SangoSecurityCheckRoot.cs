@@ -13,10 +13,9 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
 
     public override void OnInit()
     {
-        base.OnInit();
         _sangoSecurityCheckWnd = transform.Find("SangoSecurityCheckWnd").GetOrAddComponent<SangoSecurityCheckWnd>();
 
-        SecurityCheckServiceConfig config1 = SangoSystemConfig.SecurityCheckServiceInfoConfig;
+        SecurityCheckServiceConfig config1 = GameConfig.SecurityCheckServiceInfoConfig;
         config1.RegistInfoCode = RegistInfoCode.Timestamp;
         config1.SignMethodCode = SignMethodCode.Md5;
         config1.CheckLength = 5;
@@ -24,7 +23,7 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
         config1.OnCheckedResult = RegistInfoCheckResultActionCallBack;
 
         TypeInConfig config2 = new TypeInConfig();
-        SceneViewConfig sceneViewConfig = SangoSystemConfig.SceneViewConfig;
+        SceneViewConfig sceneViewConfig = GameConfig.SceneViewConfig;
         switch (sceneViewConfig.SceneViewResolution)
         {
             case SceneViewResolution._1KH_1920x1080:
@@ -134,5 +133,18 @@ public class SangoSecurityCheckRoot : BaseRoot<SangoSecurityCheckRoot>
             PersistDataService.Instance.RemovePersistData("key2");
             SangoLogger.Done("已手动删除注册信息");
         }
+    }
+
+    protected override void OnUpdate()
+    {
+    }
+
+    public override void OnDispose()
+    {
+    }
+
+    public override void OnAwake()
+    {
+        
     }
 }

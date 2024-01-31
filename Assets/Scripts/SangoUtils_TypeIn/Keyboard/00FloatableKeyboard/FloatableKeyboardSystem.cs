@@ -1,7 +1,7 @@
 using SangoUtils_Extensions_UnityEngine.Core;
 using SangoUtils_Extensions_UnityEngine.Service;
 
-namespace SangoUtils_Unity_App.InputSystem
+namespace SangoUtils_TypeIn
 {
     public class FloatableKeyboardSystem : TypeInBaseSystem
     {

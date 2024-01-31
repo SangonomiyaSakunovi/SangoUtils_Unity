@@ -11,7 +11,7 @@ namespace SangoUtils_Unity_App.Operation
 
         protected void SetAndSendOperationKey(string jsonString)
         {
-            SystemRoot.Instance.OperationKeyCoreSystem.SetAndSendOperationKey(OperationKeyType, jsonString);
+            SystemService.Instance.OperationKeyCoreSystem.SetAndSendOperationKey(OperationKeyType, jsonString);
         }
 
         public abstract void OnMessageReceived(OperationKey operationKey);

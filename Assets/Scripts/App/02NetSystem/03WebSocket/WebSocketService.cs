@@ -13,13 +13,7 @@ namespace SangoUtils_Unity_Scripts.Net
 
         public override void OnInit()
         {
-            base.OnInit();
-            string ipAddressAndPort = _currentNetEnvironmentConfig.ServerAddressAndPort;
-            InitClientInstance(ipAddressAndPort);
-
-            DefaultWebSocketRequest defaultWebSocketRequest = _netOperationHandler.GetNetRequest<DefaultWebSocketRequest>(NetOperationCode.Default);
-            DefaultWebSocketEvent defaultWebSocketEvent = _netOperationHandler.GetNetEvent<DefaultWebSocketEvent>(NetOperationCode.Default);
-            DefaultWebSocketBroadcast defaultWebSocketBroadcast = _netOperationHandler.GetNetBroadcast<DefaultWebSocketBroadcast>(NetOperationCode.Default);
+            
         }
 
         public void SetConfig(NetEnvironmentConfig netEnvironmentConfig)
@@ -47,16 +41,6 @@ namespace SangoUtils_Unity_Scripts.Net
         //    NetMessageCommandBroadcast(sangoNetMessage);
         //}
 
-        private void InitClientInstance(string ipAddressAndPort)
-        {
-            _clientPeerInstance = new(ipAddressAndPort);
-        }
-
-        public void CloseClientInstance()
-        {
-            _clientPeerInstance.Close();
-        }
-
         public T GetNetRequest<T>(NetOperationCode netOperationCode) where T : BaseNetRequest, new()
         {
             return _netOperationHandler.GetNetRequest<T>(netOperationCode);
@@ -70,6 +54,33 @@ namespace SangoUtils_Unity_Scripts.Net
         public T GetNetBroadcast<T>(NetOperationCode operationCode) where T : BaseNetBroadcast, new()
         {
             return _netOperationHandler.GetNetBroadcast<T>(operationCode);
+        }
+
+        protected override void OnUpdate()
+        {
+            
+        }
+
+        public override void OnDispose()
+        {
+            
+        }
+
+        public void OpenClient()
+        {
+            string ipAddressAndPort = _currentNetEnvironmentConfig.ServerAddressAndPort;
+            _clientPeerInstance = new(ipAddressAndPort);
+
+            DefaultWebSocketRequest defaultWebSocketRequest = _netOperationHandler.GetNetRequest<DefaultWebSocketRequest>(NetOperationCode.Default);
+            DefaultWebSocketEvent defaultWebSocketEvent = _netOperationHandler.GetNetEvent<DefaultWebSocketEvent>(NetOperationCode.Default);
+            DefaultWebSocketBroadcast defaultWebSocketBroadcast = _netOperationHandler.GetNetBroadcast<DefaultWebSocketBroadcast>(NetOperationCode.Default);
+
+            WebSocketEvent_Ping ping = _netOperationHandler.GetNetEvent<WebSocketEvent_Ping>(NetOperationCode.Ping);
+        }
+
+        public void CloseClient()
+        {
+            _clientPeerInstance.Close();
         }
     }
 }

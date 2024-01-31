@@ -1,9 +1,8 @@
 using SangoUtils_Bases_UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
-namespace SangoUtils_Unity_App.InputSystem
+namespace SangoUtils_TypeIn
 {
     public class FloatableKeyboardPanel : BasePanel
     {
@@ -16,7 +15,7 @@ namespace SangoUtils_Unity_App.InputSystem
         private Transform _keyboardLine2;
         private Transform _keyboardLine3;
         private Transform _keyboardLine4;
-        private Transform _keyboardLine5;
+        private Transform _keyboardLine5; 
 
         private bool _currentIsShiftMode = true;
 
@@ -35,16 +34,6 @@ namespace SangoUtils_Unity_App.InputSystem
         private string[][] _line4_KeyValue = {
             new string[]{"shift","z","x", "c", "v", "b", "n", "m", ",", ".", "/","delet"},
             new string[]{"Shift","Z", "X", "C", "V", "B", "N", "M", "<", ">", "?","Delet"}};
-
-        protected override void OnInit()
-        {
-            base.OnInit();
-        }
-
-        protected override void OnDispose()
-        {
-            base.OnDispose();
-        }
 
         public void SetSystem(FloatableKeyboardSystem system)
         {
@@ -82,19 +71,23 @@ namespace SangoUtils_Unity_App.InputSystem
         {
             for (int i = 0; i < _keyboardLine1.childCount; i++)
             {
-                _keyboardLine1.GetChild(i).GetOrAddComponent<FloatableKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                FloatableKeyboardKeyPrefab prefab = _keyboardLine1.GetChild(i).GetComponent<FloatableKeyboardKeyPrefab>() ?? _keyboardLine1.GetChild(i).gameObject.AddComponent<FloatableKeyboardKeyPrefab>();
+                prefab.InitStandardKey(_standardKeyFont);
             }
             for (int i = 0; i < _keyboardLine2.childCount; i++)
             {
-                _keyboardLine2.GetChild(i).GetOrAddComponent<FloatableKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                FloatableKeyboardKeyPrefab prefab = _keyboardLine2.GetChild(i).GetComponent<FloatableKeyboardKeyPrefab>() ?? _keyboardLine2.GetChild(i).gameObject.AddComponent<FloatableKeyboardKeyPrefab>();
+                prefab.InitStandardKey(_standardKeyFont);
             }
             for (int i = 0; i < _keyboardLine3.childCount; i++)
             {
-                _keyboardLine3.GetChild(i).GetOrAddComponent<FloatableKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                FloatableKeyboardKeyPrefab prefab = _keyboardLine3.GetChild(i).GetComponent<FloatableKeyboardKeyPrefab>() ?? _keyboardLine3.GetChild(i).gameObject.AddComponent<FloatableKeyboardKeyPrefab>();
+                prefab.InitStandardKey(_standardKeyFont);
             }
             for (int i = 1; i < _keyboardLine4.childCount - 1; i++)
             {
-                _keyboardLine4.GetChild(i).GetOrAddComponent<FloatableKeyboardKeyPrefab>().InitStandardKey(_standardKeyFont);
+                FloatableKeyboardKeyPrefab prefab = _keyboardLine4.GetChild(i).GetComponent<FloatableKeyboardKeyPrefab>() ?? _keyboardLine4.GetChild(i).gameObject.AddComponent<FloatableKeyboardKeyPrefab>();
+                prefab.InitStandardKey(_standardKeyFont);
             }
         }
 
@@ -104,12 +97,14 @@ namespace SangoUtils_Unity_App.InputSystem
             {
                 if (i == 0 || i == _keyboardLine4.childCount - 1)
                 {
-                    _keyboardLine4.GetChild(i).GetOrAddComponent<FloatableKeyboardKeyPrefab>().InitSpecialKey(_specialKeyFont);
+                    FloatableKeyboardKeyPrefab prefab = _keyboardLine4.GetChild(i).GetComponent<FloatableKeyboardKeyPrefab>() ?? _keyboardLine4.GetChild(i).gameObject.AddComponent<FloatableKeyboardKeyPrefab>();
+                    prefab.InitSpecialKey(_specialKeyFont);
                 }
             }
             for (int i = 0; i < _keyboardLine5.childCount; i++)
             {
-                _keyboardLine5.GetChild(i).GetOrAddComponent<FloatableKeyboardKeyPrefab>().InitSpecialKey(_specialKeyFont);
+                FloatableKeyboardKeyPrefab prefab = _keyboardLine5.GetChild(i).GetComponent<FloatableKeyboardKeyPrefab>() ?? _keyboardLine5.GetChild(i).gameObject.AddComponent<FloatableKeyboardKeyPrefab>();
+                prefab.InitSpecialKey(_specialKeyFont);
             }
         }
 
@@ -180,6 +175,22 @@ namespace SangoUtils_Unity_App.InputSystem
         private void OnSpecialButtonClickedCallBack(string buttonName)
         {
             _floatableKeyboardSystem.OnSpecialButtonClickedCallBack(buttonName);
+        }
+
+        public override void OnAwake()
+        {
+            PanelLayer = PanelLayer.Base;
+            AddPanel(this);
+        }
+
+        protected override void OnInit()
+        {
+
+        }
+
+        protected override void OnDispose()
+        {
+
         }
     }
 }

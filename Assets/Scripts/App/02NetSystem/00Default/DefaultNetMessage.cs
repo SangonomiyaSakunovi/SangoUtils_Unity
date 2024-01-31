@@ -57,3 +57,11 @@ public class DefaultWebSocketBroadcast : BaseNetBroadcast
         SangoLogger.Warning("A Net Broadcast have no Implement!");
     }
 }
+
+public class WebSocketEvent_Ping : BaseNetEvent
+{
+    public override void OnEventData(string message)
+    {
+        SangoLogger.Log("A ping message from the Server: " + message);
+    }
+}

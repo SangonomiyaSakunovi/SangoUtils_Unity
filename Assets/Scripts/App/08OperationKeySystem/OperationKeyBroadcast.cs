@@ -18,13 +18,13 @@ namespace SangoUtils_Unity_App.Operation
 
         public override void OnBroadcast(string message)
         {
-            OperationKeyReqMessage reqMessage = DeJsonString<OperationKeyReqMessage>(message);
+            OperationKeyReqMessage reqMessage = FromJson<OperationKeyReqMessage>(message);
             if (reqMessage != null)
             {
                 switch (reqMessage.OperationKey.OperationKeyType)
                 {
                     case OperationKeyType.Move:
-                        SystemRoot.Instance.OperationKeyMoveSystem.OnMessageReceived(reqMessage.OperationKey);
+                        SystemService.Instance.OperationKeyMoveSystem.OnMessageReceived(reqMessage.OperationKey);
                         break;
                 }
             }
@@ -32,7 +32,7 @@ namespace SangoUtils_Unity_App.Operation
 
         public override void DefaultOperationBroadcast()
         {
-            string jsonString = SetJsonString(_message);
+            string jsonString = ToJson(_message);
             WebSocketService.Instance.SendOperationBroadcast(NetOperationCode, jsonString);
         }
     }

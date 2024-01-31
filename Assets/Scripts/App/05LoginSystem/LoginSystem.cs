@@ -3,6 +3,7 @@ using SangoUtils_Unity_App.Controller;
 using SangoUtils_Unity_Scripts.Net;
 using SangoUtils_Common.Messages;
 using SangoUtils_Bases_Universal;
+using SangoUtils_Bases_UnityEngine;
 
 public class LoginSystem : BaseSystem<LoginSystem>
 {
@@ -25,10 +26,30 @@ public class LoginSystem : BaseSystem<LoginSystem>
         _loginWebSocketRequest.SetAndSendLoginReqMessage(LoginMode.Guest, _entityId, "");
     }
 
+    public override void OnAwake()
+    {
+        
+    }
+
+    public override void OnDispose()
+    {
+        
+    }
+
+    public override void OnInit()
+    {
+        
+    }
+
     public void OnLoginSucceed(string entityID)
     {
         _playerController.EntityID = entityID;
         CacheService.Instance.EntityCache.AddEntityLocal(entityID);
         _playerController.SetPlayerEntity(CacheService.Instance.EntityCache.PlayerEntity_This);
+    }
+
+    protected override void OnUpdate()
+    {
+
     }
 }

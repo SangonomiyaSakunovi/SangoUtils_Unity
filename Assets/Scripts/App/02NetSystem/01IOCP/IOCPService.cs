@@ -18,14 +18,7 @@ namespace SangoUtils_Unity_Scripts.Net
 
         public override void OnInit()
         {
-            base.OnInit();
-
-            string ipAddress = _currentNetEnvironmentConfig.ServerAddress;
-            int port = _currentNetEnvironmentConfig.ServerPort;
-            InitClientInstance(ipAddress, port);
-
-            DefaultIOCPRequest defaultNetRequest = _netOperationHandler.GetNetRequest<DefaultIOCPRequest>(NetOperationCode.Default);
-            DefaultIOCPEvent defaultNetEvent = _netOperationHandler.GetNetEvent<DefaultIOCPEvent>(NetOperationCode.Default);
+            
         }
 
         public void SetConfig(NetEnvironmentConfig netEnvironmentConfig)
@@ -67,18 +60,6 @@ namespace SangoUtils_Unity_Scripts.Net
             _netOperationHandler.NetMessageCommandBroadcast(sangoNetMessage);
         }
 
-        private void InitClientInstance(string ipAddress, int port)
-        {
-            _clientPeerInstance = new IOCPPeer<IOCPClientPeer>();
-            _clientPeerInstance.OpenAsUnityClient(ipAddress, port);
-            _netOperationHandler = new();
-        }
-
-        public void CloseClientInstance()
-        {
-            _clientPeerInstance.CloseAsClient();
-        }
-
         public T GetNetRequest<T>(NetOperationCode netOperationCode) where T : BaseNetRequest, new()
         {
             return _netOperationHandler.GetNetRequest<T>(netOperationCode);
@@ -93,6 +74,28 @@ namespace SangoUtils_Unity_Scripts.Net
         {
             return _netOperationHandler.GetNetBroadcast<T>(operationCode);
         }
+
+        public override void OnDispose()
+        {
+            
+        }
+
+        public void OpenClient()
+        {
+            string ipAddress = _currentNetEnvironmentConfig.ServerAddress;
+            int port = _currentNetEnvironmentConfig.ServerPort;
+            _clientPeerInstance = new IOCPPeer<IOCPClientPeer>();
+            _clientPeerInstance.OpenAsUnityClient(ipAddress, port);
+            _netOperationHandler = new();
+
+            DefaultIOCPRequest defaultNetRequest = _netOperationHandler.GetNetRequest<DefaultIOCPRequest>(NetOperationCode.Default);
+            DefaultIOCPEvent defaultNetEvent = _netOperationHandler.GetNetEvent<DefaultIOCPEvent>(NetOperationCode.Default);
+        }
+
+        public void CloseClient()
+        {
+            _clientPeerInstance.CloseAsClient();
+        }
     }
 
     public class NetEnvironmentConfig : BaseConfig
@@ -100,7 +103,7 @@ namespace SangoUtils_Unity_Scripts.Net
         public NetEnvMode NetEnvMode { get; set; } = NetEnvMode.Offline;
         public string ServerAddress { get; set; } = "127.0.0.1";
         public int ServerPort { get; set; } = 52037;
-        public string ServerAddressAndPort { get; set; } = "ws://127.0.0.1:52037";
+        public string ServerAddressAndPort { get; set; } = "ws://127.0.0.1:52516";
     }
 
     public enum NetEnvMode

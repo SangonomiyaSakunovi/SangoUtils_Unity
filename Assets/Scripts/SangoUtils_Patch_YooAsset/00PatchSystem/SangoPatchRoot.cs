@@ -14,7 +14,6 @@ namespace SangoUtils_Patch_YooAsset
         public override void OnInit()
         {
             _sangoPatchWnd = transform.Find("SangoPatchWnd").GetOrAddComponent<SangoPatchWnd>();
-            base.OnInit();
             AddEventCache();
             _sangoPatchWnd.SetRoot(this);
             _sangoPatchWnd.SetWindowState();
@@ -22,7 +21,6 @@ namespace SangoUtils_Patch_YooAsset
 
         public override void OnDispose()
         {
-            base.OnDispose();
             _eventCache.RemoveAllListeners();
         }
 
@@ -109,6 +107,15 @@ namespace SangoUtils_Patch_YooAsset
             {
                 throw new NotImplementedException($"{message.GetType()}");
             }
+        }
+
+        protected override void OnUpdate()
+        {
+        }
+
+        public override void OnAwake()
+        {
+            
         }
     }
 }

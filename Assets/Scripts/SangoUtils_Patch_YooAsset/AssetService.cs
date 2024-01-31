@@ -18,7 +18,6 @@ namespace SangoUtils_Patch_YooAsset
 
         public override void OnInit()
         {
-            base.OnInit();
         }
 
         public AudioClip LoadAudioClip(string audioClipPath, bool isCache)
@@ -245,6 +244,14 @@ namespace SangoUtils_Patch_YooAsset
                 _cacheAssetHandles[i].Release();
             }
             _cacheAssetHandles.Clear();
+        }
+
+        protected override void OnUpdate()
+        {
+        }
+
+        public override void OnDispose()
+        {
         }
     }
 }

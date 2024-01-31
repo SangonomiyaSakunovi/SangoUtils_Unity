@@ -29,10 +29,9 @@ namespace SangoUtils_Unity_App.Scene
 
         public override void OnInit()
         {
-            base.OnInit();
             Instance = this;
-            _currentSceneViewConfig = SangoSystemConfig.SceneViewConfig;
-            _currentNetEnvironmentConfig = SangoSystemConfig.NetEnvironmentConfig;
+            _currentSceneViewConfig = GameConfig.SceneViewConfig;
+            _currentNetEnvironmentConfig = GameConfig.NetEnvironmentConfig;
             SceneService.Instance.SetHandleEventMessageCallBack(OnHandleEventMessage);
             GetTrans();
             GameStart();
