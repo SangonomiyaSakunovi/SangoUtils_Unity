@@ -21,11 +21,11 @@ public class AOISystem : BaseSystem<AOISystem>
 
     public void AddAOIActiveMoveEntity(string entityId, FixedVector3 logicPosition)
     {
-        Vector3Message position = new(logicPosition.X.ScaledValue, logicPosition.Y.ScaledValue, logicPosition.Z.ScaledValue);
+        Vector3FixedMessage position = new(logicPosition.X.ScaledValue, logicPosition.Y.ScaledValue, logicPosition.Z.ScaledValue);
         //QuaternionMessage rotation = new(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w);
         //Vector3Message scale = new(transform.localScale.x, transform.localScale.y, transform.localScale.z);
         //TransformMessage transformInfo = new(position, rotation, scale);
-        TransformMessage transformInfo = new();
+        TransformFixedMessage transformInfo = new();
 
         AOIActiveMoveEntity activeMoveEntity = new AOIActiveMoveEntity(entityId, transformInfo);
         _aoiIOCPRequest.AddAOIActiveMoveEntity(activeMoveEntity);

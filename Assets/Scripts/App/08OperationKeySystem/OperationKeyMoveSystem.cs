@@ -12,7 +12,7 @@ namespace SangoUtils_Unity_App.Operation
 
         public override void OnMessageReceived(OperationKey operationKey)
         {
-            Vector3Message vector3Message = DeJsonString<Vector3Message>(operationKey.OperationString);
+            Vector3FixedMessage vector3Message = DeJsonString<Vector3FixedMessage>(operationKey.OperationString);
             if (vector3Message != null)
             {
                 FixedInt x = FixedInt.ZERO;
@@ -26,7 +26,7 @@ namespace SangoUtils_Unity_App.Operation
 
         public void AddOperationMove(FixedVector3 logicDirection)
         {
-            Vector3Message vector3Message = new(logicDirection.X.ScaledValue, logicDirection.Y.ScaledValue, logicDirection.Z.ScaledValue);
+            Vector3FixedMessage vector3Message = new(logicDirection.X.ScaledValue, logicDirection.Y.ScaledValue, logicDirection.Z.ScaledValue);
             string vector3InfoJson = SetJsonString(vector3Message);
             SetAndSendOperationKey(vector3InfoJson);
         }

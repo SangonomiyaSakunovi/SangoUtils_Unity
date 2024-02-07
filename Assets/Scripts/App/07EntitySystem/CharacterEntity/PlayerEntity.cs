@@ -24,7 +24,7 @@ namespace SangoUtils_Unity_App.Entity
             }
         }
 
-        public void SendMoveKey(FixedVector3 logicDirection)
+        private void SendMoveKey(FixedVector3 logicDirection)
         {
             SystemService.Instance.OperationKeyMoveSystem.AddOperationMove(logicDirection);
         }

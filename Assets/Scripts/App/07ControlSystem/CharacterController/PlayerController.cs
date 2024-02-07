@@ -2,6 +2,7 @@ using SangoUtils_Unity_App.Entity;
 using SangoUtils_FixedNum;
 using UnityEngine;
 using SangoUtils_Bases_UnityEngine;
+using SangoUtils_Logger;
 
 namespace SangoUtils_Unity_App.Controller
 {
@@ -22,7 +23,7 @@ namespace SangoUtils_Unity_App.Controller
         private Quaternion _rotationLast;
         private Vector3 _scaleLast;
 
-        public Vector3 PositionTarget { get; set; }
+        public Vector3 PositionTarget { get; set; } 
 
         public bool IsCurrent { get; set; } = false;
         public bool IsLerp { get; set; } = false;
@@ -45,6 +46,11 @@ namespace SangoUtils_Unity_App.Controller
 
         private void FixedUpdate()
         {
+            if (transform.hasChanged)
+            {
+                SangoLogger.Done("Transform has changed!");
+                transform.hasChanged = false;
+            }
             if (_playerEntity != null)
             {
                 UpdateMoveKey();
