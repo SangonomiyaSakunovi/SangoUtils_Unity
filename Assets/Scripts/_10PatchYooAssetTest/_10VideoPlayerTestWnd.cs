@@ -1,8 +1,8 @@
+using SangoUtils.Patchs_YooAsset;
 using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Extensions_UnityEngine.Service;
 using SangoUtils_Extensions_UnityEngine.Utils;
 using SangoUtils_Logger;
-using SangoUtils_Patch_YooAsset;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,7 +40,7 @@ public class _10VideoPlayerTestWnd : BaseWindow
 
     private void Start()
     {
-        videoPlayerConfig = new VideoPlayerConfig(videoRawImage,videoRenderTexture);
+        videoPlayerConfig = new VideoPlayerConfig(videoRawImage, videoRenderTexture);
         videoPlayerConfig.PlayOrPauseBtn = playOrPauseBtn;
         videoPlayerConfig.FullScreenBtn = fullScreenBtn;
         videoPlayerConfig.MuteBtn = muteBtn;
@@ -51,7 +51,7 @@ public class _10VideoPlayerTestWnd : BaseWindow
         videoPlayerConfig.DefaultAudioVolume = defaultAudioVolume;
         videoPlayerConfig.NormalScreenRectTransValue = normalScreenRectTransValue;
         videoPlayerConfig.FullScreenRectTransValue = fullScreenRectTransValue;
-        videoPlayerConfig.OnPlayOrPauseCallBack = OnPlayOrPauseBtnClickedCallBack;        
+        videoPlayerConfig.OnPlayOrPauseCallBack = OnPlayOrPauseBtnClickedCallBack;
 
         VideoPlayerService.Instance.AddVideoPlayer(_videoId, videoPlayerConfig);
 
@@ -61,7 +61,7 @@ public class _10VideoPlayerTestWnd : BaseWindow
     }
 
     private void Update()
-    {        
+    {
         if (Input.GetKeyDown(KeyCode.S))
         {
             VideoPlayerService.Instance.PlayVideo(_videoId);

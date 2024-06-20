@@ -1,8 +1,7 @@
-using SangoNetProtol;
+using SangoUtils.Patchs_YooAsset;
 using SangoUtils_Bases_UnityEngine;
 using SangoUtils_Event;
 using SangoUtils_Logger;
-using SangoUtils_Patch_YooAsset;
 using SangoUtils_Unity_App.Scene;
 using SangoUtils_Unity_Scripts.Net;
 using UnityEngine;
@@ -13,8 +12,8 @@ public class GameRoot : BaseRoot<GameRoot>
 
     private void Awake()
     {
-        OnInit();        
-        DontDestroyOnLoad(this); 
+        OnInit();
+        DontDestroyOnLoad(this);
     }
 
     public override void OnInit()
@@ -53,11 +52,11 @@ public class GameRoot : BaseRoot<GameRoot>
 
     private void InitService()
     {
-        AssetService.Instance.OnInit();
+        AssetService.Instance.Initialize();
         EventService.Instance.OnInit();
         SceneService.Instance.OnInit();
         PatchService.Instance.OnPatchCompleted = OnPatchCompleted;
-        PatchService.Instance.OnInit();
+        PatchService.Instance.Initialize();
         CacheService.Instance.OnInit();
         SecurityCheckService.Instance.OnInit();
     }
@@ -70,7 +69,7 @@ public class GameRoot : BaseRoot<GameRoot>
                 IOCPService.Instance.SetConfig(GameConfig.NetEnvironmentConfig);
                 IOCPService.Instance.OpenClient();
                 break;
-            case NetEnvMode.Online_WebSocket:                
+            case NetEnvMode.Online_WebSocket:
                 WebSocketService.Instance.SetConfig(GameConfig.NetEnvironmentConfig);
                 WebSocketService.Instance.OpenClient();
                 break;
@@ -114,6 +113,6 @@ public class GameRoot : BaseRoot<GameRoot>
 
     public override void OnAwake()
     {
-        
+
     }
 }
