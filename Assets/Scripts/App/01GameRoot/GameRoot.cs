@@ -10,6 +10,9 @@ public class GameRoot : BaseRoot<GameRoot>
 {
     public SceneMainInstance SceneMainInstance;
 
+    [SerializeField]
+    private SangoPatchRoot _sangoPatchRoot;
+
     private void Awake()
     {
         OnInit();
@@ -35,7 +38,6 @@ public class GameRoot : BaseRoot<GameRoot>
 
     private void InitConfig()
     {
-        PatchService.Instance.SetConfig(GameConfig.PatchConfig);
         SceneService.Instance.SetConfig(GameConfig.SceneViewConfig);
     }
 
@@ -52,11 +54,9 @@ public class GameRoot : BaseRoot<GameRoot>
 
     private void InitService()
     {
-        AssetService.Instance.Initialize();
+        SangoAssetService.Instance.Initialize();
         EventService.Instance.OnInit();
         SceneService.Instance.OnInit();
-        PatchService.Instance.OnPatchCompleted = OnPatchCompleted;
-        PatchService.Instance.Initialize();
         CacheService.Instance.OnInit();
         SecurityCheckService.Instance.OnInit();
     }
@@ -85,13 +85,14 @@ public class GameRoot : BaseRoot<GameRoot>
 
     private void StartGame()
     {
+        _sangoPatchRoot.Initialize(GameConfig.PatchConfig);
         SceneMainInstance.OnInit();
         //UIService.Instance.SwitchWindow<LoginWnd>();
     }
 
     private void OnPatchCompleted(bool isComplete)
     {
-        SceneSystemEventMessage.ChangeToHomeScene.SendEventMessage();
+        
     }
 
     private void OnApplicationQuit()

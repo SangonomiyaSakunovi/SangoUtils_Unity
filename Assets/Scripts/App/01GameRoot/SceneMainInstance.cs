@@ -20,7 +20,6 @@ namespace SangoUtils_Unity_App.Scene
         private Dictionary<string, GameObject> _entityDict = new();
 
         private Transform _canvasTrans;
-        private SangoPatchRoot _patchRoot;
         private SangoSecurityCheckRoot _securityCheckRoot;
         private SceneViewConfig _currentSceneViewConfig;
         private Transform _3DSceneAOITest;
@@ -34,19 +33,12 @@ namespace SangoUtils_Unity_App.Scene
             _currentNetEnvironmentConfig = GameConfig.NetEnvironmentConfig;
             SceneService.Instance.SetHandleEventMessageCallBack(OnHandleEventMessage);
             GetTrans();
-            GameStart();
         }
 
         private void GetTrans()
         {
             _canvasTrans = transform.Find("Canvas");
-            _patchRoot = _canvasTrans.Find("SangoPatchRoot").AddComponent<SangoPatchRoot>();
             _3DSceneAOITest = transform.Find("3DSceneAOITest");
-        }
-
-        private void GameStart()
-        {
-            _patchRoot.OnInit();
         }
 
         public void OnHandleEventMessage(IEventMessageBase message)

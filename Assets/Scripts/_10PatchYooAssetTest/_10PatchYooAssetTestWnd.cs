@@ -12,7 +12,7 @@ public class _10PatchYooAssetTestWnd : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             _audioSource.clip = null;
-            AssetService.Instance.LoadAudioClipASync(audioString, OnBgmLoaded, false);
+            SangoAssetService.Instance.LoadAudioClipASync(audioString, OnBgmLoaded, false);
         }
 
         if (Input.GetKeyDown(KeyCode.W))

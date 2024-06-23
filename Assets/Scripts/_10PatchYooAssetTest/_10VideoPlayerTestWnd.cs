@@ -75,17 +75,17 @@ public class _10VideoPlayerTestWnd : BaseWindow
     private void OnButton1Clicked()
     {
         _videoClip = null;
-        AssetService.Instance.LoadVideoClipASync(_videoString1, OnVideoClipLoaded, false);
+        SangoAssetService.Instance.LoadVideoClipASync(_videoString1, OnVideoClipLoaded, false);
     }
     private void OnButton2Clicked()
     {
         _videoClip = null;
-        AssetService.Instance.LoadVideoClipASync(_videoString2, OnVideoClipLoaded, false);
+        SangoAssetService.Instance.LoadVideoClipASync(_videoString2, OnVideoClipLoaded, false);
     }
     private void OnButton3Clicked()
     {
         _videoClip = null;
-        AssetService.Instance.LoadVideoClipASync(_videoString3, OnVideoClipLoaded, false);
+        SangoAssetService.Instance.LoadVideoClipASync(_videoString3, OnVideoClipLoaded, false);
     }
 
     private void OnVideoClipLoaded(VideoClip videoClip)
