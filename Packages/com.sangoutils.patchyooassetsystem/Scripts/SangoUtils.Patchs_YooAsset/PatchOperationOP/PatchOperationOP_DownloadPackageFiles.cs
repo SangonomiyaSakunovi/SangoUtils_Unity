@@ -10,20 +10,20 @@ namespace SangoUtils.Patchs_YooAsset
 
         internal override void OnEvent()
         {
-            EventBus_Patchs.SangoPatchRoot.SendMessage(this, new PatchSystemEventArgs(PatchSystemEventCode.PatchStatesChange, "开始下载补丁文件！"));
-            BeginDownload().Start();
+            EventBus_Patchs.CallPatchSystemEvent(this, new PatchSystemEventArgs(PatchSystemEventCode.PatchStatesChange, "开始下载补丁文件！"));
+            _BeginDownloadASync().Start();
         }
 
-        private IEnumerator BeginDownload()
+        private IEnumerator _BeginDownloadASync()
         {
-            var downloader = EventBus_Patchs.PatchOperation.PatchOperationData.ResourceDownloaderOperation;
+            var downloader = EventBus_Patchs.PatchConfig.ResourceDownloaderOperation;
             downloader.OnDownloadErrorCallback = delegate (string fileName, string error)
             {
-                EventBus_Patchs.SangoPatchRoot.SendMessage(this, new PatchSystemEventArgs(PatchSystemEventCode.WebFileDownloadFailed, fileName, error));
+                EventBus_Patchs.CallPatchSystemEvent(this, new PatchSystemEventArgs(PatchSystemEventCode.WebFileDownloadFailed, fileName, error));
             };
             downloader.OnDownloadProgressCallback = delegate (int totalDownloadCount, int currentDownloadCount, long totalDownloadSizeBytes, long currentDownloadSizeBytes)
             {
-                EventBus_Patchs.SangoPatchRoot.SendMessage(this, new PatchSystem_DownloadProgressUpdateEventArgs
+                EventBus_Patchs.CallPatchSystem_DownloadProgressUpdateEvent(this, new PatchSystem_DownloadProgressUpdateEventArgs
                     (totalDownloadCount, currentDownloadCount, totalDownloadSizeBytes, currentDownloadSizeBytes));
             };
             downloader.BeginDownload();
@@ -32,7 +32,7 @@ namespace SangoUtils.Patchs_YooAsset
             if (downloader.Status != EOperationStatus.Succeed)
                 yield break;
 
-            EventBus_Patchs.PatchOperation.SendMessage(this, new PatchOperationEventArgs(PatchOperationEventCode.DownloadPackageOver));
+            EventBus_Patchs.CallPatchOperationEvent(this, new PatchOperationEventArgs(PatchOperationEventCode.DownloadPackageOver));
         }
     }
 }

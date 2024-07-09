@@ -1,3 +1,4 @@
+using Codice.Client.BaseCommands;
 using SangoUtils.Patchs_YooAsset.Utils;
 using System.Collections;
 using System.IO;
@@ -12,14 +13,14 @@ namespace SangoUtils.Patchs_YooAsset
 
         internal override void OnEvent()
         {
-            InitPackage().Start();
+            _InitPackageASync().Start();
         }
 
-        private IEnumerator InitPackage()
+        private IEnumerator _InitPackageASync()
         {
-            EPlayMode playMode = EventBus_Patchs.PatchOperation.PatchOperationData.PlayMode;
-            string packageName = EventBus_Patchs.PatchOperation.PatchOperationData.PackageName;
-            string buildPipeline = EventBus_Patchs.PatchOperation.PatchOperationData.BuildPipline;
+            EPlayMode playMode = EventBus_Patchs.PatchConfig.PlayMode;
+            string packageName = EventBus_Patchs.PatchConfig.PackageName;
+            string buildPipeline = EventBus_Patchs.PatchConfig.BuildPipeline.ToString();
 
             var package = YooAssets.TryGetPackage(packageName);
             if (package == null)
@@ -67,22 +68,22 @@ namespace SangoUtils.Patchs_YooAsset
             if (initializationOperation.Status != EOperationStatus.Succeed)
             {
                 Debug.LogWarning($"{initializationOperation.Error}");
-                EventBus_Patchs.SangoPatchRoot.SendMessage(this, new PatchSystemEventArgs(PatchSystemEventCode.InitializeFailed));
+                EventBus_Patchs.CallPatchSystemEvent(this, new PatchSystemEventArgs(PatchSystemEventCode.InitializeFailed));
             }
             else
             {
                 var version = package.GetPackageVersion();
                 Debug.Log($"Init resource package version : {version}");
 
-                EventBus_Patchs.PatchOperation.SendMessage(this, new PatchOperationEventArgs(PatchOperationEventCode.UpdatePackageVersion));
+                EventBus_Patchs.CallPatchOperationEvent(this, new PatchOperationEventArgs(PatchOperationEventCode.UpdatePackageVersion));
             }
         }
 
         private string GetHostServerURL()
         {
-            string hostServerIP = EventBus_Patchs.PatchOperation.PatchOperationData.HostServerIP;
-            string appID = EventBus_Patchs.PatchOperation.PatchOperationData.AppID;
-            string appVersion = EventBus_Patchs.PatchOperation.PatchOperationData.AppVersion;
+            string hostServerIP = EventBus_Patchs.PatchConfig.HostServerIP;
+            string appID = EventBus_Patchs.PatchConfig.AppID;
+            string appVersion = EventBus_Patchs.PatchConfig.AppVersion;
 
 #if UNITY_EDITOR
             if (UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.Android)

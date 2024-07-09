@@ -8,7 +8,7 @@ namespace SangoUtils.Patchs_YooAsset
 
         internal override void OnEvent()
         {
-            EventBus_Patchs.PatchOperation.PatchOperationData.OnUpdaterDone?.Invoke();
+            EventBus_Patchs.PatchConfig.OnUpdaterDone?.Invoke();
         }
     }
 }

@@ -89,29 +89,4 @@ namespace SangoUtils.Patchs_YooAsset
 
         internal abstract void OnEvent();
     }
-
-    internal class PatchOperationData
-    {
-        internal PatchOperationData(string packageName, EPlayMode playMode, string buildPipline, string hostServerIP, string appID, string appVersion, Action onUpdaterDone)
-        {
-            PackageName = packageName;
-            PlayMode = playMode;
-            BuildPipline = buildPipline;
-            HostServerIP = hostServerIP;
-            AppID = appID;
-            AppVersion = appVersion;
-            OnUpdaterDone = onUpdaterDone;
-        }
-
-        internal string PackageName { get; }
-        internal EPlayMode PlayMode { get; }
-        internal string BuildPipline { get; }
-        internal string HostServerIP { get; }
-        internal string AppID { get; }
-        internal string AppVersion { get; }
-        internal Action OnUpdaterDone { get; }
-
-        internal string PackageVersion { get; set; }
-        internal ResourceDownloaderOperation ResourceDownloaderOperation { get; set; }
-    }
 }

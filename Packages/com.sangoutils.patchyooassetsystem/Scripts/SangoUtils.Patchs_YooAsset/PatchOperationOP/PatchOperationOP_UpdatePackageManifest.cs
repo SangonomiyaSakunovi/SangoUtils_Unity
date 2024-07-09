@@ -11,16 +11,16 @@ namespace SangoUtils.Patchs_YooAsset
 
         internal override void OnEvent()
         {
-            EventBus_Patchs.SangoPatchRoot.SendMessage(this, new PatchSystemEventArgs(PatchSystemEventCode.PatchStatesChange, "更新资源清单！"));
-            UpdateManifest().Start();
+            EventBus_Patchs.CallPatchSystemEvent(this, new PatchSystemEventArgs(PatchSystemEventCode.PatchStatesChange, "更新资源清单！"));
+            _UpdateManifestASync().Start();
         }
 
-        private IEnumerator UpdateManifest()
+        private IEnumerator _UpdateManifestASync()
         {
             yield return new WaitForSecondsRealtime(0.5f);
 
-            var packageName = EventBus_Patchs.PatchOperation.PatchOperationData.PackageName;
-            var packageVersion = EventBus_Patchs.PatchOperation.PatchOperationData.PackageVersion;
+            var packageName = EventBus_Patchs.PatchConfig.PackageName;
+            var packageVersion = EventBus_Patchs.PatchConfig.PackageVersion;
             var package = YooAssets.GetPackage(packageName);
             bool savePackageVersion = true;
             var operation = package.UpdatePackageManifestAsync(packageVersion, savePackageVersion);
@@ -29,12 +29,12 @@ namespace SangoUtils.Patchs_YooAsset
             if (operation.Status != EOperationStatus.Succeed)
             {
                 Debug.LogWarning(operation.Error);
-                EventBus_Patchs.SangoPatchRoot.SendMessage(this, new PatchSystemEventArgs(PatchSystemEventCode.PatchManifestUpdateFailed));
+                EventBus_Patchs.CallPatchSystemEvent(this, new PatchSystemEventArgs(PatchSystemEventCode.PatchManifestUpdateFailed));
                 yield break;
             }
             else
             {
-                EventBus_Patchs.PatchOperation.SendMessage(this, new PatchOperationEventArgs(PatchOperationEventCode.CreatePackageDownloader));
+                EventBus_Patchs.CallPatchOperationEvent(this, new PatchOperationEventArgs(PatchOperationEventCode.CreatePackageDownloader));
             }
         }
     }

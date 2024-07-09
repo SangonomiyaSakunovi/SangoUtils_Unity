@@ -10,9 +10,6 @@ public class GameRoot : BaseRoot<GameRoot>
 {
     public SceneMainInstance SceneMainInstance;
 
-    [SerializeField]
-    private SangoPatchRoot _sangoPatchRoot;
-
     private void Awake()
     {
         OnInit();
@@ -85,7 +82,7 @@ public class GameRoot : BaseRoot<GameRoot>
 
     private void StartGame()
     {
-        _sangoPatchRoot.Initialize(GameConfig.PatchConfig);
+        //_sangoPatchRoot.Initialize(GameConfig.PatchConfig);
         SceneMainInstance.OnInit();
         //UIService.Instance.SwitchWindow<LoginWnd>();
     }

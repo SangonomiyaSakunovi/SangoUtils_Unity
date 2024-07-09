@@ -19,20 +19,20 @@ public static class GameConfig
         DefaultRegistLimitDateTime = new DateTime(2022, 2, 22, 0, 0, 0)
     };
 
-    public static readonly SangoPatchConfig PatchConfig = new()
-    {
-        PackageName = "DefaultPackage",
-        PlayMode = EPlayMode.HostPlayMode,
-        BuildPipeline = EDefaultBuildPipeline.BuiltinBuildPipeline,
+    //public static readonly SangoPatchConfig PatchConfig = new()
+    //{
+    //    PackageName = "DefaultPackage",
+    //    PlayMode = EPlayMode.HostPlayMode,
+    //    BuildPipeline = EDefaultBuildPipeline.BuiltinBuildPipeline,
 
-        //Protocol: hostServerIP/CDN/Editor/Unity/appId/Patch/PC/appVersion
-        //Protocol: hostServerIP/CDN/Online/Unity/appId/Patch/PC/appVersion
-        HostServerIP = "https://hvr.isunupcg.com/sangonomiyasakunovi",
-        AppID = "0000TestSangoApp",
-        AppVersion = "1.0",
+    //    //Protocol: hostServerIP/CDN/Editor/Unity/appId/Patch/PC/appVersion
+    //    //Protocol: hostServerIP/CDN/Online/Unity/appId/Patch/PC/appVersion
+    //    HostServerIP = "https://hvr.isunupcg.com/sangonomiyasakunovi",
+    //    AppID = "0000TestSangoApp",
+    //    AppVersion = "1.0",
 
-        OnUpdaterDone = SceneSystemEventMessage.ChangeToHomeScene.SendEventMessage
-};
+    //    //OnUpdaterDone = SceneSystemEventMessage.ChangeToHomeScene.SendEventMessage()
+    //};
 
     public static readonly LoggerConfig_Sango LoggerConfig_Sango = new()
     {

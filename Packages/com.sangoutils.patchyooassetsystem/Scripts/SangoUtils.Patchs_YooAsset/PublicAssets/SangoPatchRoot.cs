@@ -1,53 +1,60 @@
 using SangoUtils.Patchs_YooAsset.Utils;
 using System;
+using System.Collections;
 using UnityEngine;
+using YooAsset;
 
 namespace SangoUtils.Patchs_YooAsset
 {
-    public class SangoPatchRoot : MonoBehaviour
+    [RequireComponent(typeof(SangoPatchConfig))]
+    internal class SangoPatchRoot : MonoBehaviour
     {
         private SangoPatchWnd _sangoPatchWnd;
 
-        private event EventHandler<PatchSystemEventArgs> _onPatchSystemEventHandler;
-        private event EventHandler<PatchSystem_DownloadProgressUpdateEventArgs> _onPatchSystemDownloadProgressUpdateEventHandler;
-
-        public void Initialize(SangoPatchConfig config)
+        private void Awake()
         {
-            PatchService.Instance.Initialize(config);
-            OnInit();
-        }
+            new EventBus_Patchs();
 
-        private void OnInit()
-        {
+            EventBus_Patchs.PatchConfig = GetComponent<SangoPatchConfig>();
+
             _sangoPatchWnd = transform.Find("SangoPatchWnd").GetComponent<SangoPatchWnd>();
 
-            EventBus_Patchs.SangoPatchRoot = this;
-            _onPatchSystemEventHandler += C_OnPatchSystemEvent;
-            _onPatchSystemDownloadProgressUpdateEventHandler += C_OnPatchSystemDownloadProgressUpdateEvent;
+            EventBus_Patchs.AddPatchSystemEvent(_OnPatchSystemEvent);
+            EventBus_Patchs.AddPatchSystem_DownloadProgressUpdateEvent(_OnPatchSystemDownloadProgressUpdateEvent);
 
             _sangoPatchWnd.SetRoot(this);
+        }
+
+        private void Start()
+        {
+            _StartOperationASync().Start();
+
             _sangoPatchWnd.gameObject.SetActive(true);
             _sangoPatchWnd.Initialize();
         }
 
-        internal void SendMessage(object sender, PatchSystemEventArgs eventArgs)
+        private IEnumerator _StartOperationASync()
         {
-            _onPatchSystemEventHandler?.Invoke(sender, eventArgs);
+            YooAssets.Initialize();
+
+            PatchOperation hotFixOperation = new();
+            YooAssets.StartOperation(hotFixOperation);
+            yield return hotFixOperation;
+
+            ResourcePackage assetPackage = YooAssets.GetPackage(EventBus_Patchs.PatchConfig.PackageName);
+            YooAssets.SetDefaultPackage(assetPackage);
+
+            EventBus_Patchs.CallPatchSystemEvent(this, new PatchSystemEventArgs(PatchSystemEventCode.ClosePatchWindow));
         }
 
-        internal void SendMessage(object sender, PatchSystem_DownloadProgressUpdateEventArgs eventArgs)
-        {
-            _onPatchSystemDownloadProgressUpdateEventHandler?.Invoke(sender, eventArgs);
-        }
-
-        private void C_OnPatchSystemEvent(object sender, PatchSystemEventArgs eventArgs)
+        private void _OnPatchSystemEvent(object sender, PatchSystemEventArgs eventArgs)
         {
             switch (eventArgs.PatchSystemEventCode)
             {
                 case PatchSystemEventCode.InitializeFailed:
                     Action callback = delegate
                     {
-                        EventBus_Patchs.PatchOperation.SendMessage(this, new PatchUserEventArgs(PatchUserEventCode.UserTryInitialize));
+                        EventBus_Patchs.CallPatchUserEvent(this, new PatchUserEventArgs(PatchUserEventCode.UserTryInitialize));
                     };
                     _sangoPatchWnd.ShowMessageBox($"Failed to initialize package !", callback);
                     break;
@@ -60,7 +67,7 @@ namespace SangoUtils.Patchs_YooAsset
                     long totalSizeBytes = long.Parse(eventArgs.ExtensionData[1].ToString());
                     Action callback1 = delegate
                     {
-                        EventBus_Patchs.PatchOperation.SendMessage(this, new PatchUserEventArgs(PatchUserEventCode.UserBeginDownloadWebFiles));
+                        EventBus_Patchs.CallPatchUserEvent(this, new PatchUserEventArgs(PatchUserEventCode.UserBeginDownloadWebFiles));
                     };
                     float sizeMB = totalSizeBytes / 1048576f;
                     sizeMB = Mathf.Clamp(sizeMB, 0.1f, float.MaxValue);
@@ -70,14 +77,14 @@ namespace SangoUtils.Patchs_YooAsset
                 case PatchSystemEventCode.PackageVersionUpdateFailed:
                     Action callback2 = delegate
                     {
-                        EventBus_Patchs.PatchOperation.SendMessage(this, new PatchUserEventArgs(PatchUserEventCode.UserTryUpdatePackageVersion));
+                        EventBus_Patchs.CallPatchUserEvent(this, new PatchUserEventArgs(PatchUserEventCode.UserTryUpdatePackageVersion));
                     };
                     _sangoPatchWnd.ShowMessageBox($"Failed to update static version, please check the network status.", callback2);
                     break;
                 case PatchSystemEventCode.PatchManifestUpdateFailed:
                     Action callback3 = delegate
                     {
-                        EventBus_Patchs.PatchOperation.SendMessage(this, new PatchUserEventArgs(PatchUserEventCode.UserTryUpdatePatchManifest));
+                        EventBus_Patchs.CallPatchUserEvent(this, new PatchUserEventArgs(PatchUserEventCode.UserTryUpdatePatchManifest));
                     };
                     _sangoPatchWnd.ShowMessageBox($"Failed to update patch manifest, please check the network status.", callback3);
                     break;
@@ -86,7 +93,7 @@ namespace SangoUtils.Patchs_YooAsset
                     string Error = eventArgs.ExtensionData[1].ToString();
                     Action callback4 = delegate
                     {
-                        EventBus_Patchs.PatchOperation.SendMessage(this, new PatchUserEventArgs(PatchUserEventCode.UserTryDownloadWebFiles));
+                        EventBus_Patchs.CallPatchUserEvent(this, new PatchUserEventArgs(PatchUserEventCode.UserTryDownloadWebFiles));
                     };
                     _sangoPatchWnd.ShowMessageBox($"Failed to download file : {fileName}", callback4);
                     break;
@@ -96,7 +103,7 @@ namespace SangoUtils.Patchs_YooAsset
             }
         }
 
-        private void C_OnPatchSystemDownloadProgressUpdateEvent(object sender, PatchSystem_DownloadProgressUpdateEventArgs eventArgs)
+        private void _OnPatchSystemDownloadProgressUpdateEvent(object sender, PatchSystem_DownloadProgressUpdateEventArgs eventArgs)
         {
             int totalDownloadCount = eventArgs.TotalDownloadCount;
             int currentDownloadCount = eventArgs.CurrentDownloadCount;

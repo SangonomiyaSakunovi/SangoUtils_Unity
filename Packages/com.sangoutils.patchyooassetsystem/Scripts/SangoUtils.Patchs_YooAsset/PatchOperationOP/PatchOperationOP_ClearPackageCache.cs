@@ -9,16 +9,16 @@ namespace SangoUtils.Patchs_YooAsset
 
         internal override void OnEvent()
         {
-            EventBus_Patchs.SangoPatchRoot.SendMessage(this, new PatchSystemEventArgs(PatchSystemEventCode.PatchStatesChange, "清理未使用的缓存文件！"));
-            var packageName = EventBus_Patchs.PatchOperation.PatchOperationData.PackageName;
+            EventBus_Patchs.CallPatchSystemEvent(this, new PatchSystemEventArgs(PatchSystemEventCode.PatchStatesChange, "清理未使用的缓存文件！"));
+            var packageName = EventBus_Patchs.PatchConfig.PackageName;
             var package = YooAssets.GetPackage(packageName);
             var operation = package.ClearUnusedCacheFilesAsync();
-            operation.Completed += Operation_Completed;
+            operation.Completed += _Operation_Completed;
         }
 
-        private void Operation_Completed(AsyncOperationBase obj)
+        private void _Operation_Completed(AsyncOperationBase obj)
         {
-            EventBus_Patchs.PatchOperation.SendMessage(this, new PatchOperationEventArgs(PatchOperationEventCode.UpdaterDone));
+            EventBus_Patchs.CallPatchOperationEvent(this, new PatchOperationEventArgs(PatchOperationEventCode.UpdaterDone));
         }
     }
 }

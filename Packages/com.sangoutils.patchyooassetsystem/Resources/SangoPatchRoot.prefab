@@ -145,6 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 770158323821192275}
   - component: {fileID: 3921032082914779869}
+  - component: {fileID: -6053592353173486670}
   m_Layer: 5
   m_Name: SangoPatchRoot
   m_TagString: Untagged
@@ -184,6 +185,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d64334410c86344782da80d1ba2066a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-6053592353173486670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2274285450713248455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae4189d474187e488ca523c4fceb2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hostServerIP: https://hvr.isunupcg.com/sangonomiyasakunovi
+  _appID: 0000TestSangoApp
+  _appVersion: 1.0
+  _packageName: DefaultPackage
+  _playMode: 2
+  _buildPipeline: 0
+  _onUpdaterDone:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &2330575067938672490
 GameObject:
   m_ObjectHideFlags: 0
